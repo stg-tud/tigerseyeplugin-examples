@@ -22,6 +22,13 @@ import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
 import junit.framework.TestCase;
 
+/**
+ * 
+ * This test case uses a syntax definition using multiple modules and tests imports including renaming.
+ * 
+ * @author Pablo Hoch
+ *
+ */
 public class ImportTest extends TestCase {
 	SdfDSL sdf;
 	Grammar grammar;

@@ -14,6 +14,7 @@ public class ModuleMerger implements Visitor {
 	// state information
 	private Module newMod;
 	private HashMap<Symbol,Symbol> replacements;
+	private boolean inHiddens;
 	
 	public ModuleMerger(SdfDSL dsl) {
 		this.dsl = dsl;
@@ -46,6 +47,7 @@ public class ModuleMerger implements Visitor {
 			System.out.println("=== NO PARAMETERS GIVEN FOR MODULE '" + mod.getName() + "' ===");
 		}
 		
+		this.inHiddens = false;
 		
 		Module processedModule = (Module)mod.visit(this, null);
 //		dsl.setProcessedModule(mod.getName(), processedModule);
@@ -72,13 +74,23 @@ public class ModuleMerger implements Visitor {
 		}
 		ModuleMerger subMerge = new ModuleMerger(dsl);
 		Module importedModule = subMerge.processModule(moduleToImport, imp.getParameters(), imp.getRenamings());
-		
-		// now copy the exports sections of the processed module into this module
-		// TODO: if the import is inside a hiddens section, import all sections from the imported module,
-		// but into hiddens sections in the new module! (not 100% clear from docs if hiddens sections are also imported...)
-		for (ExportOrHiddenSection sect : importedModule.getExportOrHiddenSections()) {
-			if (sect instanceof Exports) {
-				newMod.getExportOrHiddenSections().add(sect);
+
+		if (inHiddens) {
+			// if the import statement is in an hiddens section, copy the exports sections of the processed
+			// module into this module, but turn them into hiddens sections
+			for (ExportOrHiddenSection sect : importedModule.getExportOrHiddenSections()) {
+				if (sect instanceof Exports) {
+					Hiddens hiddensSection = new Hiddens(sect.getGrammarElements());
+					newMod.getExportOrHiddenSections().add(hiddensSection);
+				}
+			}
+		} else {
+			// if the import statement is in an exports section (or module level),
+			// copy the exports sections of the processed module into this module
+			for (ExportOrHiddenSection sect : importedModule.getExportOrHiddenSections()) {
+				if (sect instanceof Exports) {
+					newMod.getExportOrHiddenSections().add(sect);
+				}
 			}
 		}
 		
@@ -92,7 +104,7 @@ public class ModuleMerger implements Visitor {
 
 	@Override
 	public Object visitDefinition(Definition def, Object o) {
-		// TODO Auto-generated method stub
+		// can't occur, modules are visited directly
 		return null;
 	}
 
@@ -101,6 +113,8 @@ public class ModuleMerger implements Visitor {
 		this.newMod = new Module(mod.getName());
 		
 		newMod.setParameters(new ArrayList<Symbol>(mod.getParameters()));
+		// imports at module level are treated like imports in an exports section
+		this.inHiddens = false;
 		for (Imports impSect : mod.getImportSections()) {
 			impSect.visit(this, null);
 		}
@@ -116,6 +130,8 @@ public class ModuleMerger implements Visitor {
 	public Object visitExports(Exports exp, Object o) {
 		ArrayList<GrammarElement> newElements = new ArrayList<GrammarElement>();
 		
+		this.inHiddens = false;
+		
 		for (GrammarElement ge : exp.getGrammarElements()) {
 			GrammarElement newGe = (GrammarElement)ge.visit(this, null);
 			if (newGe != null) { // imports are removed
@@ -129,6 +145,8 @@ public class ModuleMerger implements Visitor {
 	@Override
 	public Object visitHiddens(Hiddens hid, Object o) {
 		ArrayList<GrammarElement> newElements = new ArrayList<GrammarElement>();
+		
+		this.inHiddens = true;
 		
 		for (GrammarElement ge : hid.getGrammarElements()) {
 			GrammarElement newGe = (GrammarElement)ge.visit(this, null);
@@ -241,9 +259,14 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		// TODO hier könnte das innere symbol theoretisch durch was anderes ersetzt werden.
-		// evtl einfach ersetzungen für character classes zb nicht erlauben. oder es schlägt hier fehl.
-		return new CharacterClassComplement((CharacterClassSymbol)sym.getSymbol().visit(this, null));
+		Symbol inner = (Symbol)sym.getSymbol().visit(this, null);
+		if (inner instanceof CharacterClass) {
+			return new CharacterClassComplement((CharacterClass)inner);
+		} else {
+			// TODO: inner character class was replaced by something which is not a character class
+			// this results in an error.
+			return null;
+		}
 	}
 
 	@Override
@@ -252,8 +275,15 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		// TODO Auto-generated method stub
-		return null;
+		Symbol left = (Symbol)sym.getLeft().visit(this, null);
+		Symbol right = (Symbol)sym.getRight().visit(this, null);
+		if (left instanceof CharacterClass && right instanceof CharacterClass) {
+			return new CharacterClassDifference((CharacterClass)left, (CharacterClass)right);
+		} else {
+			// TODO: inner character class was replaced by something which is not a character class
+			// this results in an error.
+			return null;
+		}
 	}
 
 	@Override
@@ -262,8 +292,15 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		// TODO Auto-generated method stub
-		return null;
+		Symbol left = (Symbol)sym.getLeft().visit(this, null);
+		Symbol right = (Symbol)sym.getRight().visit(this, null);
+		if (left instanceof CharacterClass && right instanceof CharacterClass) {
+			return new CharacterClassIntersection((CharacterClass)left, (CharacterClass)right);
+		} else {
+			// TODO: inner character class was replaced by something which is not a character class
+			// this results in an error.
+			return null;
+		}
 	}
 
 	@Override
@@ -271,8 +308,15 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		// TODO Auto-generated method stub
-		return null;
+		Symbol left = (Symbol)sym.getLeft().visit(this, null);
+		Symbol right = (Symbol)sym.getRight().visit(this, null);
+		if (left instanceof CharacterClass && right instanceof CharacterClass) {
+			return new CharacterClassUnion((CharacterClass)left, (CharacterClass)right);
+		} else {
+			// TODO: inner character class was replaced by something which is not a character class
+			// this results in an error.
+			return null;
+		}
 	}
 
 	@Override

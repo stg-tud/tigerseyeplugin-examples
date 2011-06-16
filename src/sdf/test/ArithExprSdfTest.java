@@ -26,6 +26,9 @@ import junit.framework.TestCase;
 
 /**
  * 
+ * Simple test case that uses a syntax definition consisting of one module. The grammar
+ * recognizes arithmetic expressions containing numbers, +-/* operators and brackets.
+ * 
  * SDF:
  * <code>
  * module ArithExpr

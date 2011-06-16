@@ -10,7 +10,11 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
 import sdf.SdfDSL;
 import sdf.model.*;
 
-/*
+/**
+ * A very simple test case using a simple grammar that only accepts one specific
+ * string. The example is taken from the SDF documentation.
+ * 
+ * <code>
  module LeesPlank
 
  exports
@@ -21,8 +25,14 @@ import sdf.model.*;
  "noot"        -> Noot
  "mies"        -> Mies
  Aap Noot Mies -> LeesPlank
+ </code>
+ * 
+ * Source of this example:
+ * http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf
+ * /sdf.html#example.simplelex
+ * 
+ * @author Pablo Hoch
  */
-
 public class SimpleSdfTest extends TestCase {
 	
 	SdfDSL sdf;

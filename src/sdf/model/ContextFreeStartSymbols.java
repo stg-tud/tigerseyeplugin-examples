@@ -6,7 +6,6 @@ public class ContextFreeStartSymbols extends StartSymbols {
 
 	public ContextFreeStartSymbols(ArrayList<Symbol> symbols) {
 		super(symbols);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

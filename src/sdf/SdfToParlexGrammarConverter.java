@@ -94,7 +94,8 @@ public class SdfToParlexGrammarConverter implements Visitor {
 
 	@Override
 	public Object visitDefinition(Definition def, Object o) {
-		// TODO brauchen wir eigtl gar nicht...
+		// TODO: Definition is not really needed. should probably either be removed
+		// or always be created automatically...
 		return null;
 	}
 
@@ -149,7 +150,8 @@ public class SdfToParlexGrammarConverter implements Visitor {
 
 	@Override
 	public Object visitSorts(Sorts sor, Object o) {
-		// TODO Auto-generated method stub
+		// TODO maybe use this information to check for undeclared sorts
+		// (not really necessary, but can be used to check for typos)
 		return null;
 	}
 
@@ -228,60 +230,37 @@ public class SdfToParlexGrammarConverter implements Visitor {
 			if (rhsCategory.getName().equals("LAYOUT")) {
 				addRule(NS_CF, optLayoutCat, rhsCategory);
 			}
-			
-//			// TODO: cleaner solution =)
-//			String lexName = rhsCategory.getName();
-//			assert lexName.startsWith("<") && lexName.endsWith("-LEX>");
-//			String baseName = lexName.substring(1, lexName.length() - 5);
-//			Category cfCat = createNonTerminal("<" + baseName + "-CF>", false);
-//			
-//			addRule(cfCat, rhsCategory);
-//			
-//			// TODO: cleaner solution
-//			if (baseName.equals("LAYOUT")) {
-//				addRule(optLayoutCat, cfCat);
-//			}
 		}
 		return null;
 	}
 
-	// TODO: http://download.oracle.com/javase/tutorial/essential/regex/char_classes.html
-	// http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html
-	// java character classes können union, intersection, subtraction!
-	
 	@Override
 	public Object visitCharacterClassSymbol(CharacterClassSymbol sym, Object o) {
-		// TODO ist das richtig? -> .matches -> double/boolean geht nicht?
-		// TODO escapes
-		Category cat = new StringCategory("[" + sym.getPattern() + "]");
+		Category cat = new StringCategory("[" + sym.getRegexpPattern() + "]");
 		return cat;
 	}
 	
 	@Override
 	public Object visitCharacterClassComplement(CharacterClassComplement sym, Object o) {
-		// TODO verschachtelte character classes
-		Category cat = new StringCategory("[^" + sym.getSymbol().getPattern() + "]");
+		Category cat = new StringCategory("[" + sym.getRegexpPattern() + "]");
 		return cat;
 	}
 
 	@Override
 	public Object visitCharacterClassDifference(CharacterClassDifference sym, Object o) {
-		// TODO Auto-generated method stub
-		System.out.println("+++ character class difference not yet supported +++");
-		return null;
+		Category cat = new StringCategory("[" + sym.getRegexpPattern() + "]");
+		return cat;
 	}
 
 	@Override
 	public Object visitCharacterClassIntersection(CharacterClassIntersection sym, Object o) {
-		// TODO Auto-generated method stub
-		System.out.println("+++ character class intersection not yet supported +++");
-		return null;
+		Category cat = new StringCategory("[" + sym.getRegexpPattern() + "]");
+		return cat;
 	}
 
 	@Override
 	public Object visitCharacterClassUnion(CharacterClassUnion sym, Object o) {
-		// TODO verschachtelte character classes
-		Category cat = new StringCategory("([" + sym.getLeft().getPattern() + "]|[" + sym.getRight().getPattern() + "])");
+		Category cat = new StringCategory("[" + sym.getRegexpPattern() + "]");
 		return cat;
 	}
 

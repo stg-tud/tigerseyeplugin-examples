@@ -6,7 +6,6 @@ public class Exports extends ExportOrHiddenSection {
 
 	public Exports(ArrayList<GrammarElement> grammarElements) {
 		super(grammarElements);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

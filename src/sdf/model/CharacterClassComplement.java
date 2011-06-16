@@ -12,20 +12,20 @@ package sdf.model;
  * @author Pablo Hoch
  *
  */
-public class CharacterClassComplement extends Symbol {
+public class CharacterClassComplement extends CharacterClass {
 
-	CharacterClassSymbol symbol;
+	CharacterClass symbol;
 
-	public CharacterClassComplement(CharacterClassSymbol symbol) {
+	public CharacterClassComplement(CharacterClass symbol) {
 		super();
 		this.symbol = symbol;
 	}
 
-	public CharacterClassSymbol getSymbol() {
+	public CharacterClass getSymbol() {
 		return symbol;
 	}
 
-	public void setSymbol(CharacterClassSymbol symbol) {
+	public void setSymbol(CharacterClass symbol) {
 		this.symbol = symbol;
 	}
 
@@ -62,6 +62,11 @@ public class CharacterClassComplement extends Symbol {
 		} else if (!symbol.equals(other.symbol))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getRegexpPattern() {
+		return "^" + symbol.getRegexpPattern();
 	}
 
 	

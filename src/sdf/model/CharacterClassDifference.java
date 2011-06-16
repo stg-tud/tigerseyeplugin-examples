@@ -12,31 +12,31 @@ package sdf.model;
  * @author Pablo Hoch
  *
  */
-public class CharacterClassDifference extends Symbol {
+public class CharacterClassDifference extends CharacterClass {
 
-	CharacterClassSymbol left;
-	CharacterClassSymbol right;
+	CharacterClass left;
+	CharacterClass right;
 
-	public CharacterClassDifference(CharacterClassSymbol left,
-			CharacterClassSymbol right) {
+	public CharacterClassDifference(CharacterClass left,
+			CharacterClass right) {
 		super();
 		this.left = left;
 		this.right = right;
 	}
 
-	public CharacterClassSymbol getLeft() {
+	public CharacterClass getLeft() {
 		return left;
 	}
 
-	public void setLeft(CharacterClassSymbol left) {
+	public void setLeft(CharacterClass left) {
 		this.left = left;
 	}
 
-	public CharacterClassSymbol getRight() {
+	public CharacterClass getRight() {
 		return right;
 	}
 
-	public void setRight(CharacterClassSymbol right) {
+	public void setRight(CharacterClass right) {
 		this.right = right;
 	}
 
@@ -79,6 +79,11 @@ public class CharacterClassDifference extends Symbol {
 		} else if (!right.equals(other.right))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getRegexpPattern() {
+		return left.getRegexpPattern() + "&&[^" + right.getRegexpPattern() + "]";
 	}
 	
 	

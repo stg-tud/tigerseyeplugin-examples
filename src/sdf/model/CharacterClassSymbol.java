@@ -40,7 +40,7 @@ package sdf.model;
  * @author Pablo Hoch
  * 
  */
-public class CharacterClassSymbol extends Symbol {
+public class CharacterClassSymbol extends CharacterClass {
 
 	String pattern;
 
@@ -90,6 +90,12 @@ public class CharacterClassSymbol extends Symbol {
 		} else if (!pattern.equals(other.pattern))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getRegexpPattern() {
+		// TODO: escapes
+		return pattern;
 	}
 
 	
