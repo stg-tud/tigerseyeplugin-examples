@@ -67,7 +67,7 @@ public class SimpleSdfTest extends TestCase {
 			lexSyntax
 		});
 		
-		Module module = sdf.moduleWithoutParameters("LeesPlank", new Imports[]{}, new ExportOrHiddenSection[]{ exports });
+		Module module = sdf.moduleWithoutParameters(new ModuleId("LeesPlank"), new Imports[]{}, new ExportOrHiddenSection[]{ exports });
 		
 		grammar = sdf.getGrammar("LeesPlank");
 	}

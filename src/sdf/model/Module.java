@@ -22,6 +22,10 @@ public class Module extends SdfElement {
 	ArrayList<Imports> importSections;
 	ArrayList<ExportOrHiddenSection> exportOrHiddenSections;
 
+	public Module(ModuleId name) {
+		this(name.toString());
+	}
+	
 	public Module(String name) {
 		this.name = name;
 		this.parameters = new ArrayList<Symbol>();

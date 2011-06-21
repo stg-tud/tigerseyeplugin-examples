@@ -9,6 +9,7 @@ import sdf.model.Exports;
 import sdf.model.GrammarElement;
 import sdf.model.Imports;
 import sdf.model.Module;
+import sdf.model.ModuleId;
 import sdf.model.Production;
 import sdf.model.SortSymbol;
 import sdf.model.Sorts;
@@ -89,7 +90,7 @@ public class SimpleArithExprSdfTest extends TestCase {
 			cfSyntax
 		});
 		
-		Module module = sdf.moduleWithoutParameters("SimpleArithExpr", new Imports[]{}, new ExportOrHiddenSection[]{ exports });
+		Module module = sdf.moduleWithoutParameters(new ModuleId("SimpleArithExpr"), new Imports[]{}, new ExportOrHiddenSection[]{ exports });
 		
 		grammar = sdf.getGrammar("SimpleArithExpr");
 	}

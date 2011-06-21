@@ -13,6 +13,7 @@ import sdf.model.GrammarElement;
 import sdf.model.Imports;
 import sdf.model.LexicalSyntax;
 import sdf.model.Module;
+import sdf.model.ModuleId;
 import sdf.model.Production;
 import sdf.model.SortSymbol;
 import sdf.model.Sorts;
@@ -119,7 +120,7 @@ public class ArithExprSdfTest extends TestCase {
 			cfSyntax
 		});
 		
-		Module module = sdf.moduleWithoutParameters("ArithExpr", new Imports[]{}, new ExportOrHiddenSection[]{ exports });
+		Module module = sdf.moduleWithoutParameters(new ModuleId("ArithExpr"), new Imports[]{}, new ExportOrHiddenSection[]{ exports });
 		
 		grammar = sdf.getGrammar("ArithExpr");
 	}

@@ -6,5 +6,6 @@
 	<classpathentry kind="src" path="/tigerseye"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.tud.stg.tigerseye.dslsupport"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

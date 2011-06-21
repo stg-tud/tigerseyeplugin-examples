@@ -11,6 +11,7 @@ import sdf.model.Hiddens;
 import sdf.model.Import;
 import sdf.model.Imports;
 import sdf.model.Module;
+import sdf.model.ModuleId;
 import sdf.model.Production;
 import sdf.model.SortSymbol;
 import sdf.model.Sorts;
@@ -78,7 +79,7 @@ public class ImportTest extends TestCase {
 				startSymbols
 		});
 		
-		return sdf.moduleWithoutParameters("test/Numbers", new Imports[]{}, new ExportOrHiddenSection[]{ exports, hiddens });
+		return sdf.moduleWithoutParameters(new ModuleId("test/Numbers"), new Imports[]{}, new ExportOrHiddenSection[]{ exports, hiddens });
 	}
 	
 	/**
@@ -98,7 +99,7 @@ public class ImportTest extends TestCase {
 			lexSyntax,
 		});
 		
-		return sdf.moduleWithoutParameters("test/Whitespace", new Imports[]{}, new ExportOrHiddenSection[]{ exports });
+		return sdf.moduleWithoutParameters(new ModuleId("test/Whitespace"), new Imports[]{}, new ExportOrHiddenSection[]{ exports });
 	}
 
 	/**
@@ -181,10 +182,10 @@ public class ImportTest extends TestCase {
 		Imports imports = sdf.imports(new Import[]{
 //				sdf.importModuleWithoutParameters("test/Numbers"),
 				numbersImport,
-				sdf.importModuleWithoutParameters("test/Whitespace"),
+				sdf.importModuleWithoutParameters(new ModuleId("test/Whitespace")),
 		});
 		
-		return sdf.moduleWithoutParameters("ArithExpr2", new Imports[]{ imports }, new ExportOrHiddenSection[]{ exports, hiddens });
+		return sdf.moduleWithoutParameters(new ModuleId("ArithExpr2"), new Imports[]{ imports }, new ExportOrHiddenSection[]{ exports, hiddens });
 	}
 	
 	/**
@@ -241,10 +242,10 @@ public class ImportTest extends TestCase {
 		});
 		
 		Imports imports = sdf.imports(new Import[]{
-				sdf.importModuleWithoutParameters("ArithExpr2"),
+				sdf.importModuleWithoutParameters(new ModuleId("ArithExpr2")),
 		});
 		
-		return sdf.moduleWithoutParameters("SimpleLang", new Imports[]{ imports }, new ExportOrHiddenSection[]{ exports, hiddens });
+		return sdf.moduleWithoutParameters(new ModuleId("SimpleLang"), new Imports[]{ imports }, new ExportOrHiddenSection[]{ exports, hiddens });
 	}
 	
 	@Test
