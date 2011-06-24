@@ -66,7 +66,7 @@ public class CharacterClassTest extends TestCase {
 	public void setUp() {
 		sdf = new SdfDSL();
 
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("OctDigit"),
 				sdf.sortSymbol("HexDigit"),
 				sdf.sortSymbol("DEF"),
@@ -89,11 +89,11 @@ public class CharacterClassTest extends TestCase {
 						sdf.characterClassIntersection(sdf.characterClassSymbol("a-f"), sdf.characterClassSymbol("d-q"))
 				}, sdf.sortSymbol("DEF")),
 				sdf.production(new Symbol[]{
-						sdf.caseSensitiveliteralSymbol("0"),
+						sdf.caseSensitiveLiteralSymbol("0"),
 						sdf.repetitionSymbolAtLeastZero(sdf.sortSymbol("OctDigit"))
 				}, sdf.sortSymbol("OctNumber")),
 				sdf.production(new Symbol[]{
-						sdf.caseSensitiveliteralSymbol("0x"),
+						sdf.caseSensitiveLiteralSymbol("0x"),
 						sdf.repetitionSymbolAtLeastOnce(sdf.sortSymbol("HexDigit"))
 				}, sdf.sortSymbol("HexNumber")),
 				sdf.production(new Symbol[]{
@@ -119,7 +119,7 @@ public class CharacterClassTest extends TestCase {
 						sdf.sortSymbol("DEF"),
 				}, sdf.sortSymbol("Item")),
 				sdf.production(new Symbol[]{
-						sdf.listSymbolAtLeastZero(sdf.sortSymbol("Item"), sdf.caseSensitiveliteralSymbol(","))
+						sdf.listSymbolAtLeastZero(sdf.sortSymbol("Item"), sdf.caseSensitiveLiteralSymbol(","))
 				}, sdf.sortSymbol("List")),
 		});
 		

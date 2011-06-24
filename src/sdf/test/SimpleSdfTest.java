@@ -42,7 +42,7 @@ public class SimpleSdfTest extends TestCase {
 	public void setUp() {
 		sdf = new SdfDSL();
 
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("Aap"),
 				sdf.sortSymbol("Noot"),
 				sdf.sortSymbol("Mies"),
@@ -50,9 +50,9 @@ public class SimpleSdfTest extends TestCase {
 		});
 		
 		LexicalSyntax lexSyntax = sdf.lexicalSyntax(new Production[]{
-				sdf.production(new Symbol[]{ sdf.caseSensitiveliteralSymbol("aap") }, sdf.sortSymbol("Aap")),
-				sdf.production(new Symbol[]{ sdf.caseSensitiveliteralSymbol("noot") }, sdf.sortSymbol("Noot")),
-				sdf.production(new Symbol[]{ sdf.caseSensitiveliteralSymbol("mies") }, sdf.sortSymbol("Mies")),
+				sdf.production(new Symbol[]{ sdf.caseSensitiveLiteralSymbol("aap") }, sdf.sortSymbol("Aap")),
+				sdf.production(new Symbol[]{ sdf.caseSensitiveLiteralSymbol("noot") }, sdf.sortSymbol("Noot")),
+				sdf.production(new Symbol[]{ sdf.caseSensitiveLiteralSymbol("mies") }, sdf.sortSymbol("Mies")),
 				sdf.production(new Symbol[]{ sdf.sortSymbol("Aap"), sdf.sortSymbol("Noot"), sdf.sortSymbol("Mies") }, sdf.sortSymbol("LeesPlank")),
 //				sdf.production(new Symbol[]{ sdf.caseInsensitiveLiteralSymbol(" ") }, sdf.sortSymbol("LAYOUT")),
 		});

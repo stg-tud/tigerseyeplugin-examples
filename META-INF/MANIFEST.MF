@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: grammarware
+Bundle-SymbolicName: grammarware;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Export-Package: de.tud.stg.popart.builder.test.dsls,
+ sdf,
+ sdf.model,
+ sdf.test,
+ test
+Require-Bundle: de.tud.stg.tigerseye.eclipse;bundle-version="0.0.1",
+ de.tud.stg.tigerseye.eclipse.core;bundle-version="0.0.1"

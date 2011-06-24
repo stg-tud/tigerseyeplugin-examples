@@ -68,7 +68,7 @@ public class ArithExprSdfTest extends TestCase {
 	public void setUp() {
 		sdf = new SdfDSL();
 
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("Expr"),
 				sdf.sortSymbol("Number"),
 				sdf.sortSymbol("Term"),
@@ -82,20 +82,20 @@ public class ArithExprSdfTest extends TestCase {
 		
 		Syntax cfSyntax = sdf.contextFreeSyntax(new Production[]{
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol("+"), sdf.sortSymbol("Term")
+						sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol("+"), sdf.sortSymbol("Term")
 				}, sdf.sortSymbol("Expr")),
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol("-"), sdf.sortSymbol("Term")
+						sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol("-"), sdf.sortSymbol("Term")
 				}, sdf.sortSymbol("Expr")),
 				sdf.production(new Symbol[]{
 						sdf.sortSymbol("Term")
 				}, sdf.sortSymbol("Expr")),
 				
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Term"), sdf.caseSensitiveliteralSymbol("*"), sdf.sortSymbol("Factor")
+						sdf.sortSymbol("Term"), sdf.caseSensitiveLiteralSymbol("*"), sdf.sortSymbol("Factor")
 				}, sdf.sortSymbol("Term")),
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Term"), sdf.caseSensitiveliteralSymbol("/"), sdf.sortSymbol("Factor")
+						sdf.sortSymbol("Term"), sdf.caseSensitiveLiteralSymbol("/"), sdf.sortSymbol("Factor")
 				}, sdf.sortSymbol("Term")),
 				sdf.production(new Symbol[]{
 						sdf.sortSymbol("Factor")
@@ -105,7 +105,7 @@ public class ArithExprSdfTest extends TestCase {
 						sdf.sortSymbol("Number")
 				}, sdf.sortSymbol("Factor")),
 				sdf.production(new Symbol[]{
-						sdf.caseSensitiveliteralSymbol("("), sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol(")"),
+						sdf.caseSensitiveLiteralSymbol("("), sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol(")"),
 				}, sdf.sortSymbol("Factor")),
 		});
 		

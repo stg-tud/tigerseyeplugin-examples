@@ -57,7 +57,7 @@ public class SimpleArithExprSdfTest extends TestCase {
 	public void setUp() {
 		sdf = new SdfDSL();
 
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("Expr"),
 				sdf.sortSymbol("Number"),
 		});
@@ -69,10 +69,10 @@ public class SimpleArithExprSdfTest extends TestCase {
 		
 		Syntax cfSyntax = sdf.contextFreeSyntax(new Production[]{
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol("+"), sdf.sortSymbol("Number")
+						sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol("+"), sdf.sortSymbol("Number")
 				}, sdf.sortSymbol("Expr")),
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol("-"), sdf.sortSymbol("Number")
+						sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol("-"), sdf.sortSymbol("Number")
 				}, sdf.sortSymbol("Expr")),
 				sdf.production(new Symbol[]{
 						sdf.sortSymbol("Number")

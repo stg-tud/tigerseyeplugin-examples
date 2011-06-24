@@ -58,7 +58,7 @@ public class ImportTest extends TestCase {
 	 *  	lexical start-symbols Integer
 	 */
 	private Module setUpNumbersModule() {
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("Integer"),
 		});
 		
@@ -127,7 +127,7 @@ public class ImportTest extends TestCase {
 	 * context-free start-symbols Expr
 	 */
 	private Module setUpArithExpr2Module() {
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("Expr"),
 				sdf.sortSymbol("Term"),
 				sdf.sortSymbol("Factor")
@@ -135,20 +135,20 @@ public class ImportTest extends TestCase {
 		
 		Syntax cfSyntax = sdf.contextFreeSyntax(new Production[]{
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol("+"), sdf.sortSymbol("Term")
+						sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol("+"), sdf.sortSymbol("Term")
 				}, sdf.sortSymbol("Expr")),
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol("-"), sdf.sortSymbol("Term")
+						sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol("-"), sdf.sortSymbol("Term")
 				}, sdf.sortSymbol("Expr")),
 				sdf.production(new Symbol[]{
 						sdf.sortSymbol("Term")
 				}, sdf.sortSymbol("Expr")),
 				
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Term"), sdf.caseSensitiveliteralSymbol("*"), sdf.sortSymbol("Factor")
+						sdf.sortSymbol("Term"), sdf.caseSensitiveLiteralSymbol("*"), sdf.sortSymbol("Factor")
 				}, sdf.sortSymbol("Term")),
 				sdf.production(new Symbol[]{
-						sdf.sortSymbol("Term"), sdf.caseSensitiveliteralSymbol("/"), sdf.sortSymbol("Factor")
+						sdf.sortSymbol("Term"), sdf.caseSensitiveLiteralSymbol("/"), sdf.sortSymbol("Factor")
 				}, sdf.sortSymbol("Term")),
 				sdf.production(new Symbol[]{
 						sdf.sortSymbol("Factor")
@@ -158,7 +158,7 @@ public class ImportTest extends TestCase {
 						sdf.sortSymbol("Number")
 				}, sdf.sortSymbol("Factor")),
 				sdf.production(new Symbol[]{
-						sdf.caseSensitiveliteralSymbol("("), sdf.sortSymbol("Expr"), sdf.caseSensitiveliteralSymbol(")"),
+						sdf.caseSensitiveLiteralSymbol("("), sdf.sortSymbol("Expr"), sdf.caseSensitiveLiteralSymbol(")"),
 				}, sdf.sortSymbol("Factor")),
 		});
 		
@@ -179,7 +179,7 @@ public class ImportTest extends TestCase {
 		Import numbersImport = new Import("test/Numbers");
 		numbersImport.getRenamings().put(sdf.sortSymbol("Integer"), sdf.sortSymbol("Number"));
 		
-		Imports imports = sdf.imports(new Import[]{
+		Imports imports = sdf.importsStatement(new Import[]{
 //				sdf.importModuleWithoutParameters("test/Numbers"),
 				numbersImport,
 				sdf.importModuleWithoutParameters(new ModuleId("test/Whitespace")),
@@ -207,24 +207,24 @@ public class ImportTest extends TestCase {
 	 * context-free start-symbols Program
 	 */
 	private Module setUpSimpleLangModule() {
-		Sorts sorts = sdf.sorts(new SortSymbol[]{
+		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
 				sdf.sortSymbol("Stmt"),
 				sdf.sortSymbol("Program"),
 		});
 		
 		Syntax cfSyntax = sdf.contextFreeSyntax(new Production[]{
 				sdf.production(new Symbol[]{
-						sdf.caseSensitiveliteralSymbol("print"), sdf.sortSymbol("Expr")
+						sdf.caseSensitiveLiteralSymbol("print"), sdf.sortSymbol("Expr")
 				}, sdf.sortSymbol("Stmt")),
 				sdf.production(new Symbol[]{
-						sdf.caseSensitiveliteralSymbol("exit")
+						sdf.caseSensitiveLiteralSymbol("exit")
 				}, sdf.sortSymbol("Stmt")),
 				sdf.production(new Symbol[]{
 						
 				}, sdf.sortSymbol("Stmt")),
 				
 				sdf.production(new Symbol[]{
-						sdf.listSymbolAtLeastZero(sdf.sortSymbol("Stmt"), sdf.caseSensitiveliteralSymbol(";"))
+						sdf.listSymbolAtLeastZero(sdf.sortSymbol("Stmt"), sdf.caseSensitiveLiteralSymbol(";"))
 				}, sdf.sortSymbol("Program")),
 		});
 		
@@ -241,7 +241,7 @@ public class ImportTest extends TestCase {
 				startSymbols
 		});
 		
-		Imports imports = sdf.imports(new Import[]{
+		Imports imports = sdf.importsStatement(new Import[]{
 				sdf.importModuleWithoutParameters(new ModuleId("ArithExpr2")),
 		});
 		
