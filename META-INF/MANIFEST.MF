@@ -9,4 +9,6 @@ Export-Package: de.tud.stg.popart.builder.test.dsls,
  sdf.test,
  test
 Require-Bundle: de.tud.stg.tigerseye.eclipse;bundle-version="0.0.1",
- de.tud.stg.tigerseye.eclipse.core;bundle-version="0.0.1"
+ de.tud.stg.tigerseye.eclipse.core;bundle-version="0.0.1",
+ org.apache.log4j;bundle-version="1.2.16",
+ slf4j.log4j12;bundle-version="1.6.1"

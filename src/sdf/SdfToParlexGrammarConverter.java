@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import sdf.model.Alias;
+import sdf.model.Aliases;
 import sdf.model.AlternativeSymbol;
 import sdf.model.CharacterClassComplement;
 import sdf.model.CharacterClassDifference;
@@ -16,6 +19,7 @@ import sdf.model.ContextFreeSyntax;
 import sdf.model.Definition;
 import sdf.model.ExportOrHiddenSection;
 import sdf.model.Exports;
+import sdf.model.FunctionSymbol;
 import sdf.model.GrammarElement;
 import sdf.model.Hiddens;
 import sdf.model.Import;
@@ -32,10 +36,22 @@ import sdf.model.SequenceSymbol;
 import sdf.model.SortSymbol;
 import sdf.model.Sorts;
 import sdf.model.Symbol;
+import sdf.model.TupleSymbol;
 import sdf.model.Visitor;
 import de.tud.stg.parlex.core.*;
 import de.tud.stg.parlex.core.groupcategories.StringCategory;
 
+/**
+ * Converts an SDF definition into a parlex grammar.
+ * Before converting the grammar, it must be pre-processed with {@link ModuleMerger ModuleMerger}
+ * to resolve imports and alias operations.
+ * 
+ * @author Pablo Hoch
+ * @see SdfDSL
+ * @see ModuleMerger
+ * @see de.tud.stg.parlex.core.Grammar
+ *
+ */
 public class SdfToParlexGrammarConverter implements Visitor {
 	
 	private static final boolean DEBUG = false;
@@ -134,7 +150,7 @@ public class SdfToParlexGrammarConverter implements Visitor {
 
 	@Override
 	public Object visitImports(Imports imp, Object o) {
-		// this should not happen, because imports are merge before the grammar is converted
+		// this should not happen, because imports are merged before the grammar is converted
 		// TODO: error
 		System.out.println("=== Error: imports not merged in " + currentModule.getName() + "===");
 		return null;
@@ -142,7 +158,7 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	
 	@Override
 	public Object visitImport(Import imp, Object o) {
-		// this should not happen, because imports are merge before the grammar is converted
+		// this should not happen, because imports are merged before the grammar is converted
 		// TODO: error
 		System.out.println("=== Error: imports not merged in " + currentModule.getName() + "===");
 		return null;
@@ -152,6 +168,22 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	public Object visitSorts(Sorts sor, Object o) {
 		// TODO maybe use this information to check for undeclared sorts
 		// (not really necessary, but can be used to check for typos)
+		return null;
+	}
+	
+	@Override
+	public Object visitAliases(Aliases ali, Object o) {
+		// this should not happen, because aliases are replaced before the grammar is converted
+		// TODO: error
+		System.out.println("=== Error: aliases not replaced in " + currentModule.getName() + "===");
+		return null;
+	}
+
+	@Override
+	public Object visitAlias(Alias ali, Object o) {
+		// this should not happen, because aliases are replaced before the grammar is converted
+		// TODO: error
+		System.out.println("=== Error: aliases not replaced in " + currentModule.getName() + "===");
 		return null;
 	}
 
@@ -266,8 +298,13 @@ public class SdfToParlexGrammarConverter implements Visitor {
 
 	@Override
 	public Object visitLiteralSymbol(LiteralSymbol sym, Object o) {
-		Category cat = createTerminalString(sym.getText());
-		// TODO: case insensitive symbols
+		Category cat;
+		if (sym.isCaseSensitive()) {
+			cat = createTerminalString(sym.getText());
+		} else {
+			// case insensitive literal => regex
+			cat = new StringCategory("(?i:" + Pattern.quote(sym.getText()) + ")");
+		}
 		return cat;
 	}
 
@@ -386,6 +423,47 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		
 		return createNonTerminal(sym.toString());
 	}
+	
+	@Override
+	public Object visitTupleSymbol(TupleSymbol sym, Object o) {
+		Category cat = createNonTerminal(sym.toString());
+		
+		// Add rule like: "<" sym0 "," sym1 "," sym2 ">" -> sym
+		ArrayList<ICategory<String>> ruleRhs = new ArrayList<ICategory<String>>();
+		ruleRhs.add(createTerminalString("<"));
+		boolean first = true;
+		for (Symbol s : sym.getSymbols()) {
+			if (!first) ruleRhs.add(createTerminalString(","));
+			ruleRhs.add((Category)s.visit(this, this));
+			first = false;
+		}
+		ruleRhs.add(createTerminalString(">"));
+		addRule(getCurrentNamespace(), cat, ruleRhs);
+		
+		return createNonTerminal(sym.toString());
+	}
+	
+
+	@Override
+	public Object visitFunctionSymbol(FunctionSymbol sym, Object o) {
+		/*SDF generates the following syntax for (A B => C):
+		(A B => C) "(" A B ")" -> C*/
+
+		Category cat = createNonTerminal(sym.toString());
+		
+		// Add rule like: sym "(" lhs0 lhs1 ")" -> rhs
+		ArrayList<ICategory<String>> ruleRhs = new ArrayList<ICategory<String>>();
+		ruleRhs.add(cat);
+		ruleRhs.add(createTerminalString("("));
+		for (Symbol s : sym.getLeft()) {
+			ruleRhs.add((Category)s.visit(this, this));
+		}
+		ruleRhs.add(createTerminalString(")"));
+		Category ruleLhs = (Category)sym.getRight().visit(this, null);
+		addRule(getCurrentNamespace(), ruleLhs, ruleRhs);
+		
+		return createNonTerminal(sym.toString());
+	}
 
 	
 	
@@ -471,5 +549,10 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	private String getCurrentNamespace() {
 		return inCFSyntax ? NS_CF : NS_LEX;
 	}
+
+
+
+
+
 
 }

@@ -4,15 +4,17 @@ import java.util.ArrayList;
 
 /**
  * A production in an SDF grammar.
+ * A production is read as the definition of a symbol. The symbol on the right-hand side is defined by the left-hand side of the production.
+ * Note that this definition is different from the one used in BNF.
  * 
- * SDF syntax:
- * <code>
- * &lt;Symbol&gt;* -> &lt;Symbol&gt;
- * </code>
- * 
- * Note that, unlike in BNF, the symbol on the RHS is defined by the LHS.
+ * <p>SDF Syntax:
+ * <pre>
+ * <i>Symbol*</i> -> <i>Symbol</i>
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.productions">SDF Documentation</a>
+ * @see Symbol
  *
  */
 public class Production extends SdfElement {

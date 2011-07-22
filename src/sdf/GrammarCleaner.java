@@ -8,6 +8,7 @@ import de.tud.stg.parlex.core.*;
  * GrammarCleaner removes unused categories and rules from a Grammar.
  * 
  * @author Pablo Hoch
+ * @see de.tud.stg.parlex.core.Grammar
  *
  */
 public class GrammarCleaner {
@@ -16,8 +17,10 @@ public class GrammarCleaner {
 	 * Returns a new Grammar that is equivalent to the supplied grammar, but only contains required
 	 * categories and rules.
 	 * 
-	 * @param g
-	 * @return
+	 * <p>The original grammar is not modified, however Rule and Category objects are reused.
+	 * 
+	 * @param g	the Grammar to clean
+	 * @return	a new Grammar without unused rules
 	 */
 	public static Grammar clean(Grammar g) {
 		

@@ -4,12 +4,18 @@ package sdf.model;
  * Character class intersection operator.
  * Accepts all characters that are in both the first (left) and second (right) class.
  * 
- * SDF syntax:
- * <code>
- * &lt;CharacterClass&gt; /\ &lt;CharacterClass&gt;
- * </code>
+ * <p>SDF Syntax:
+ * <pre>
+ * <i>CharacterClass</i> /\ <i>CharacterClass</i>
+ * </pre>
+ * 
+ * <p>Example:
+ * <pre>
+ * [0-7] /\ [4-9]
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.characters">SDF Documentation</a>
  *
  */
 public class CharacterClassIntersection extends CharacterClass {
@@ -22,6 +28,11 @@ public class CharacterClassIntersection extends CharacterClass {
 		super();
 		this.left = left;
 		this.right = right;
+	}
+	
+	public CharacterClassIntersection(CharacterClass left, CharacterClass right, String label) {
+		this(left, right);
+		this.setLabel(label);
 	}
 
 	public CharacterClass getLeft() {

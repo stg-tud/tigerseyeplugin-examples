@@ -2,6 +2,19 @@ package sdf.model;
 
 import java.util.ArrayList;
 
+/**
+ * An imports statement, containing an arbitrary number of {@link Import imports}.
+ * 
+ * <p>SDF Syntax:
+ * <pre>
+ * imports <i>Import*</i>
+ * </pre>
+ * 
+ * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.imports">SDF Documentation</a>
+ * @see Import
+ *
+ */
 public class Imports extends GrammarElement {
 
 	ArrayList<Import> importList;

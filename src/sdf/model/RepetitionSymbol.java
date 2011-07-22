@@ -3,19 +3,22 @@ package sdf.model;
 /**
  * The repetition operators applied to a symbol match an arbitrary number of
  * occurences of the inner symbol (at least one occurence may be required
- * depending on the value of <code>atLeastOnce</code>).
+ * depending on the value of <tt>atLeastOnce</tt>).
  * 
- * SDF syntax for at least 0 occurences:
- * <code>
- * &lt;Symbol&gt;*
- * </code>
- * 
- * SDF syntax for at least 1 occurence:
- * <code>
- * &lt;Symbol&gt;+
- * </code>
+ * <p>SDF Syntax (at least 0 occurences):
+ * <pre>
+ * <i>Symbol</i>*
+ * </pre>
+ *
+ * <p>SDF Syntax (at least 1 occurence):
+ * <pre>
+ * <i>Symbol</i>+
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.lists">SDF Documentation</a>
+ * @see ListSymbol
+ * @see OptionalSymbol
  * 
  */
 public class RepetitionSymbol extends Symbol {
@@ -28,6 +31,11 @@ public class RepetitionSymbol extends Symbol {
 		this.atLeastOnce = atLeastOnce;
 	}
 
+	public RepetitionSymbol(Symbol symbol, boolean atLeastOnce, String label) {
+		this(symbol, atLeastOnce);
+		this.setLabel(label);
+	}
+	
 	public Symbol getSymbol() {
 		return symbol;
 	}

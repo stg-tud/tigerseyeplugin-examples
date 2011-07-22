@@ -14,24 +14,22 @@ import sdf.model.*;
  * A very simple test case using a simple grammar that only accepts one specific
  * string. The example is taken from the SDF documentation.
  * 
- * <code>
- module LeesPlank
-
- exports
- context-free start-symbols LeesPlank
- sorts Aap Noot Mies LeesPlank
- lexical syntax
- "aap"         -> Aap
- "noot"        -> Noot
- "mies"        -> Mies
- Aap Noot Mies -> LeesPlank
- </code>
+ * <pre>{@code
+ *  module LeesPlank
  * 
- * Source of this example:
- * http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf
- * /sdf.html#example.simplelex
+ *  exports
+ *  context-free start-symbols LeesPlank
+ *  sorts Aap Noot Mies LeesPlank
+ *  lexical syntax
+ *  "aap"         -> Aap
+ *  "noot"        -> Noot
+ *  "mies"        -> Mies
+ *  Aap Noot Mies -> LeesPlank
+ * }</pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#example.simplelex">Source of the example</a>
+ * 
  */
 public class SimpleSdfTest extends TestCase {
 	

@@ -5,9 +5,22 @@ import java.util.HashMap;
 
 import sdf.model.*;
 
+/**
+ * Pre-processes an SDF definition by resolving imports and alias definitions.
+ * The returned module does no longer depend on other modules and does not include
+ * either import or alias statements.
+ * 
+ * <p>The elements of the input modules are not reused in the generated modules,
+ * instead copies of the elements are created where needed, so the input modules
+ * are not modified.
+ * 
+ * @author Pablo Hoch
+ * @see SdfDSL
+ *
+ */
 public class ModuleMerger implements Visitor {
 	
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private SdfDSL dsl;
 	
@@ -20,10 +33,29 @@ public class ModuleMerger implements Visitor {
 		this.dsl = dsl;
 	}
 	
+	/**
+	 * Process the given module by resolving import and alias statements.
+	 * No parameters or replacements are specified for the given module.
+	 * 
+	 * @param mod	Module to process
+	 * @return		a new Module
+	 */
 	public Module processModule(Module mod) {
 		return processModule(mod, null, null);
 	}
 	
+	/**
+	 * Process the given module by resolving import and alias statements.
+	 * The given actual parameters are used to replace the formal parameters declared
+	 * by the given module. The renamings are used to replace symbols in the given module.
+	 * 
+	 * <p>This method is used when the module is imported with the given parameters or renamings.
+	 * 
+	 * @param mod			Module to process
+	 * @param parameters	actual values for the parameters of the module
+	 * @param renamings		a list of symbol replacements to be performed in the module
+	 * @return				a new Module
+	 */
 	public Module processModule(Module mod, ArrayList<Symbol> parameters, HashMap<Symbol,Symbol> renamings) {
 		
 		if (DEBUG) System.out.println("*** ModuleMerger.processModule(" + mod.getName() + ")");
@@ -54,7 +86,13 @@ public class ModuleMerger implements Visitor {
 		return processedModule;
 	}
 	
-	
+	/**
+	 * Gets the symbol by which the given symbol should be replaced inside this module.
+	 * If no replacement is registered for the given symbol, null is returned.
+	 * 
+	 * @param original		Symbol to check
+	 * @return				if the Symbol should be replaced, a replacement Symbol, otherwise null
+	 */
 	private Symbol getReplacementSymbol(Symbol original) {
 		Symbol replacement = replacements.get(original);
 		if (DEBUG && replacement != null) {
@@ -173,7 +211,7 @@ public class ModuleMerger implements Visitor {
 		// TODO: replacement hier? problem ist, es könnte durch ein anderes nicht-sort symbol ersetzt werden
 		// das darf hier aber nicht aufreten.
 		for (SortSymbol s : sor.getSymbols()) {
-			newSymbols.add(new SortSymbol(s.getName()));
+			newSymbols.add(new SortSymbol(s.getName(), s.getLabel()));
 		}
 		
 		return new Sorts(newSymbols);
@@ -250,7 +288,7 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		return new CharacterClassSymbol(sym.getPattern());
+		return new CharacterClassSymbol(sym.getPattern(), sym.getLabel());
 	}
 
 	@Override
@@ -261,7 +299,7 @@ public class ModuleMerger implements Visitor {
 		
 		Symbol inner = (Symbol)sym.getSymbol().visit(this, null);
 		if (inner instanceof CharacterClass) {
-			return new CharacterClassComplement((CharacterClass)inner);
+			return new CharacterClassComplement((CharacterClass)inner, sym.getLabel());
 		} else {
 			// TODO: inner character class was replaced by something which is not a character class
 			// this results in an error.
@@ -278,7 +316,7 @@ public class ModuleMerger implements Visitor {
 		Symbol left = (Symbol)sym.getLeft().visit(this, null);
 		Symbol right = (Symbol)sym.getRight().visit(this, null);
 		if (left instanceof CharacterClass && right instanceof CharacterClass) {
-			return new CharacterClassDifference((CharacterClass)left, (CharacterClass)right);
+			return new CharacterClassDifference((CharacterClass)left, (CharacterClass)right, sym.getLabel());
 		} else {
 			// TODO: inner character class was replaced by something which is not a character class
 			// this results in an error.
@@ -295,7 +333,7 @@ public class ModuleMerger implements Visitor {
 		Symbol left = (Symbol)sym.getLeft().visit(this, null);
 		Symbol right = (Symbol)sym.getRight().visit(this, null);
 		if (left instanceof CharacterClass && right instanceof CharacterClass) {
-			return new CharacterClassIntersection((CharacterClass)left, (CharacterClass)right);
+			return new CharacterClassIntersection((CharacterClass)left, (CharacterClass)right, sym.getLabel());
 		} else {
 			// TODO: inner character class was replaced by something which is not a character class
 			// this results in an error.
@@ -311,7 +349,7 @@ public class ModuleMerger implements Visitor {
 		Symbol left = (Symbol)sym.getLeft().visit(this, null);
 		Symbol right = (Symbol)sym.getRight().visit(this, null);
 		if (left instanceof CharacterClass && right instanceof CharacterClass) {
-			return new CharacterClassUnion((CharacterClass)left, (CharacterClass)right);
+			return new CharacterClassUnion((CharacterClass)left, (CharacterClass)right, sym.getLabel());
 		} else {
 			// TODO: inner character class was replaced by something which is not a character class
 			// this results in an error.
@@ -324,7 +362,7 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		return new LiteralSymbol(sym.getText(), sym.isCaseSensitive());
+		return new LiteralSymbol(sym.getText(), sym.isCaseSensitive(), sym.getLabel());
 	}
 
 	@Override
@@ -332,7 +370,7 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 
-		return new OptionalSymbol((Symbol)sym.getSymbol().visit(this, null));
+		return new OptionalSymbol((Symbol)sym.getSymbol().visit(this, null), sym.getLabel());
 	}
 
 	@Override
@@ -340,7 +378,7 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		return new RepetitionSymbol((Symbol)sym.getSymbol().visit(this, null), sym.isAtLeastOnce());
+		return new RepetitionSymbol((Symbol)sym.getSymbol().visit(this, null), sym.isAtLeastOnce(), sym.getLabel());
 	}
 
 	@Override
@@ -348,7 +386,7 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		return new SortSymbol(sym.getName());
+		return new SortSymbol(sym.getName(), sym.getLabel());
 	}
 
 	@Override
@@ -361,7 +399,7 @@ public class ModuleMerger implements Visitor {
 			newSymbols.add((Symbol)s.visit(this, null));
 		}
 		
-		return new SequenceSymbol(newSymbols);
+		return new SequenceSymbol(newSymbols, sym.getLabel());
 	}
 
 	@Override
@@ -369,7 +407,7 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		return new ListSymbol((Symbol)sym.getElement().visit(this, null), (Symbol)sym.getSeperator().visit(this, null), sym.isAtLeastOnce());
+		return new ListSymbol((Symbol)sym.getElement().visit(this, null), (Symbol)sym.getSeperator().visit(this, null), sym.isAtLeastOnce(), sym.getLabel());
 	}
 
 	@Override
@@ -377,6 +415,51 @@ public class ModuleMerger implements Visitor {
 		Symbol replacement = getReplacementSymbol(sym);
 		if (replacement != null) return replacement;
 		
-		return new AlternativeSymbol((Symbol)sym.getLeft().visit(this, null), (Symbol)sym.getRight().visit(this, null));
+		return new AlternativeSymbol((Symbol)sym.getLeft().visit(this, null), (Symbol)sym.getRight().visit(this, null), sym.getLabel());
+	}
+
+	@Override
+	public Object visitTupleSymbol(TupleSymbol sym, Object o) {
+		Symbol replacement = getReplacementSymbol(sym);
+		if (replacement != null) return replacement;
+		
+		ArrayList<Symbol> newSymbols = new ArrayList<Symbol>();
+		for (Symbol s : sym.getSymbols()) {
+			newSymbols.add((Symbol)s.visit(this, null));
+		}
+		
+		return new TupleSymbol(newSymbols, sym.getLabel());
+	}
+
+	@Override
+	public Object visitFunctionSymbol(FunctionSymbol sym, Object o) {
+		Symbol replacement = getReplacementSymbol(sym);
+		if (replacement != null) return replacement;
+		
+		ArrayList<Symbol> newLeft = new ArrayList<Symbol>();
+		for (Symbol s : sym.getLeft()) {
+			newLeft.add((Symbol)s.visit(this, null));
+		}
+		Symbol newRight = (Symbol)sym.getRight().visit(this, null);
+		
+		return new FunctionSymbol(newLeft, newRight, sym.getLabel());
+	}
+
+	@Override
+	public Object visitAliases(Aliases ali, Object o) {
+		for (Alias a : ali.getAliasList()) {
+			a.visit(this, null);
+		}
+		// aliases are removed
+		return null;
+	}
+
+	@Override
+	public Object visitAlias(Alias ali, Object o) {
+		// TODO: not sure if only occurences of the symbol *after* the alias delcaration
+		// need to be replaced (current implementation), or even occurences before the
+		// alias declaration. can't find anything regarding that in the sdf documentation.
+		this.replacements.put(ali.getAliasName(), ali.getOriginal());
+		return null;
 	}
 }

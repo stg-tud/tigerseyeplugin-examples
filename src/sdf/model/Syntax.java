@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * Syntax definitions consist of a number of productions.
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.lexicalandcontextfreesyntax">SDF Documentation</a>
+ * @see LexicalSyntax
+ * @see ContextFreeSyntax
  *
  */
 public abstract class Syntax extends GrammarElement {

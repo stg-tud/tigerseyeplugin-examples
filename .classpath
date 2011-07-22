@@ -5,7 +5,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="con" path="TIGERSEYE_SUPPORT"/>
-	<classpathentry kind="src" path="src-tigerseye"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,5 +1,23 @@
 package sdf.model;
 
+/**
+ * A literal symbol is a terminal that matches the given string.
+ * Literal symbols can be either case sensitive or case insensitive.
+ * 
+ * <p>Example (case sensitive):
+ * <pre>
+ * "test"
+ * </pre>
+ * 
+ * <p>Example (case insensitive):
+ * <pre>
+ * 'test'
+ * </pre>
+ * 
+ * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.literals">SDF Documentation</a>
+ *
+ */
 public class LiteralSymbol extends Symbol {
 	String text;
 	boolean caseSensitive;
@@ -9,6 +27,11 @@ public class LiteralSymbol extends Symbol {
 		this.caseSensitive = caseSensitive;
 	}
 
+	public LiteralSymbol(String text, boolean caseSensitive, String label) {
+		this(text, caseSensitive);
+		this.setLabel(label);
+	}
+	
 	public String getText() {
 		return text;
 	}
@@ -57,7 +80,7 @@ public class LiteralSymbol extends Symbol {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof LiteralSymbol))
 			return false;
 		LiteralSymbol other = (LiteralSymbol) obj;
 		if (caseSensitive != other.caseSensitive)

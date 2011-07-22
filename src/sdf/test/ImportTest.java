@@ -13,6 +13,7 @@ import sdf.model.Imports;
 import sdf.model.Module;
 import sdf.model.ModuleId;
 import sdf.model.Production;
+import sdf.model.Renaming;
 import sdf.model.SortSymbol;
 import sdf.model.Sorts;
 import sdf.model.StartSymbols;
@@ -49,6 +50,7 @@ public class ImportTest extends TestCase {
 	/**
 	 * Defines the test/Numbers module
 	 * 
+	 * <pre>{@code
 	 *  module test/Numbers
 	 *  exports
 	 *  	sorts Integer
@@ -56,6 +58,7 @@ public class ImportTest extends TestCase {
 	 *  		[0-9]+	-> Integer
 	 *  hiddens
 	 *  	lexical start-symbols Integer
+	 *  }</pre>
 	 */
 	private Module setUpNumbersModule() {
 		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
@@ -85,10 +88,12 @@ public class ImportTest extends TestCase {
 	/**
 	 * Defines the test/Whitespace module
 	 * 
-	 *  module test/Numbers
+	 * <pre>{@code
+	 *  module test/Whitespace
 	 *  exports
 	 *  	lexical syntax
 	 *  		[ ]+	-> LAYOUT
+	 *  }</pre>
 	 */
 	private Module setUpWhitespaceModule() {
 		Syntax lexSyntax = sdf.lexicalSyntax(new Production[]{
@@ -105,6 +110,7 @@ public class ImportTest extends TestCase {
 	/**
 	 * Defines the ArithExpr2 module
 	 * 
+	 * <pre>{@code
 	 * module ArithExpr2
 	 * imports test/Numbers[ Integer => Number ]
 	 * imports test/Whitespace
@@ -125,6 +131,7 @@ public class ImportTest extends TestCase {
 	 * 
 	 * hiddens
 	 * context-free start-symbols Expr
+	 * }</pre>
 	 */
 	private Module setUpArithExpr2Module() {
 		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{
@@ -175,13 +182,13 @@ public class ImportTest extends TestCase {
 				startSymbols
 		});
 		
-		// no support in SdfDSL yet
-		Import numbersImport = new Import("test/Numbers");
-		numbersImport.getRenamings().put(sdf.sortSymbol("Integer"), sdf.sortSymbol("Number"));
-		
 		Imports imports = sdf.importsStatement(new Import[]{
-//				sdf.importModuleWithoutParameters("test/Numbers"),
-				numbersImport,
+				sdf.importModuleWithRenamings(
+						new ModuleId("test/Numbers"),
+						new Renaming[]{
+							sdf.renaming(sdf.sortSymbol("Integer"), sdf.sortSymbol("Number"))
+						}
+					),
 				sdf.importModuleWithoutParameters(new ModuleId("test/Whitespace")),
 		});
 		
@@ -191,6 +198,7 @@ public class ImportTest extends TestCase {
 	/**
 	 * Defines the SimplePlang module
 	 * 
+	 * <pre>{@code
 	 * module SimpleLang
 	 * imports ArithExpr2
 	 * exports
@@ -205,6 +213,7 @@ public class ImportTest extends TestCase {
 	 * 
 	 * hiddens
 	 * context-free start-symbols Program
+	 * }</pre>
 	 */
 	private Module setUpSimpleLangModule() {
 		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[]{

@@ -1,14 +1,20 @@
 package sdf.model;
 
 /**
- * Alternative operator
+ * The alternative operator creates a symbol that matches either the left or right symbol.
  * 
- * SDF syntax:
- * <code>
- * &lt;Symbol&gt; | &lt;Symbol&gt;
- * </code>
+ * <p>SDF Syntax:
+ * <pre>
+ * <i>Symbol</i> | <i>Symbol</i>
+ * </pre>
+ * 
+ * <p>Example:
+ * <pre>
+ * "true" | "false" -> Bool
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.alternatives">SDF Documentation</a>
  *
  */
 public class AlternativeSymbol extends Symbol {
@@ -20,6 +26,11 @@ public class AlternativeSymbol extends Symbol {
 		super();
 		this.left = left;
 		this.right = right;
+	}
+	
+	public AlternativeSymbol(Symbol left, Symbol right, String label) {
+		this(left, right);
+		this.setLabel(label);
 	}
 
 	public Symbol getLeft() {

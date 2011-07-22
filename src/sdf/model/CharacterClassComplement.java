@@ -4,12 +4,18 @@ package sdf.model;
  * Character class complement operator.
  * Accepts all characters not in the inner character class.
  * 
- * SDF syntax:
- * <code>
- * ~&lt;CharacterClass&gt;
- * </code>
+ * <p>SDF Syntax:
+ * <pre>
+ * ~<i>CharacterClass</i>
+ * </pre>
+ * 
+ * <p>Example:
+ * <pre>
+ * ~[0-9]
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.characters">SDF Documentation</a>
  *
  */
 public class CharacterClassComplement extends CharacterClass {
@@ -19,6 +25,11 @@ public class CharacterClassComplement extends CharacterClass {
 	public CharacterClassComplement(CharacterClass symbol) {
 		super();
 		this.symbol = symbol;
+	}
+	
+	public CharacterClassComplement(CharacterClass symbol, String label) {
+		this(symbol);
+		this.setLabel(label);
 	}
 
 	public CharacterClass getSymbol() {

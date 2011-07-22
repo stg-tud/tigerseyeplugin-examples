@@ -1,5 +1,32 @@
 package sdf.model;
 
+/**
+ * List symbols are an extension of {@link RepetitionSymbol repetition symbols} that match
+ * zero or more (or one or more, depending on the repetition operator used) occurences
+ * of the element symbol, seperated by a given seperator symbol.
+ * 
+ * <p>SDF Syntax (at least 0 occurences):
+ * <pre>
+ * {<i>Symbol</i> <i>Symbol</i>}*
+ * </pre>
+ * 
+ * <p>SDF Syntax (at least 1 occurence):
+ * <pre>
+ * {<i>Symbol</i> <i>Symbol</i>}*
+ * </pre>
+ * 
+ * The first symbol in SDF syntax is the element symbol, the second symbol is the seperator.
+ * 
+ * <p>Example:
+ * <pre>
+ * {Number ","}+	-> NumberList
+ * </pre>
+ * 
+ * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.lists">SDF Documentation</a>
+ * @see RepetitionSymbol
+ * 
+ */
 public class ListSymbol extends Symbol {
 
 	Symbol element;
@@ -11,6 +38,11 @@ public class ListSymbol extends Symbol {
 		this.element = element;
 		this.seperator = seperator;
 		this.atLeastOnce = atLeastOnce;
+	}
+	
+	public ListSymbol(Symbol element, Symbol seperator, boolean atLeastOnce, String label) {
+		this(element, seperator, atLeastOnce);
+		this.setLabel(label);
 	}
 
 	public Symbol getElement() {

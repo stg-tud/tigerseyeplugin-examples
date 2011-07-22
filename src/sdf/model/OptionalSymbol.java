@@ -2,13 +2,16 @@ package sdf.model;
 
 /**
  * An optional symbol may occur 0 or 1 times.
+ * The optional operator is a postfix operator in SDF syntax.
  * 
- * SDF syntax:
- * <code>
- * &lt;Symbol&gt;?
- * </code>
+ * <p>SDF Syntax:
+ * <pre>
+ * <i>Symbol<i>?
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.optionals">SDF Documentation</a>
+ * @see RepetitionSymbol
  *
  */
 public class OptionalSymbol extends Symbol {
@@ -17,6 +20,11 @@ public class OptionalSymbol extends Symbol {
 	public OptionalSymbol(Symbol symbol) {
 		super();
 		this.symbol = symbol;
+	}
+	
+	public OptionalSymbol(Symbol symbol, String label) {
+		this(symbol);
+		this.setLabel(label);
 	}
 
 	public Symbol getSymbol() {

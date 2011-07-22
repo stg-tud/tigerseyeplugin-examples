@@ -5,15 +5,28 @@ import java.util.ArrayList;
 /**
  * Represents an SDF module.
  * 
- * SDF Syntax:
+ * The module may have parameters and an arbitrary number of import, export and hidden sections.
  * 
- * <code>
- * module &lt;ModuleName&gt;
- * &lt;ImportSection&gt;*
- * &lt;ExportOrHiddenSection&gt;*
- * </code>
+ * <p>SDF Syntax (without parameters):
+ * <pre>
+ * module <i>ModuleName</i>
+ *   <i>ImportSection*</i>
+ *   <i>ExportOrHiddenSection*</i>
+ * </pre>
+ * 
+ * <p>SDF Syntax (with parameters):
+ * <pre>
+ * module <i>ModuleName</i>[<i>Symbol+</i>]
+ *   <i>ImportSection*</i>
+ *   <i>ExportOrHiddenSection*</i>
+ * </pre>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.modules">SDF Documentation</a>
+ * @see ModuleId
+ * @see Imports
+ * @see Exports
+ * @see Hiddens
  * 
  */
 public class Module extends SdfElement {

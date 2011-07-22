@@ -1,8 +1,10 @@
 package sdf.model;
 
 /**
+ * A simple character class literal.
+ * 
  * A character class contains a list of zero or more characters (which stand for
- * themselves) or character ranges such as, for instance, [0-9] as an
+ * themselves) or character ranges such as, for instance, {@code [0-9]} as an
  * abbreviation for the characters 0, 1, ..., 9. In a character range of the
  * form c1-c2 one of the following restrictions should apply:
  * 
@@ -38,6 +40,7 @@ package sdf.model;
  * </ul>
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.characters">SDF Documentation</a>
  * 
  */
 public class CharacterClassSymbol extends CharacterClass {
@@ -46,7 +49,16 @@ public class CharacterClassSymbol extends CharacterClass {
 
 	public CharacterClassSymbol(String pattern) {
 		super();
-		this.pattern = pattern;
+		if (pattern.startsWith("[") && pattern.endsWith("]")) {
+			this.pattern = pattern.substring(1, pattern.length() - 1);
+		} else {
+			this.pattern = pattern;
+		}
+	}
+	
+	public CharacterClassSymbol(String pattern, String label) {
+		this(pattern);
+		this.setLabel(label);
 	}
 
 	public String getPattern() {

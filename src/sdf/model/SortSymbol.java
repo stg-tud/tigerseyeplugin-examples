@@ -1,9 +1,21 @@
 package sdf.model;
 
 /**
- * non-terminal
+ * A sort symbol is a non-terminal.
+ * Sort names always start with a capital letter and may be followed by letters and/or digits. Hyphens (-) may be embedded in a sort name.
+ * 
+ * <p>Example:
+ * <pre>
+ * Statement
+ * </pre>
+ * 
+ * Note that the sort symbol named <tt>LAYOUT</tt> is special symbol used to define layout characters.
+ * It is automatically inserted between symbols on the left-hand side of context-free productions (as <tt>LAYOUT?</tt>).
+ * It has to be defined by the user in a lexical syntax section (e.g. {@code [\ \t\n] -> LAYOUT}).
  * 
  * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.sort">SDF Documentation</a>
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.layout">LAYOUT Symbol</a>
  * 
  */
 public class SortSymbol extends Symbol {
@@ -12,6 +24,11 @@ public class SortSymbol extends Symbol {
 	public SortSymbol(String name) {
 		super();
 		this.name = name;
+	}
+	
+	public SortSymbol(String name, String label) {
+		this(name);
+		this.setLabel(label);
 	}
 
 	public String getName() {

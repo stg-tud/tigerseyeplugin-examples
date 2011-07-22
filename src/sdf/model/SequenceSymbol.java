@@ -2,6 +2,19 @@ package sdf.model;
 
 import java.util.ArrayList;
 
+/**
+ * A sequence symbol consists of a list of symbols that must occur in the given order.
+ * The list can also be empty.
+ * 
+ * <p>SDF Syntax:
+ * <pre>
+ * (<i>Symbol*</i>)
+ * </pre>
+ * 
+ * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.sequence">SDF Documentation</a>
+ *
+ */
 public class SequenceSymbol extends Symbol {
 
 	ArrayList<Symbol> symbols;
@@ -9,6 +22,11 @@ public class SequenceSymbol extends Symbol {
 	public SequenceSymbol(ArrayList<Symbol> symbols) {
 		super();
 		this.symbols = symbols;
+	}
+	
+	public SequenceSymbol(ArrayList<Symbol> symbols, String label) {
+		this(symbols);
+		this.setLabel(label);
 	}
 
 	public ArrayList<Symbol> getSymbols() {

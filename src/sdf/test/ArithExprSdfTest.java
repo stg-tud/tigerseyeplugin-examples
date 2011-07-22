@@ -30,8 +30,8 @@ import junit.framework.TestCase;
  * Simple test case that uses a syntax definition consisting of one module. The grammar
  * recognizes arithmetic expressions containing numbers, +-/* operators and brackets.
  * 
- * SDF:
- * <code>
+ * <p>SDF:
+ * <pre>{@code
  * module ArithExpr
  * exports
  * context-free start-symbols Expr
@@ -52,9 +52,7 @@ import junit.framework.TestCase;
  * 
  * Number				-> Factor
  * "(" Expr ")"			-> Factor
- * 
- * 
- * </code>
+ * }</pre>
  * 
  * 
  * @author Pablo Hoch

@@ -26,8 +26,8 @@ import junit.framework.TestCase;
  * This test case checks the implementation of character classes, in particular
  * the character class operators.
  * 
- * SDF:
- * <code>
+ * <p>SDF:
+ * <pre>{@code
  * module CharClassTest
  * exports
  * context-free start-symbols List
@@ -50,9 +50,7 @@ import junit.framework.TestCase;
  * DEF					-> Item
  * 
  * {Item ","}*			-> List
- * 
- * 
- * </code>
+ * }</pre>
  * 
  * 
  * @author Pablo Hoch

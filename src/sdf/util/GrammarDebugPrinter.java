@@ -15,6 +15,7 @@ import de.tud.stg.parlex.core.groupcategories.*;
  * Both categories and rules are sorted alphabetically and categories are linked to the corresponding rules.
  * 
  * @author Pablo Hoch
+ * @see de.tud.stg.parlex.core.IGrammar
  *
  */
 public class GrammarDebugPrinter {
@@ -66,13 +67,17 @@ public class GrammarDebugPrinter {
 			ruleList.add(rule);
 		}
 	}
-
+	
 	public void printGrammar() {
+		printGrammar("Grammar");
+	}
+
+	public void printGrammar(String title) {
 
 		// html header
 		out.println("<!DOCTYPE HTML>");
 		out.println("<html><head>");
-		out.println("<title>Grammar</title>");
+		out.println("<title>" + escape(title) + "</title>");
 		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		out.println("<style type=\"text/css\">");
 		out.println("body {font-family: Arial, Helvetica, sans-serif;}");
@@ -84,7 +89,7 @@ public class GrammarDebugPrinter {
 		out.println("</style>");
 		out.println("</head><body>");
 		
-		out.println("<h1>Grammar</h1>");
+		out.println("<h1>" + escape(title) + "</h1>");
 		out.println("<ul>");
 		out.println("<li><a href=\"#categories\">Categories</a></li>");
 		out.println("<li><a href=\"#rules\">Rules</a></li>");
@@ -123,10 +128,12 @@ public class GrammarDebugPrinter {
 		
 		// start rule
 		
-		if (ruleList.contains(startRule)) {
-			out.println("<li><a href=\"#start_rule\">Start rule</a></li>");
-		} else {
-			out.print("<li><b class=\"missing\">Start rule (not in rule set):</b> <b>");
+		{
+			if (ruleList.contains(startRule)) {
+				out.print("<li><a href=\"#start_rule\"><b>Start rule:</b></a> <b>");
+			} else {
+				out.print("<li><b class=\"missing\">Start rule:</b> <b>");
+			}
 			ICategory<String> lhsCat = startRule.getLhs();
 			out.print(escape(catString(lhsCat)) + "</b> -&gt; ");
 			for (ICategory<String> cat : startRule.getRhs()) {

@@ -3,6 +3,17 @@ package sdf.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Specifies the name and parameters of an imported module.
+ * Used inside of {@link Imports imports} statements.
+ * 
+ * <p>An import consists of at least a module name and optionally actual parameters and/or symbol renamings.
+ * 
+ * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html#section.imports">SDF Documentation</a>
+ * @see Imports
+ *
+ */
 public class Import extends SdfElement {
 
 	String moduleName;
@@ -22,6 +33,15 @@ public class Import extends SdfElement {
 		this.moduleName = moduleName;
 		this.parameters = parameters;
 		this.renamings = renamings;
+	}
+	
+	public Import(String moduleName, ArrayList<Symbol> parameters, ArrayList<Renaming> renamings) {
+		this(moduleName, parameters);
+		HashMap<Symbol, Symbol> hashMap = new HashMap<Symbol, Symbol>();
+		for (Renaming r : renamings) {
+			hashMap.put(r.getOldSymbol(), r.getNewSymbol());
+		}
+		this.renamings = hashMap;
 	}
 
 	public Import(String moduleName, ArrayList<Symbol> parameters) {
