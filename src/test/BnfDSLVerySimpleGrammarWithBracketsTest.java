@@ -57,7 +57,10 @@ public class BnfDSLVerySimpleGrammarWithBracketsTest extends TestCase {
 	@Test
 	public void testEarleyParserWithVerySimpleWithBracketsGrammar() {
 		EarleyParser parser = new EarleyParser(grammar);
-		Chart chart = (Chart) parser.parse("aaab");
+		
+		System.out.println("Grammar: "+grammar);
+		
+		Chart chart = (Chart) parser.parse("aab");
 		chart.rparse((de.tud.stg.parlex.core.Rule)grammar.getStartRule());
 		System.out.println(chart.toString());
 		assertTrue(chart.isValidParse());
