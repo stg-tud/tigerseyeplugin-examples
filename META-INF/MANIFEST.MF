@@ -6,4 +6,4 @@ Bundle-Version: 1.0.0.qualifier
 Fragment-Host: grammarware;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: junit.framework,
- org.junit;version="4.8.2"
+ org.junit;version="4.0.0"
