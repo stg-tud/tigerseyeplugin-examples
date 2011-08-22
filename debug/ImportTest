@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html><head>
+<title>SimpleLang&nbsp;Grammar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {font-family: Arial, Helvetica, sans-serif;}
+li {font-family: Menlo, Consolas, monospace; font-size: 10pt;}
+.missing, .missing a {color: red;}
+.inline {background: #eee;}
+.inline .inline {background: #ddd;}
+.inline .inline .inline {background: #ccc;}
+</style>
+</head><body>
+<h1>SimpleLang&nbsp;Grammar</h1>
+<ul>
+<li><a href="#categories">Categories</a></li>
+<li><a href="#rules">Rules</a></li>
+</ul>
+<h2 id="categories">Categories</h2>
+<ul>
+<li id="cat_1">&quot;(&quot; </li>
+<li id="cat_2">&quot;)&quot; </li>
+<li id="cat_3">&quot;*&quot; </li>
+<li id="cat_4">&quot;+&quot; </li>
+<li id="cat_5">&quot;-&quot; </li>
+<li id="cat_6">&quot;/&quot; </li>
+<li id="cat_7">&quot;;&quot; </li>
+<li id="cat_8">&quot;exit&quot; </li>
+<li id="cat_9">&quot;print&quot; </li>
+<li id="cat_10"><a href="#cat_10_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> </li>
+<li id="cat_11"><a href="#cat_11_rule1">&lt;&lt;Factor-CF&gt;&gt;</a> </li>
+<li id="cat_12"><a href="#cat_12_rule1">&lt;&lt;LAYOUT-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_13_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_13"><a href="#cat_13_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_14"><a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> </li>
+<li id="cat_15"><a href="#cat_15_rule1">&lt;&lt;Number-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_16_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_16"><a href="#cat_16_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_17"><a href="#cat_17_rule1">&lt;&lt;Program-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_23_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</a> )</span> </li>
+<li id="cat_18"><a href="#cat_18_rule1">&lt;&lt;START&gt;&gt;</a> </li>
+<li id="cat_19"><a href="#cat_19_rule1">&lt;&lt;Stmt-CF&gt;&gt;</a> </li>
+<li id="cat_20"><a href="#cat_20_rule1">&lt;&lt;Term-CF&gt;&gt;</a> </li>
+<li id="cat_21"><a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> </li>
+<li id="cat_22"><a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> </li>
+<li id="cat_23"><a href="#cat_23_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</a> </li>
+<li id="cat_24"><a href="#cat_24_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}+-CF&gt;&gt;</a> </li>
+<li id="cat_25">string([&nbsp;]) </li>
+<li id="cat_26">string([0-9]) </li>
+</ul>
+<h2 id="rules">Rules</h2>
+<ul>
+<li><a href="#start_rule"><b>Start rule:</b></a> <b>&lt;&lt;START&gt;&gt;</b> -&gt; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_17_rule1">&lt;&lt;Program-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_23_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</a> )</span> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <li id="cat_10_rule1"><b>&lt;&lt;Expr-CF&gt;&gt;</b> -&gt; <a href="#cat_10_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;+&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_20_rule1">&lt;&lt;Term-CF&gt;&gt;</a> </li>
+<li id="cat_10_rule3"><b>&lt;&lt;Expr-CF&gt;&gt;</b> -&gt; <a href="#cat_10_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;-&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_20_rule1">&lt;&lt;Term-CF&gt;&gt;</a> </li>
+<li id="cat_10_rule5"><b>&lt;&lt;Expr-CF&gt;&gt;</b> -&gt; <a href="#cat_20_rule1">&lt;&lt;Term-CF&gt;&gt;</a> </li>
+<li id="cat_11_rule1"><b>&lt;&lt;Factor-CF&gt;&gt;</b> -&gt; &quot;(&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_10_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;)&quot; </li>
+<li id="cat_11_rule3"><b>&lt;&lt;Factor-CF&gt;&gt;</b> -&gt; <a href="#cat_15_rule1">&lt;&lt;Number-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_16_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_12_rule1"><b>&lt;&lt;LAYOUT-CF&gt;&gt;</b> -&gt; <a href="#cat_13_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_13_rule1"><b>&lt;&lt;LAYOUT-LEX&gt;&gt;</b> -&gt; <a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> </li>
+<li id="cat_14_rule1"><b>&lt;&lt;LAYOUT?-CF&gt;&gt;</b> -&gt; </li>
+<li id="cat_14_rule3"><b>&lt;&lt;LAYOUT?-CF&gt;&gt;</b> -&gt; <a href="#cat_12_rule1">&lt;&lt;LAYOUT-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_13_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_15_rule1"><b>&lt;&lt;Number-CF&gt;&gt;</b> -&gt; <a href="#cat_16_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_16_rule1"><b>&lt;&lt;Number-LEX&gt;&gt;</b> -&gt; <a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> </li>
+<li id="cat_17_rule1"><b>&lt;&lt;Program-CF&gt;&gt;</b> -&gt; <a href="#cat_23_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</a> </li>
+<li id="cat_18_rule1"><b id="start_rule">&lt;&lt;START&gt;&gt;</b> -&gt; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_17_rule1">&lt;&lt;Program-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_23_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</a> )</span> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> </li>
+<li id="cat_19_rule1"><b>&lt;&lt;Stmt-CF&gt;&gt;</b> -&gt; </li>
+<li id="cat_19_rule3"><b>&lt;&lt;Stmt-CF&gt;&gt;</b> -&gt; &quot;exit&quot; </li>
+<li id="cat_19_rule5"><b>&lt;&lt;Stmt-CF&gt;&gt;</b> -&gt; &quot;print&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_10_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> </li>
+<li id="cat_20_rule1"><b>&lt;&lt;Term-CF&gt;&gt;</b> -&gt; <a href="#cat_11_rule1">&lt;&lt;Factor-CF&gt;&gt;</a> </li>
+<li id="cat_20_rule3"><b>&lt;&lt;Term-CF&gt;&gt;</b> -&gt; <a href="#cat_20_rule1">&lt;&lt;Term-CF&gt;&gt;</a> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;*&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_11_rule1">&lt;&lt;Factor-CF&gt;&gt;</a> </li>
+<li id="cat_20_rule5"><b>&lt;&lt;Term-CF&gt;&gt;</b> -&gt; <a href="#cat_20_rule1">&lt;&lt;Term-CF&gt;&gt;</a> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;/&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_11_rule1">&lt;&lt;Factor-CF&gt;&gt;</a> </li>
+<li id="cat_21_rule1"><b>&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</b> -&gt; <a href="#cat_21_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> string([&nbsp;]) </li>
+<li id="cat_21_rule3"><b>&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</b> -&gt; string([&nbsp;]) </li>
+<li id="cat_22_rule1"><b>&lt;&lt;[0-9]+-LEX&gt;&gt;</b> -&gt; <a href="#cat_22_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> string([0-9]) </li>
+<li id="cat_22_rule3"><b>&lt;&lt;[0-9]+-LEX&gt;&gt;</b> -&gt; string([0-9]) </li>
+<li id="cat_23_rule1"><b>&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</b> -&gt; </li>
+<li id="cat_23_rule3"><b>&lt;&lt;{Stmt&nbsp;&quot;;&quot;}*-CF&gt;&gt;</b> -&gt; <a href="#cat_24_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}+-CF&gt;&gt;</a> </li>
+<li id="cat_24_rule1"><b>&lt;&lt;{Stmt&nbsp;&quot;;&quot;}+-CF&gt;&gt;</b> -&gt; <a href="#cat_19_rule1">&lt;&lt;Stmt-CF&gt;&gt;</a> </li>
+<li id="cat_24_rule3"><b>&lt;&lt;{Stmt&nbsp;&quot;;&quot;}+-CF&gt;&gt;</b> -&gt; <a href="#cat_19_rule1">&lt;&lt;Stmt-CF&gt;&gt;</a> <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;;&quot; <a href="#cat_14_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_24_rule1">&lt;&lt;{Stmt&nbsp;&quot;;&quot;}+-CF&gt;&gt;</a> </li>
+</ul>
+</body></html>

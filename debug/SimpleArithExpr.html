@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html><head>
+<title>SimpleArithExpr&nbsp;Grammar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {font-family: Arial, Helvetica, sans-serif;}
+li {font-family: Menlo, Consolas, monospace; font-size: 10pt;}
+.missing, .missing a {color: red;}
+.inline {background: #eee;}
+.inline .inline {background: #ddd;}
+.inline .inline .inline {background: #ccc;}
+</style>
+</head><body>
+<h1>SimpleArithExpr&nbsp;Grammar</h1>
+<ul>
+<li><a href="#categories">Categories</a></li>
+<li><a href="#rules">Rules</a></li>
+</ul>
+<h2 id="categories">Categories</h2>
+<ul>
+<li id="cat_1">&quot;+&quot; </li>
+<li id="cat_2">&quot;-&quot; </li>
+<li id="cat_3"><a href="#cat_3_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> </li>
+<li id="cat_4"><a href="#cat_4_rule1">&lt;&lt;LAYOUT-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_5_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_5"><a href="#cat_5_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_6"><a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> </li>
+<li id="cat_7"><a href="#cat_7_rule1">&lt;&lt;Number-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_8_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_8"><a href="#cat_8_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_9"><a href="#cat_9_rule1">&lt;&lt;START&gt;&gt;</a> </li>
+<li id="cat_10"><a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> </li>
+<li id="cat_11"><a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> </li>
+<li id="cat_12">string([&nbsp;]) </li>
+<li id="cat_13">string([0-9]) </li>
+</ul>
+<h2 id="rules">Rules</h2>
+<ul>
+<li><a href="#start_rule"><b>Start rule:</b></a> <b>&lt;&lt;START&gt;&gt;</b> -&gt; <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_3_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <li id="cat_3_rule1"><b>&lt;&lt;Expr-CF&gt;&gt;</b> -&gt; <a href="#cat_3_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;+&quot; <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_7_rule1">&lt;&lt;Number-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_8_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_3_rule3"><b>&lt;&lt;Expr-CF&gt;&gt;</b> -&gt; <a href="#cat_3_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> &quot;-&quot; <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_7_rule1">&lt;&lt;Number-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_8_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_3_rule5"><b>&lt;&lt;Expr-CF&gt;&gt;</b> -&gt; <a href="#cat_7_rule1">&lt;&lt;Number-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_8_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_4_rule1"><b>&lt;&lt;LAYOUT-CF&gt;&gt;</b> -&gt; <a href="#cat_5_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_5_rule1"><b>&lt;&lt;LAYOUT-LEX&gt;&gt;</b> -&gt; <a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> </li>
+<li id="cat_6_rule1"><b>&lt;&lt;LAYOUT?-CF&gt;&gt;</b> -&gt; </li>
+<li id="cat_6_rule3"><b>&lt;&lt;LAYOUT?-CF&gt;&gt;</b> -&gt; <a href="#cat_4_rule1">&lt;&lt;LAYOUT-CF&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_5_rule1">&lt;&lt;LAYOUT-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> )</span> )</span> </li>
+<li id="cat_7_rule1"><b>&lt;&lt;Number-CF&gt;&gt;</b> -&gt; <a href="#cat_8_rule1">&lt;&lt;Number-LEX&gt;&gt;</a> <span class="inline">( -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> )</span> </li>
+<li id="cat_8_rule1"><b>&lt;&lt;Number-LEX&gt;&gt;</b> -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> </li>
+<li id="cat_9_rule1"><b id="start_rule">&lt;&lt;START&gt;&gt;</b> -&gt; <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> <a href="#cat_3_rule1">&lt;&lt;Expr-CF&gt;&gt;</a> <a href="#cat_6_rule1">&lt;&lt;LAYOUT?-CF&gt;&gt;</a> </li>
+<li id="cat_10_rule1"><b>&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</b> -&gt; <a href="#cat_10_rule1">&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</a> string([&nbsp;]) </li>
+<li id="cat_10_rule3"><b>&lt;&lt;[&nbsp;]+-LEX&gt;&gt;</b> -&gt; string([&nbsp;]) </li>
+<li id="cat_11_rule1"><b>&lt;&lt;[0-9]+-LEX&gt;&gt;</b> -&gt; <a href="#cat_11_rule1">&lt;&lt;[0-9]+-LEX&gt;&gt;</a> string([0-9]) </li>
+<li id="cat_11_rule3"><b>&lt;&lt;[0-9]+-LEX&gt;&gt;</b> -&gt; string([0-9]) </li>
+</ul>
+</body></html>
