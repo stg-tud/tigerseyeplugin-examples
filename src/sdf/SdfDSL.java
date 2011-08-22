@@ -249,6 +249,11 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return sym;
 	}
 	
+	// convenience method for manual tests
+	public LiteralSymbol caseInsensitiveLiteralSymbol(String str) {
+		return caseInsensitiveLiteralSymbol(new CaseInsensitiveLiteralSymbol("'" + str + "'"));
+	}
+	
 	// p0
 	// convenience method for manual tests
 	//@DSLMethod(prettyName = "p0", topLevel = false)
