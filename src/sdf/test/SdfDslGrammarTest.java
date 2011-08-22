@@ -1,6 +1,9 @@
 package sdf.test;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import jjtraveler.VisitFailure;
 
@@ -15,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import sdf.SdfDSL;
 import sdf.util.GrammarDebugPrinter;
 import de.tud.stg.parlex.core.IGrammar;
+import de.tud.stg.popart.dslsupport.DSL;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.GrammarBuilder;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.UnicodeLookupTable;
 import de.tud.stg.tigerseye.test.PrettyGroovyCodePrinterFactory;
@@ -37,7 +41,10 @@ public class SdfDslGrammarTest extends TestCase {
 		
 		GrammarBuilder gb = new GrammarBuilder(ult);
 		
-		IGrammar<String> grammar = gb.buildGrammar(SdfDSL.class);
+		List<Class<? extends DSL>> classList = new ArrayList<Class<? extends DSL>>();
+		classList.add(SdfDSL.class);
+		IGrammar<String> grammar = gb.buildGrammar(classList);
+//		IGrammar<String> grammar = gb.buildGrammar(SdfDSL.class);
 		
 		try {
 			FileOutputStream fos = new FileOutputStream("src/sdf/test/SdfDslGrammar.html");
@@ -64,11 +71,7 @@ public class SdfDslGrammarTest extends TestCase {
 			
 			String s = transform(testInput, SdfDSL.class);
 			System.out.println(s);
-		} catch (VisitFailure e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -76,9 +79,10 @@ public class SdfDslGrammarTest extends TestCase {
 		
 	}
 
-	private String transform(String input, Class... classes) throws VisitFailure {
+	private String transform(String input, Class<? extends DSL>... classes) throws VisitFailure {
 		TestDSLTransformation trans = new TestDSLTransformation(ult, new PrettyGroovyCodePrinterFactory());
+		List<Class<? extends DSL>> classList = Arrays.asList(classes);
 		
-		return trans.performTransformation(input, classes);
+		return trans.performTransformation(input, classList);
 	}
 }
