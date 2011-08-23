@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.tud.stg.popart.builder.test.statemachine.OutputAction;
-
 public class StateMachineTest {
 
 	StateMachine m
