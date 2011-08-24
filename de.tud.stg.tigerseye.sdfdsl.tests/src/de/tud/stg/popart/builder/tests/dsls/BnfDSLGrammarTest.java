@@ -1,4 +1,4 @@
-package test;
+package de.tud.stg.popart.builder.tests.dsls;
 
 import junit.framework.TestCase;
 

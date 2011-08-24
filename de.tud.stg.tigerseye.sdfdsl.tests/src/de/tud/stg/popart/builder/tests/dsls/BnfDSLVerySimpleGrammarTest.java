@@ -1,4 +1,4 @@
-package test;
+package de.tud.stg.popart.builder.tests.dsls;
 
 import junit.framework.TestCase;
 
@@ -12,11 +12,12 @@ import de.tud.stg.popart.builder.test.dsls.*;
 /*
  * BNF Test Grammar:
  * 
-	FOO	::= "a" {"a"} "b"
+	FOO	::= BAR "b"
+	BAR ::= "a" BAR | "a"
  *
  */
 
-public class BnfDSLVerySimpleGrammarWithBracketsTest extends TestCase {
+public class BnfDSLVerySimpleGrammarTest extends TestCase {
 	
 	private Grammar grammar;
 
@@ -26,22 +27,26 @@ public class BnfDSLVerySimpleGrammarWithBracketsTest extends TestCase {
 		
 		BnfDSL.Expression fooRHS = dsl.expression(new BnfDSL.Term[]{
 			dsl.termFromFactors(new BnfDSL.Factor[]{
-					dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("a")})),
-					dsl.factorFromExpressionInBraces(
-						dsl.expression(new BnfDSL.Term[]{
-								dsl.termFromFactors(new BnfDSL.Factor[]{
-										dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("a")})),
-								})
-						})	
-					),
+					dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("BAR"))),
 					dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("b")})),
-			})
+			})	
 		});
 		
 		BnfDSL.Rule fooRule = dsl.rule(dsl.identifierFromLetters(letters("FOO")), fooRHS);
 		
+		BnfDSL.Expression barRHS = dsl.expression(new BnfDSL.Term[]{
+			dsl.termFromFactors(new BnfDSL.Factor[]{
+					dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("a")})),
+					dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("BAR"))),
+			}),
+			dsl.termFromFactors(new BnfDSL.Factor[]{
+					dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("a")})),
+			}),
+		});
+		BnfDSL.Rule barRule = dsl.rule(dsl.identifierFromLetters(letters("BAR")), barRHS);
+		
 		BnfDSL.Syntax syntax = dsl.syntax(new BnfDSL.Rule[]{
-			fooRule
+			fooRule, barRule
 		});
 		
 		grammar = syntax.getGrammar();
@@ -49,18 +54,15 @@ public class BnfDSLVerySimpleGrammarWithBracketsTest extends TestCase {
 	
 	@Test
 	public void testFoo() {
-		System.out.println("== BnfDSLVerySimpleGrammarWithBracketsTest == ");
+		System.out.println("== BnfDSLVerySimpleGrammarTest == ");
 		System.out.println(grammar.toString());
 		
 	}
 	
 	@Test
-	public void testEarleyParserWithVerySimpleWithBracketsGrammar() {
+	public void testEarleyParserWithVerySimpleGrammar() {
 		EarleyParser parser = new EarleyParser(grammar);
-		
-		System.out.println("Grammar: "+grammar);
-		
-		Chart chart = (Chart) parser.parse("aab");
+		Chart chart = (Chart) parser.parse("aaab");
 		chart.rparse((de.tud.stg.parlex.core.Rule)grammar.getStartRule());
 		System.out.println(chart.toString());
 		assertTrue(chart.isValidParse());

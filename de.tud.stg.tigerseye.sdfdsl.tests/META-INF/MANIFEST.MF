@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: de.tud.stg.tigerseye.sdfdsl.tests
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: de.tud.stg.tigerseye.sdfdsl;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit4;bundle-version="4.8.0"
+Import-Package: org.slf4j,
+ org.slf4j.impl

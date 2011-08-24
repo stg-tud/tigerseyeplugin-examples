@@ -1,5 +1,6 @@
-package test;
+package sdf.general;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -14,7 +15,6 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
 /*
  * BNF Test Grammar:
  * 
-	math		::= { expression }
 	expression	::= plus | minus
 	plus		::= number "+" number
 	minus		::= number "-" number
@@ -22,9 +22,7 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  *
  * Rules:
  * 
- * S			-> MATH
- * MATH			-> ε
- * MATH			-> MATH EXPRESSION
+ * S			-> EXPRESSION
  * EXPRESSION	-> PLUS
  * EXPRESSION	-> MINUS
  * PLUS			-> NUMBER "+" NUMBER
@@ -33,18 +31,17 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  * NUMBER		-> NUMBER "digit"
  */
 
-public class GrammarTest1 extends TestCase {
+public class GrammarTest2{
 
 	Grammar grammar;
-	Category S, MATH, EXPRESSION, PLUS, MINUS, NUMBER, digit, plusSign, minusSign;
-	Rule rMATH1, rMATH2, rEXPRESSION1, rEXPRESSION2, rPLUS, rMINUS, rNUMBER1, rNUMBER2, rS;
+	Category S, EXPRESSION, PLUS, MINUS, NUMBER, digit, plusSign, minusSign;
+	Rule rEXPRESSION1, rEXPRESSION2, rPLUS, rMINUS, rNUMBER1, rNUMBER2, rS;
 	
 	@Before
 	public void setUp() {
 		grammar = new Grammar();
 		
 		S = new Category("S", false);
-		MATH = new Category("MATH", false);
 		EXPRESSION = new Category("EXPRESSION", false);
 		PLUS = new Category("PLUS", false);
 		MINUS = new Category("MINUS", false);
@@ -54,9 +51,7 @@ public class GrammarTest1 extends TestCase {
 		plusSign = new Category("+", true);
 		minusSign = new Category("-", true);
 		
-		rS = new Rule(S, MATH);
-		rMATH1 = new Rule(MATH);
-		rMATH2 = new Rule(MATH, MATH, EXPRESSION);
+		rS = new Rule(S, EXPRESSION);
 		rEXPRESSION1 = new Rule(EXPRESSION, PLUS);
 		rEXPRESSION2 = new Rule(EXPRESSION, MINUS);
 		rPLUS = new Rule(PLUS, NUMBER, plusSign, NUMBER);
@@ -64,23 +59,23 @@ public class GrammarTest1 extends TestCase {
 		rNUMBER1 = new Rule(NUMBER, digit);
 		rNUMBER2 = new Rule(NUMBER, NUMBER, digit);
 		
-		grammar.addCategories(S, MATH, EXPRESSION, PLUS, MINUS, NUMBER, digit, plusSign, minusSign);
-		grammar.addRules(rMATH1, rMATH2, rEXPRESSION1, rEXPRESSION2, rPLUS, rMINUS, rNUMBER1, rNUMBER2, rS);
+		grammar.addCategories(S, EXPRESSION, PLUS, MINUS, NUMBER, digit, plusSign, minusSign);
+		grammar.addRules(rEXPRESSION1, rEXPRESSION2, rPLUS, rMINUS, rNUMBER1, rNUMBER2, rS);
 		grammar.setStartRule(rS);
 	}
 	
 	@Test
-	public void testGrammar1() {
+	public void testGrammar2() {
 		assertEquals(rS, grammar.getStartRule());
-		assertEquals(9, grammar.getCategories().size());
-		assertEquals(9, grammar.getRules().size());
+		assertEquals(8, grammar.getCategories().size());
+		assertEquals(7, grammar.getRules().size());
 		
-		System.out.println("== GrammarTest1 == ");
+		System.out.println("== GrammarTest2 == ");
 		System.out.println(grammar.toString());
 	}
 	
 	@Test
-	public void testEarleyParser1() {
+	public void testEarleyParserGrammar2() {
 		EarleyParser parser = new EarleyParser(grammar);
 		Chart chart = (Chart) parser.parse("digit+digitdigit");
 		chart.rparse(this.rS);

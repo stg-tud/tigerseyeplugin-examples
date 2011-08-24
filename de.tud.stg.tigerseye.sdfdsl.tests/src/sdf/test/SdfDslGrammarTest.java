@@ -10,7 +10,6 @@ import jjtraveler.VisitFailure;
 import junit.framework.TestCase;
 
 import org.apache.bsf.util.IOUtils;
-import org.apache.log4j.BasicConfigurator;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +32,10 @@ import de.tud.stg.tigerseye.test.TestUtils;
  *
  */
 public class SdfDslGrammarTest {
+	
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(SdfDslGrammarTest.class);
 
 	private UnicodeLookupTable ult = TestUtils.getDefaultLookupTable();
 
@@ -57,9 +60,6 @@ public class SdfDslGrammarTest {
 			e.printStackTrace();
 		}
 		
-		// enable ast output
-		Logger logger = LoggerFactory.getLogger(TestDSLTransformation.class);
-		BasicConfigurator.configure();
 		logger.info("test");
 		
 		try {
