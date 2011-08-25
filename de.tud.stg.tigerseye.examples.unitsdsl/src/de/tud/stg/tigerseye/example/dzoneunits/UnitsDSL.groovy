@@ -23,12 +23,6 @@ class UnitsDSL extends Interpreter{
 		return cl.call();
 	}
 
-	@DSLMethod(prettyName="p0.p1")
-	@PopartType(clazz = PopartOperationKeyword.class)
-	public String toDouble(Integer i1,Integer i2){
-		return (i1.doubleValue() + Double.valueOf ( "0."+ i2.toString())).toString()
-	}
-
 	@DSLMethod(prettyName="p0__kg")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount kilogram(Object n){

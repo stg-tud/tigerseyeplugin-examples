@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import org.apache.commons.collections.SetUtils;
-
 import de.tud.stg.popart.builder.core.annotations.DSL;
 import de.tud.stg.popart.builder.core.annotations.DSLMethod;
 import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
