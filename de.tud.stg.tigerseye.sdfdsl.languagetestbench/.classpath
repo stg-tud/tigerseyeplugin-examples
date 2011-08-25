@@ -4,8 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry exported="true" kind="con" path="TIGERSEYE_SUPPORT"/>
-	<classpathentry kind="lib" path="/grammarware/bin"/>
-	<classpathentry kind="lib" path="/parlex/bin"/>
 	<classpathentry kind="src" path="src-tigerseye"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
