@@ -2,6 +2,7 @@ package de.tud.stg.tigerseye.examples.unitsdsl;
 
 import org.jscience.physics.amount.Amount
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import javax.measure.unit.Unit;
 import static org.junit.Assert.*;
@@ -66,6 +67,7 @@ class UnitsDSLSemanticTest {
 		println ud.amountFor( 5, "kg")
 	}
 	
+	@Ignore("removed method due since it also translated package imports")
 	@Test
 	public void testDotSeperated() throws Exception {
 		String d1 = ud.toDouble(22,11)
