@@ -26,14 +26,14 @@ public class SimpleSqlDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return cl.call();
 	}
 
-	@DSLMethod(prettyName = "SELECT__p0__FROM__p1")
+	@DSLMethod(production = "SELECT__p0__FROM__p1")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 0)
 	public void selectFrom(String[] columns, String[] tables) {
 		System.out.println("SimpleSqlDSL.selectFrom()"
 				+ Arrays.toString(columns) + Arrays.toString(tables));
 	}
 
-	@DSLMethod(prettyName = "SELECT__p0__FROM__p1__WHERE__p2")
+	@DSLMethod(production = "SELECT__p0__FROM__p1__WHERE__p2")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 0)
 	public void selectFromWhere(String[] columns, String[] tables, @DSL(arrayDelimiter = "AND") String[] checks) {
 		System.out.println("SimpleSqlDSL.selectFromWhere()"

@@ -156,7 +156,7 @@ public class StateMachineDSL {
 	}
 
 
-	@DSLMethod(prettyName = "p0_rarr_p1")
+	@DSLMethod(production = "p0_rarr_p1")
 	@PopartType(clazz=PopartOperationKeyword.class, breakpointPossible = 0)
 	/*
 	 * Example:
@@ -170,7 +170,7 @@ public class StateMachineDSL {
 	}
 	
 	
-	@DSLMethod(prettyName = "rarr_p0")
+	@DSLMethod(production = "rarr_p0")
 	@PopartType(clazz=PopartOperationKeyword.class, breakpointPossible = 0)
 	/*
 	 * Example:

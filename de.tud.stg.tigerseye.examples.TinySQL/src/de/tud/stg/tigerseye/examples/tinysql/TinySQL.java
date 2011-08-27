@@ -36,7 +36,7 @@ public class TinySQL extends Interpreter implements ITinySQL {
 	 * not be necessary here, since they are already declared in the ITinySQL
 	 * interface
 	 */
-	@DSLMethod(prettyName = "SELECT p0 FROM p1")
+	@DSLMethod(production = "SELECT p0 FROM p1")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 0)
 	@Override
 	public List<Map> selectFrom(String[] columns, String[] tables) {

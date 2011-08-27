@@ -121,7 +121,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// - modules with neither imports nor exports (makes no sense, but still legal)
 
 	// module p0 p1 p2 (imports, no parameters)
-	@DSLMethod(prettyName = "module  p0  p1  p2", topLevel = true)
+	@DSLMethod(production = "module  p0  p1  p2", topLevel = true)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Module moduleWithoutParameters(
 			ModuleId name,
@@ -138,7 +138,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// module p0 p1 (no imports, no parameters)
-	@DSLMethod(prettyName = "module  p0   p1", topLevel = true)
+	@DSLMethod(production = "module  p0   p1", topLevel = true)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Module moduleWithoutParameters(
 			ModuleId name,
@@ -153,7 +153,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// module p0[p1] p2 p3
-	@DSLMethod(prettyName = "module  p0 [ p1 ]  p2  p3")
+	@DSLMethod(production = "module  p0 [ p1 ]  p2  p3")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Module moduleWithParameters(
 			ModuleId name,
@@ -170,7 +170,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	// for testing purposes
 	
-	@DSLMethod(prettyName = "parse  p0  p1")
+	@DSLMethod(production = "parse  p0  p1")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public boolean parseString(String topLevelModule, String input) {
 		Grammar grammar = getGrammar(topLevelModule);
@@ -197,7 +197,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return valid;
 	}
 	
-	@DSLMethod(prettyName = "printGeneratedGrammar  p0")
+	@DSLMethod(production = "printGeneratedGrammar  p0")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public void printGeneratedGrammar(String topLevelModule) {
 		Grammar grammar = getGrammar(topLevelModule);
@@ -207,7 +207,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		System.out.println();
 	}
 	
-	@DSLMethod(prettyName = "printGeneratedGrammarHTML  p0  p1")
+	@DSLMethod(production = "printGeneratedGrammarHTML  p0  p1")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public void printGeneratedGrammarHTML(String topLevelModule, String fileName) {
 		Grammar grammar = getGrammar(topLevelModule);
@@ -236,14 +236,14 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	
 	// "p0"
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public LiteralSymbol caseSensitiveLiteralSymbol(String text) {
 		return new LiteralSymbol(text, true);
 	}
 	
 	// 'p0'
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public LiteralSymbol caseInsensitiveLiteralSymbol(CaseInsensitiveLiteralSymbol sym) {
 		return sym;
@@ -256,105 +256,105 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	// p0
 	// convenience method for manual tests
-	//@DSLMethod(prettyName = "p0", topLevel = false)
+	//@DSLMethod(production = "p0", topLevel = false)
 	public SortSymbol sortSymbol(String name) {
 		return new SortSymbol(name);
 	}
 	
 	// [p0]
 	// convenience method for manual tests
-//	@DSLMethod(prettyName = "[p0]", topLevel = false)
+//	@DSLMethod(production = "[p0]", topLevel = false)
 //	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClassSymbol characterClassSymbol(String pattern) {
 		return new CharacterClassSymbol(pattern);
 	}
 	
 	// ~p0
-	@DSLMethod(prettyName = "~ p0", topLevel = false)
+	@DSLMethod(production = "~ p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClassComplement characterClassComplement(CharacterClassSymbol sym) {
 		return new CharacterClassComplement(sym);
 	}
 	
 	// p0/p1
-	@DSLMethod(prettyName = "p0 / p1", topLevel = false)
+	@DSLMethod(production = "p0 / p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClassDifference characterClassDifference(CharacterClassSymbol left, CharacterClassSymbol right) {
 		return new CharacterClassDifference(left, right);
 	}
 	
 	// p0/\p1
-	@DSLMethod(prettyName = "p0 /\\ p1", topLevel = false)
+	@DSLMethod(production = "p0 /\\ p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClassIntersection characterClassIntersection(CharacterClassSymbol left, CharacterClassSymbol right) {
 		return new CharacterClassIntersection(left, right);
 	}
 	
 	// p0\/p1
-	@DSLMethod(prettyName = "p0 \\/ p1", topLevel = false)
+	@DSLMethod(production = "p0 \\/ p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClassUnion characterClassUnion(CharacterClassSymbol left, CharacterClassSymbol right) {
 		return new CharacterClassUnion(left, right);
 	}
 	
 	// p0?
-	@DSLMethod(prettyName = "p0 ?", topLevel = false)
+	@DSLMethod(production = "p0 ?", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public OptionalSymbol optionalSymbol(Symbol symbol) {
 		return new OptionalSymbol(symbol);
 	}
 	
 	// p0*
-	@DSLMethod(prettyName = "p0 *", topLevel = false)
+	@DSLMethod(production = "p0 *", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public RepetitionSymbol repetitionSymbolAtLeastZero(Symbol symbol) {
 		return new RepetitionSymbol(symbol, false);
 	}
 	
 	// p0+
-	@DSLMethod(prettyName = "p0 +", topLevel = false)
+	@DSLMethod(production = "p0 +", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public RepetitionSymbol repetitionSymbolAtLeastOnce(Symbol symbol) {
 		return new RepetitionSymbol(symbol, true);
 	}
 	
 	// (p0)
-	@DSLMethod(prettyName = "( p0 )", topLevel = false)
+	@DSLMethod(production = "( p0 )", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public SequenceSymbol sequenceSymbol(@DSL(arrayDelimiter = " ")Symbol[] symbols) {
 		return new SequenceSymbol(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// {p0 p1}*
-	@DSLMethod(prettyName = "{ p0 p1 } *", topLevel = false)
+	@DSLMethod(production = "{ p0 p1 } *", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public ListSymbol listSymbolAtLeastZero(Symbol element, Symbol seperator) {
 		return new ListSymbol(element, seperator, false);
 	}
 	
 	// {p0 p1}+
-	@DSLMethod(prettyName = "{ p0 p1 } +", topLevel = false)
+	@DSLMethod(production = "{ p0 p1 } +", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public ListSymbol listSymbolAtLeastOnce(Symbol element, Symbol seperator) {
 		return new ListSymbol(element, seperator, true);
 	}
 	
 	// p0 | p1
-	@DSLMethod(prettyName = "p0 | p1", topLevel = false)
+	@DSLMethod(production = "p0 | p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public AlternativeSymbol alternativeSymbol(Symbol left, Symbol right) {
 		return new AlternativeSymbol(left, right);
 	}
 	
 	// <p0>
-	@DSLMethod(prettyName = "< p0 >", topLevel = false)
+	@DSLMethod(production = "< p0 >", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public TupleSymbol tupleSymbol(@DSL(arrayDelimiter = ",")Symbol[] symbol) {
 		return new TupleSymbol(new ArrayList<Symbol>(Arrays.asList(symbol)));
 	}
 	
 	// (p0 => p1)
-	@DSLMethod(prettyName = "( p0 => p1 )", topLevel = false)
+	@DSLMethod(production = "( p0 => p1 )", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public FunctionSymbol functionSymbol(@DSL(arrayDelimiter = " ")Symbol[] left, Symbol right) {
 		return new FunctionSymbol(new ArrayList<Symbol>(Arrays.asList(left)), right);
@@ -368,63 +368,63 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	// Methods to convert symbol subclasses to symbol
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(SortSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(LiteralSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(AlternativeSymbol s) { return s; }	
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(ListSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(OptionalSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(RepetitionSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(SequenceSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(CharacterClass s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClass characterClass(CharacterClassSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClass characterClass(CharacterClassComplement s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClass characterClass(CharacterClassDifference s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClass characterClass(CharacterClassIntersection s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public CharacterClass characterClass(CharacterClassUnion s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(TupleSymbol s) { return s; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Symbol symbol(FunctionSymbol s) { return s; }
 	
@@ -433,13 +433,13 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	
 	
-	@DSLMethod(prettyName = "exports  p0", topLevel = false)
+	@DSLMethod(production = "exports  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Exports exports(@DSL(arrayDelimiter = " ")GrammarElement[] grammarElements) {
 		return new Exports(new ArrayList<GrammarElement>(Arrays.asList(grammarElements)));
 	}
 	
-	@DSLMethod(prettyName = "hiddens  p0", topLevel = false)
+	@DSLMethod(production = "hiddens  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Hiddens hiddens(@DSL(arrayDelimiter = " ")GrammarElement[] grammarElements) {
 		return new Hiddens(new ArrayList<GrammarElement>(Arrays.asList(grammarElements)));
@@ -447,11 +447,11 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	// Methods to convert Exports/Hiddens to ExportOrHiddenSection
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public ExportOrHiddenSection exportOrHiddenSection(Exports e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public ExportOrHiddenSection exportOrHiddenSection(Hiddens e) { return e; }
 	
@@ -463,28 +463,28 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	
 	// imports p0
-	@DSLMethod(prettyName = "imports  p0", topLevel = false)
+	@DSLMethod(production = "imports  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Imports importsStatement(@DSL(arrayDelimiter = " ")Import[] importList) {
 		return new Imports(new ArrayList<Import>(Arrays.asList(importList)));
 	}
 	
 	// p0
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Import importModuleWithoutParameters(ModuleId moduleName) {
 		return new Import(moduleName.toString());
 	}
 	
 	// p0[p1]
-	@DSLMethod(prettyName = "p0 [ p1 ]", topLevel = false)
+	@DSLMethod(production = "p0 [ p1 ]", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Import importModuleWithParameters(ModuleId moduleName, @DSL(arrayDelimiter = ",")Symbol[] params) {
 		return new Import(moduleName.toString(), new ArrayList<Symbol>(Arrays.asList(params)));
 	}
 	
 	// p0[p1]
-	@DSLMethod(prettyName = "p0 [ p1 ]", topLevel = false)
+	@DSLMethod(production = "p0 [ p1 ]", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Import importModuleWithRenamings(ModuleId moduleName, @DSL(arrayDelimiter = ",")Renaming[] renamings) {
 		return new Import(moduleName.toString(),
@@ -493,7 +493,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0[p1][p2]
-	@DSLMethod(prettyName = "p0 [ p1 ] [ p2 ]", topLevel = false)
+	@DSLMethod(production = "p0 [ p1 ] [ p2 ]", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Import importModuleWithParametersAndRenamings(ModuleId moduleName,
 			@DSL(arrayDelimiter = ",")Symbol[] params,
@@ -504,70 +504,70 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0 => p1
-	@DSLMethod(prettyName = "p0 => p1", topLevel = false)
+	@DSLMethod(production = "p0 => p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Renaming renaming(Symbol oldSymbol, Symbol newSymbol) {
 		return new Renaming(oldSymbol, newSymbol);
 	}
 	
 	// sorts p0
-	@DSLMethod(prettyName = "sorts  p0", topLevel = false)
+	@DSLMethod(production = "sorts  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Sorts sortsDeclaration(@DSL(arrayDelimiter = " ")SortSymbol[] sortSymbols) {
 		return new Sorts(new ArrayList<SortSymbol>(Arrays.asList(sortSymbols)));
 	}
 	
 	// lexical syntax p0
-	@DSLMethod(prettyName = "lexical  syntax  p0", topLevel = false)
+	@DSLMethod(production = "lexical  syntax  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public LexicalSyntax lexicalSyntax(@DSL(arrayDelimiter = " ")Production[] productions) {
 		return new LexicalSyntax(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
 	// context-free syntax p0
-	@DSLMethod(prettyName = "context-free  syntax  p0", topLevel = false)
+	@DSLMethod(production = "context-free  syntax  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public ContextFreeSyntax contextFreeSyntax(@DSL(arrayDelimiter = " ")Production[] productions) {
 		return new ContextFreeSyntax(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
 	// lexical start-symbols p0
-	@DSLMethod(prettyName = "lexical  start-symbols  p0", topLevel = false)
+	@DSLMethod(production = "lexical  start-symbols  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public LexicalStartSymbols lexicalStartSymbols(@DSL(arrayDelimiter = " ")Symbol[] symbols) {
 		return new LexicalStartSymbols(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// context-free start-symbols p0
-	@DSLMethod(prettyName = "context-free  start-symbols  p0", topLevel = false)
+	@DSLMethod(production = "context-free  start-symbols  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public ContextFreeStartSymbols contextFreeStartSymbols(@DSL(arrayDelimiter = " ")Symbol[] symbols) {
 		return new ContextFreeStartSymbols(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// aliases p0
-	@DSLMethod(prettyName = "aliases  p0", topLevel = false)
+	@DSLMethod(production = "aliases  p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Aliases aliases(@DSL(arrayDelimiter = " ")Alias[] aliases) {
 		return new Aliases(new ArrayList<Alias>(Arrays.asList(aliases)));
 	}
 	
 	// p0 -> p1		(alias)
-	@DSLMethod(prettyName = "p0 -> p1", topLevel = false)
+	@DSLMethod(production = "p0 -> p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Alias alias(Symbol original, Symbol aliasName) {
 		return new Alias(original, aliasName);
 	}
 	
 	// p0 -> p1		(production)
-	@DSLMethod(prettyName = "p0 -> p1", topLevel = false)
+	@DSLMethod(production = "p0 -> p1", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Production production(@DSL(arrayDelimiter = " ")Symbol[] lhs, Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(Arrays.asList(lhs)), rhs);
 	}
 	
 	//  -> p0		(production with empty LHS)
-	@DSLMethod(prettyName = " -> p0", topLevel = false)
+	@DSLMethod(production = " -> p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Production production(Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(), rhs);
@@ -576,39 +576,39 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	// Methods to convert grammar elements to GrammarElement
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public GrammarElement grammarElement(Imports e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public GrammarElement grammarElement(Sorts e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public GrammarElement grammarElement(StartSymbols e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public GrammarElement grammarElement(Syntax e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public StartSymbols startSymbols(ContextFreeStartSymbols e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public StartSymbols startSymbols(LexicalStartSymbols e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Syntax syntax(ContextFreeSyntax e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public Syntax syntax(LexicalSyntax e) { return e; }
 	
-	@DSLMethod(prettyName = "p0", topLevel = false)
+	@DSLMethod(production = "p0", topLevel = false)
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	public GrammarElement syntax(Aliases e) { return e; }
 	
@@ -620,8 +620,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	/**
 	 * A sort corresponds to a non-terminal, e.g., Bool. Sort names always start with a capital letter and may be followed by
 	 * letters and/or digits. Hyphens (-) may be embedded in a sort name. 
-	 * 
+	 * <p>
 	 * Parameterized sort names (TODO): {@code <Sort>[[<Symbol1>, <Symbol2>, ... ]]}
+	 * 
 	 */
 	public static class SortSymbolType extends TypeHandler {
 

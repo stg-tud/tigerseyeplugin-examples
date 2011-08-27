@@ -151,7 +151,7 @@ public class BnfDSL {
 		return factor;
 	}
 
-	// @DSLMethod(prettyName = "( p0 )", topLevel = false)
+	// @DSLMethod(production = "( p0 )", topLevel = false)
 	// @PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	// public Factor factorFromExpressionInParanthesis(Expression expression) {
 	// Factor factor = new Factor(expression);
@@ -168,7 +168,7 @@ public class BnfDSL {
 	// return factor;
 	// }
 	//
-	// @DSLMethod(prettyName = "[ p0 ]", topLevel = false)
+	// @DSLMethod(production = "[ p0 ]", topLevel = false)
 	// @PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	// public Factor factorFromExpressionInBrackets(Expression expression) {
 	// Factor factor = new Factor(expression);
@@ -204,7 +204,7 @@ public class BnfDSL {
 		return factor;
 	}
 
-	// @DSLMethod(prettyName = "p0")
+	// @DSLMethod(production = "p0")
 	// @PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 1)
 	// public Identifier identifierFromLetter(Letter letter) {
 	// return new Identifier(letter);

@@ -23,13 +23,13 @@ class UnitsDSL extends Interpreter{
 		return cl.call();
 	}
 
-	@DSLMethod(prettyName="p0__kg")
+	@DSLMethod(production="p0__kg")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount kilogram(Object n){
 		return amountFor(n,"kg");
 	}
 	
-	@DSLMethod(prettyName="p0__g")
+	@DSLMethod(production="p0__g")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount gram(Object n){
 		return amountFor(n,"g");
@@ -48,49 +48,49 @@ class UnitsDSL extends Interpreter{
 		return Amount.valueOf(Double.valueOf(strVal), Unit.valueOf(unit))
 	}
 
-	@DSLMethod(prettyName="p0__cm")
+	@DSLMethod(production="p0__cm")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount centimeter(Object n){
 		return amountFor(n,"cm")
 	}
 
-	@DSLMethod(prettyName="p0__km")
+	@DSLMethod(production="p0__km")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount kilometer(Object n){
 		return amountFor(n,"km")
 	}
 
-	@DSLMethod(prettyName="p0__min")
+	@DSLMethod(production="p0__min")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount minutes(Object n){
 		return amountFor(n,"min")
 	}
 
-	@DSLMethod(prettyName="p0__m")
+	@DSLMethod(production="p0__m")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount meter(Object n){
 		return amountFor(n,"m")
 	}
 
-	@DSLMethod(prettyName="p0__h")
+	@DSLMethod(production="p0__h")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount hours(Object n){
 		return amountFor(n,"h")
 	}
 
-	@DSLMethod(prettyName="p0__s")
+	@DSLMethod(production="p0__s")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount seconds(Object n){
 		return amountFor(n,"s")
 	}
 
-	@DSLMethod(prettyName="p0__in")
+	@DSLMethod(production="p0__in")
 	@PopartType(clazz = PopartOperationKeyword.class)
 	public Amount inch(Object n){
 		return amountFor(n,"in")
 	}
 
-	@DSLMethod(prettyName = "SELECT__p0__FROM__p1")
+	@DSLMethod(production = "SELECT__p0__FROM__p1")
 	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 0)
 	public void selectFrom(String[] columns, String[] tables) {
 		System.out.println("SimpleSqlDSL.selectFrom()"

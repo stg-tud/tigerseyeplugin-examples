@@ -11,7 +11,7 @@ import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeywor
 @de.tud.stg.popart.builder.core.annotations.DSL(whitespaceEscape=" ")
 public interface ITinySQL extends DSL{
 
-		@DSLMethod(prettyName="SELECT p0 FROM p1")
+		@DSLMethod(production="SELECT p0 FROM p1")
 		@PopartType(clazz=PopartOperationKeyword.class,breakpointPossible=0)
 		List<Map> selectFrom(String[] columns, String[] tables);
 
