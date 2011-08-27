@@ -96,12 +96,4 @@ class UnitsDSL extends Interpreter{
 		System.out.println("SimpleSqlDSL.selectFrom()"
 				+ Arrays.toString(columns) + Arrays.toString(tables));
 	}
-	//
-	//
-	//	@DSLMethod(prettyName = "SELECT__p0__FROM__p1__WITH__p2")
-	//	@PopartType(clazz = PopartOperationKeyword.class, breakpointPossible = 0)
-	//	public void selectFromWith(String[] columns, String[] tables, String[] with) {
-	//		System.out.println("SimpleSqlDSL.selectFrom()"
-	//				+ Arrays.toString(columns) + Arrays.toString(tables) + Arrays.toString(with));
-	//	}
 }

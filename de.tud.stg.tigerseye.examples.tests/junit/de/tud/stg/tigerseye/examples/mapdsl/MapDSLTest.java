@@ -1,29 +1,9 @@
 package de.tud.stg.tigerseye.examples.mapdsl;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-
-import jjtraveler.VisitFailure;
-
-import org.apache.bsf.util.IOUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.UnhandledException;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import utilities.DSLTransformationTestBase;
-
-import de.tud.stg.tigerseye.eclipse.core.builder.resourcehandler.DSLResourceHandler;
-import de.tud.stg.tigerseye.eclipse.core.builder.transformers.FileType;
-import de.tud.stg.tigerseye.eclipse.core.codegeneration.aterm.PrettyGroovyCodePrinter;
-import de.tud.stg.tigerseye.examples.mapdsl.MapDSL;
 
 public class MapDSLTest extends DSLTransformationTestBase {
 
@@ -62,9 +42,6 @@ public class MapDSLTest extends DSLTransformationTestBase {
 	public void testMapDSLFileFormatTransformation() throws Exception {
 		assertTransformedDSLEqualsExpected("MapDSLinDSLFileFormat",
 				MapDSL.class);
-
-		DSLResourceHandler drh = new DSLResourceHandler(FileType.DSL,
-				new PrettyGroovyCodePrinter());
 	}
 
 }
