@@ -32,7 +32,8 @@ import sdf.util.GrammarDebugPrinter;
  * @see sdf.model
  *
  */
-@DSL(	whitespaceEscape = " ",
+import de.tud.stg.popart.builder.core.annotations.DSLClass;
+@DSLClass(	whitespaceEscape = " ",
 		typeRules = {
 				SdfDSL.SortSymbolType.class,
 				SdfDSL.ModuleIdType.class,
