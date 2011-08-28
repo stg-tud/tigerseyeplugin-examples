@@ -1,13 +1,16 @@
 package sdf.test;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import jjtraveler.VisitFailure;
-
-import junit.framework.TestCase;
 
 import org.apache.bsf.util.IOUtils;
 import org.junit.Test;
@@ -29,28 +32,28 @@ import de.tud.stg.tigerseye.test.TestUtils;
  * Also tries to transform a sample input file using the DSL.
  * 
  * @author Pablo Hoch
- *
+ * 
  */
 public class SdfDslGrammarTest {
-	
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(SdfDslGrammarTest.class);
 
-	private UnicodeLookupTable ult = TestUtils.getDefaultLookupTable();
+	private final UnicodeLookupTable ult = TestUtils.getDefaultLookupTable();
 
 	@Test
 	public void testGeneratedGrammar() {
-		
+
 		GrammarBuilder gb = new GrammarBuilder(ult);
-		
+
 		List<Class<? extends DSL>> classList = new ArrayList<Class<? extends DSL>>();
 		classList.add(SdfDSL.class);
 		IGrammar<String> grammar = gb.buildGrammar(classList);
-//		IGrammar<String> grammar = gb.buildGrammar(SdfDSL.class);
-		
+		// IGrammar<String> grammar = gb.buildGrammar(SdfDSL.class);
+
 		try {
-			FileOutputStream fos = new FileOutputStream("src/sdf/test/SdfDslGrammar.html");
+			FileOutputStream fos = new FileOutputStream(
+					"src/sdf/test/SdfDslGrammar.html");
 			GrammarDebugPrinter gdp = new GrammarDebugPrinter(grammar, fos);
 			gdp.printGrammar();
 			fos.close();
@@ -59,30 +62,32 @@ public class SdfDslGrammarTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		logger.info("test");
-		
+
 		try {
-//			InputStream inputStream = SdfDslGrammarTest.class.getResourceAsStream("resources/SdfDslGrammarTest.input");
-			InputStream inputStream = new FileInputStream("src/sdf/test/resources/SdfDslGrammarTest.input");
+			// InputStream inputStream =
+			// SdfDslGrammarTest.class.getResourceAsStream("resources/SdfDslGrammarTest.input");
+			InputStream inputStream = new FileInputStream(
+					"src/sdf/test/resources/SdfDslGrammarTest.input");
 			InputStreamReader reader = new InputStreamReader(inputStream);
 			String testInput = IOUtils.getStringFromReader(reader);
 			inputStream.close();
-			
+
 			String s = transform(testInput, SdfDSL.class);
 			System.out.println(s);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
 	}
 
-	private String transform(String input, Class<? extends DSL>... classes) throws VisitFailure {
-		TestDSLTransformation trans = new TestDSLTransformation(ult, new PrettyGroovyCodePrinterFactory());
+	private String transform(String input, Class<? extends DSL>... classes)
+			throws VisitFailure {
+		TestDSLTransformation trans = new TestDSLTransformation(ult,
+				new PrettyGroovyCodePrinterFactory());
 		List<Class<? extends DSL>> classList = Arrays.asList(classes);
-		
+
 		return trans.performTransformation(input, classList);
 	}
 }

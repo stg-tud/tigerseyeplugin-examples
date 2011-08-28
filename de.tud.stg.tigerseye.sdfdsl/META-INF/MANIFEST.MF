@@ -7,3 +7,4 @@ Export-Package: sdf,
  sdf.model
 Require-Bundle: de.tud.stg.tigerseye;bundle-version="0.0.1",
  de.tud.stg.tigerseye.core;bundle-version="0.0.1"
+Eclipse-ExtensibleAPI: true

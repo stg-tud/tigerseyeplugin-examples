@@ -1,23 +1,17 @@
-package de.tud.stg.popart.builder.tests.dsls;
+package de.tud.stg.popart.builder.tests.dsls.sdf;
 
-import junit.framework.TestCase;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
-import de.tud.stg.popart.builder.test.dsls.*;
+import de.tud.stg.popart.builder.test.dsls.sdf.BnfDSL;
 
-/*
- * BNF Test Grammar:
- * 
-	FOO	::= BAR "b"
-	BAR ::= "a" BAR | "a"
- *
- */
-
-public class BnfDSLVerySimpleGrammarTest extends TestCase {
+public class BnfDSLVerySimpleGrammarTest  {
 	
 	private Grammar grammar;
 
@@ -48,15 +42,8 @@ public class BnfDSLVerySimpleGrammarTest extends TestCase {
 		BnfDSL.Syntax syntax = dsl.syntax(new BnfDSL.Rule[]{
 			fooRule, barRule
 		});
-		
-		grammar = syntax.getGrammar();
-	}
-	
-	@Test
-	public void testFoo() {
-		System.out.println("== BnfDSLVerySimpleGrammarTest == ");
-		System.out.println(grammar.toString());
-		
+		Grammar grammar2 = syntax.getGrammar();
+		grammar = grammar2;
 	}
 	
 	@Test
@@ -64,11 +51,11 @@ public class BnfDSLVerySimpleGrammarTest extends TestCase {
 		EarleyParser parser = new EarleyParser(grammar);
 		Chart chart = (Chart) parser.parse("aaab");
 		chart.rparse((de.tud.stg.parlex.core.Rule)grammar.getStartRule());
-		System.out.println(chart.toString());
+//		System.out.println(chart.toString());
 		assertTrue(chart.isValidParse());
 		
-		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+//		System.out.println("AST:");
+//		System.out.println(chart.getAST().toString());
 	}
 	
 	@Test

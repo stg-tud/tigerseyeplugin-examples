@@ -1,4 +1,4 @@
-package de.tud.stg.popart.builder.test.dsls;
+package de.tud.stg.popart.builder.test.dsls.sdf;
 
 
 import java.util.HashMap;
@@ -241,7 +241,7 @@ public class BnfDSL {
 	public static class Syntax implements Evaluable {
 
 		private Grammar grammar;
-		private final de.tud.stg.popart.builder.test.dsls.BnfDSL.Rule[] rules;
+		private final de.tud.stg.popart.builder.test.dsls.sdf.BnfDSL.Rule[] rules;
 		private boolean connectEveryCategoryToStartRule;
 		private String startRuleName;
 

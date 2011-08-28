@@ -1,13 +1,14 @@
-package de.tud.stg.popart.builder.tests.dsls;
+package de.tud.stg.popart.builder.tests.dsls.sdf;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
-import junit.framework.TestCase;
-
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
-import de.tud.stg.popart.builder.test.dsls.*;
+import de.tud.stg.popart.builder.test.dsls.sdf.BnfDSL;
 
 /*
  * BNF Test Grammar:
@@ -16,7 +17,7 @@ import de.tud.stg.popart.builder.test.dsls.*;
  *
  */
 
-public class BnfDSLVerySimpleGrammarWithBracketsTest extends TestCase {
+public class BnfDSLVerySimpleGrammarWithBracketsTest  {
 	
 	private Grammar grammar;
 

@@ -34,7 +34,7 @@ import de.tud.stg.tigerseye.examples.unitsdsl.UnitsDSLTest;
 	StateMachineDSLTest.class,//
 	InterpreterCombinerTest.class, //
 	TinySQLTest.class, //
-	
+	SDFAllTests.class, //
 })
 public class AllTestsExampleDSLs {
 

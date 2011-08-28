@@ -1,4 +1,4 @@
-package de.tud.stg.popart.builder.test.dsls;
+package de.tud.stg.popart.builder.test.dsls.sdf;
 
 import groovy.lang.Closure;
 
@@ -203,8 +203,8 @@ public class ImprovedBnfDSL {
 
 		private final int uid = uuidCounter.getAndIncrement();
 
-		public Rule(de.tud.stg.popart.builder.test.dsls.ImprovedBnfDSL.Identifier identifier,
-				de.tud.stg.popart.builder.test.dsls.ImprovedBnfDSL.Expression expression) {
+		public Rule(de.tud.stg.popart.builder.test.dsls.sdf.ImprovedBnfDSL.Identifier identifier,
+				de.tud.stg.popart.builder.test.dsls.sdf.ImprovedBnfDSL.Expression expression) {
 			// TODO Auto-generated constructor stub
 		}
 
@@ -236,7 +236,7 @@ public class ImprovedBnfDSL {
 
 		private final int uid = uuidCounter.getAndIncrement();
 
-		private final de.tud.stg.popart.builder.test.dsls.ImprovedBnfDSL.Factor[] factors;
+		private final de.tud.stg.popart.builder.test.dsls.sdf.ImprovedBnfDSL.Factor[] factors;
 
 		public Term(Factor[] factors) {
 			this.factors = factors;

@@ -1,31 +1,46 @@
-package de.tud.stg.popart.builder.tests.dsls;
+package de.tud.stg.popart.builder.tests.dsls.sdf;
 
-import junit.framework.TestCase;
+import static junit.framework.Assert.assertTrue;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
-import de.tud.stg.popart.builder.test.dsls.*;
+import de.tud.stg.popart.builder.test.dsls.sdf.BnfDSL;
 
 /*
  * BNF Test Grammar:
  * 
+	math		::= { expression }
 	expression	::= plus | minus
 	plus		::= number "+" number
 	minus		::= number "-" number
-	number		::= "digit"
+	number		::= "digit" { "digit" }
  *
  */
 
-public class BnfDSLSimplerGrammarTest extends TestCase {
+public class BnfDSLGrammarTest  {
 	
 	private Grammar grammar;
 
 	@Before
 	public void setUp() {
 		BnfDSL dsl = new BnfDSL();
+		
+		BnfDSL.Expression mathRHS = dsl.expression(new BnfDSL.Term[]{
+				dsl.termFromFactors(new BnfDSL.Factor[]{
+						dsl.factorFromExpressionInBraces(
+							dsl.expression(new BnfDSL.Term[]{
+									dsl.termFromFactors(new BnfDSL.Factor[]{
+											dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("expression")))
+									})
+							})	
+						)
+				})
+		});
+		BnfDSL.Rule mathRule = dsl.rule(dsl.identifierFromLetters(letters("math")), mathRHS);
 		
 		BnfDSL.Expression expressionRHS = dsl.expression(new BnfDSL.Term[]{
 			dsl.termFromFactors(new BnfDSL.Factor[]{
@@ -57,21 +72,22 @@ public class BnfDSLSimplerGrammarTest extends TestCase {
 		
 		BnfDSL.Expression numberRHS = dsl.expression(new BnfDSL.Term[]{
 				dsl.termFromFactors(new BnfDSL.Factor[]{
-						dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("digit")}))
-//						dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("digit"))),
-//						dsl.factorFromExpressionInBraces(
-//							dsl.expression(new BnfDSL.Term[]{
-//									dsl.termFromFactors(new BnfDSL.Factor[]{
-//											dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("digit")))
-//									})
-//							})	
-//						)
+						//dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("digit"))),
+						dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("digit")})),
+						dsl.factorFromExpressionInBraces(
+							dsl.expression(new BnfDSL.Term[]{
+									dsl.termFromFactors(new BnfDSL.Factor[]{
+											//dsl.factorFromIdentifier(dsl.identifierFromLetters(letters("digit")))
+											dsl.factorFromQuotedSymbol(dsl.quotedSymbolFromAnyCharacters(new BnfDSL.AnyCharacter[]{new BnfDSL.AnyCharacter("digit")}))
+									})
+							})	
+						)
 				})
 		});
 		BnfDSL.Rule numberRule = dsl.rule(dsl.identifierFromLetters(letters("number")), numberRHS);
 		
 		BnfDSL.Syntax syntax = dsl.syntax(new BnfDSL.Rule[]{
-			expressionRule, plusRule, minusRule, numberRule
+			mathRule, expressionRule, plusRule, minusRule, numberRule
 		});
 		
 		grammar = syntax.getGrammar();
@@ -79,15 +95,15 @@ public class BnfDSLSimplerGrammarTest extends TestCase {
 	
 	@Test
 	public void testFoo() {
-		System.out.println("== BnfDSLSimplerGrammarTest == ");
+		System.out.println("== BnfDSLGrammarTest == ");
 		System.out.println(grammar.toString());
 		
 	}
 	
 	@Test
-	public void testEarleyParserWithBnfDSLSimplerGrammar() {
+	public void testEarleyParserWithBnfDSL() {
 		EarleyParser parser = new EarleyParser(grammar);
-		Chart chart = (Chart) parser.parse("digit+digit");
+		Chart chart = (Chart) parser.parse("digitdigit+digitdigit");
 		chart.rparse((de.tud.stg.parlex.core.Rule)grammar.getStartRule());
 		System.out.println(chart.toString());
 		assertTrue(chart.isValidParse());
