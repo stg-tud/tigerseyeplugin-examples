@@ -54,36 +54,31 @@ public class SetDSL implements de.tud.stg.popart.dslsupport.DSL {
 		}
 	}
 
-	@DSLMethod(production = "p0  ⋃  p1")
-	
+	@DSLMethod(production = "p0  ⋃  p1")	
 	public Set union(Set a, Set b) {
 		HashSet set = new HashSet(a);
 		set.addAll(b);
 		return set;
 	}
 
-	@DSLMethod(production = "p0  ⋂  p1")
-	
+	@DSLMethod(production = "p0  ⋂  p1")	
 	public Set intersection(Set a, Set b) {
 		HashSet set = new HashSet(a);
 		set.retainAll(b);
 		return set;
 	}
 
-	@DSLMethod(production = "{  p0  }")
-	
+	@DSLMethod(production = "{  p0  }")	
 	public Set asSet(MyList a) {
 		return new HashSet(Arrays.asList(a.toArray()));
 	}
 
-	@DSLMethod(production = "p0", topLevel = false)
-	
+	@DSLMethod(production = "p0", topLevel = false)	
 	public MyList singleElementedList(String head) {
 		return new MyList(head, null);
 	}
 
-	@DSLMethod(production = "p0  ,  p1", topLevel=false)
-	
+	@DSLMethod(production = "p0  ,  p1", topLevel=false)	
 	public MyList multiElementedList(String head, MyList tail) {
 		return new MyList(head, tail);
 	}
