@@ -15,7 +15,7 @@ import de.tud.stg.tigerseye.examples.logo.LogoDSL;
 import de.tud.stg.tigerseye.test.PrettyGroovyCodePrinterFactory;
 import de.tud.stg.tigerseye.test.TestDSLTransformation;
 import de.tud.stg.tigerseye.test.TestDSLTransformation.GrammarResult;
-import de.tud.stg.tigerseye.test.TestUtils;
+import de.tud.stg.tigerseye.test.TransformationUtils;
 
 public class LogoDSLTest extends DSLTransformationTestBase {
 
@@ -30,7 +30,7 @@ public class LogoDSLTest extends DSLTransformationTestBase {
 				.append(getClass().getPackage().getName()
 						.replaceAll("\\.", "/")).append("/resources/")
 				.append("translation.jpn\")").append("\n").append(japLogoInput);
-		GrammarResult newGrammar = TestUtils.newGrammar(LogoDSL.class);
+		GrammarResult newGrammar = TransformationUtils.newGrammar(LogoDSL.class);
 		//Execution
 		//Must perform keyword translation before actual transformation
 		KeywordTranslationTransformation ktt = new KeywordTranslationTransformation();

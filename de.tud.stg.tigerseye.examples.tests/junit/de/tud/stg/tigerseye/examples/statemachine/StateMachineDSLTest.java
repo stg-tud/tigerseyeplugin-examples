@@ -25,7 +25,7 @@ import de.tud.stg.tigerseye.test.CodePrinterFactory;
 import de.tud.stg.tigerseye.test.PrettyGroovyCodePrinterFactory;
 import de.tud.stg.tigerseye.test.TestDSLTransformation;
 import de.tud.stg.tigerseye.test.TestDSLTransformation.GrammarResult;
-import de.tud.stg.tigerseye.test.TestUtils;
+import de.tud.stg.tigerseye.test.TransformationUtils;
 import de.tud.stg.tigerseye.test.transformation.utils.DefaultDSLTransformationTester;
 
 public class StateMachineDSLTest extends DSLTransformationTestBase {
