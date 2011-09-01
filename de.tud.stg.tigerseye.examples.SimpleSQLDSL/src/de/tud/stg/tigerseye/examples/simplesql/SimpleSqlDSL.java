@@ -6,10 +6,8 @@ import groovy.lang.Closure;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import de.tud.stg.popart.builder.core.annotations.DSL;
 import de.tud.stg.popart.builder.core.annotations.DSLMethod;
-import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
-import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
+import de.tud.stg.popart.builder.core.annotations.DSLParameter;
 
 /**
  * {@link SimpleSqlDSL} is a small DSL modeling a very simple subset of SQL operations
@@ -35,7 +33,7 @@ public class SimpleSqlDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 	@DSLMethod(production = "SELECT__p0__FROM__p1__WHERE__p2")
 	
-	public void selectFromWhere(String[] columns, String[] tables, @DSL(arrayDelimiter = "AND") String[] checks) {
+	public void selectFromWhere(String[] columns, String[] tables, @DSLParameter(arrayDelimiter = "AND") String[] checks) {
 		System.out.println("SimpleSqlDSL.selectFromWhere()"
 				+ Arrays.toString(columns) + Arrays.toString(tables)
 				+ Arrays.toString(checks));

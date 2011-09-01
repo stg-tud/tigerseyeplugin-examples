@@ -14,7 +14,7 @@ import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
 
-import de.tud.stg.popart.builder.core.annotations.DSL;
+import de.tud.stg.popart.builder.core.annotations.DSLParameter;
 import de.tud.stg.popart.builder.core.annotations.DSLMethod;
 import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
 import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
@@ -126,8 +126,8 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	public Module moduleWithoutParameters(
 			ModuleId name,
-			@DSL(arrayDelimiter = " ") Imports[] imports,
-			@DSL(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
+			@DSLParameter(arrayDelimiter = " ") Imports[] imports,
+			@DSLParameter(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
 		Module mod = new Module(name);
 
 		mod.setImportSections(new ArrayList<Imports>(Arrays.asList(imports)));
@@ -143,7 +143,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	public Module moduleWithoutParameters(
 			ModuleId name,
-			@DSL(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
+			@DSLParameter(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
 		Module mod = new Module(name);
 
 		mod.setExportOrHiddenSections(new ArrayList<ExportOrHiddenSection>(Arrays.asList(exportOrHiddenSections)));
@@ -158,9 +158,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	public Module moduleWithParameters(
 			ModuleId name,
-			@DSL(arrayDelimiter = ",") Symbol[] params,
-			@DSL(arrayDelimiter = " ") Imports[] imports,
-			@DSL(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
+			@DSLParameter(arrayDelimiter = ",") Symbol[] params,
+			@DSLParameter(arrayDelimiter = " ") Imports[] imports,
+			@DSLParameter(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
 		Module mod = moduleWithoutParameters(name, imports, exportOrHiddenSections);
 
 		mod.setParameters(new ArrayList<Symbol>(Arrays.asList(params)));
@@ -322,7 +322,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// (p0)
 	@DSLMethod(production = "( p0 )", topLevel = false)
 	
-	public SequenceSymbol sequenceSymbol(@DSL(arrayDelimiter = " ")Symbol[] symbols) {
+	public SequenceSymbol sequenceSymbol(@DSLParameter(arrayDelimiter = " ")Symbol[] symbols) {
 		return new SequenceSymbol(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
@@ -350,14 +350,14 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// <p0>
 	@DSLMethod(production = "< p0 >", topLevel = false)
 	
-	public TupleSymbol tupleSymbol(@DSL(arrayDelimiter = ",")Symbol[] symbol) {
+	public TupleSymbol tupleSymbol(@DSLParameter(arrayDelimiter = ",")Symbol[] symbol) {
 		return new TupleSymbol(new ArrayList<Symbol>(Arrays.asList(symbol)));
 	}
 	
 	// (p0 => p1)
 	@DSLMethod(production = "( p0 => p1 )", topLevel = false)
 	
-	public FunctionSymbol functionSymbol(@DSL(arrayDelimiter = " ")Symbol[] left, Symbol right) {
+	public FunctionSymbol functionSymbol(@DSLParameter(arrayDelimiter = " ")Symbol[] left, Symbol right) {
 		return new FunctionSymbol(new ArrayList<Symbol>(Arrays.asList(left)), right);
 	}
 	
@@ -436,13 +436,13 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	@DSLMethod(production = "exports  p0", topLevel = false)
 	
-	public Exports exports(@DSL(arrayDelimiter = " ")GrammarElement[] grammarElements) {
+	public Exports exports(@DSLParameter(arrayDelimiter = " ")GrammarElement[] grammarElements) {
 		return new Exports(new ArrayList<GrammarElement>(Arrays.asList(grammarElements)));
 	}
 	
 	@DSLMethod(production = "hiddens  p0", topLevel = false)
 	
-	public Hiddens hiddens(@DSL(arrayDelimiter = " ")GrammarElement[] grammarElements) {
+	public Hiddens hiddens(@DSLParameter(arrayDelimiter = " ")GrammarElement[] grammarElements) {
 		return new Hiddens(new ArrayList<GrammarElement>(Arrays.asList(grammarElements)));
 	}
 	
@@ -466,7 +466,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// imports p0
 	@DSLMethod(production = "imports  p0", topLevel = false)
 	
-	public Imports importsStatement(@DSL(arrayDelimiter = " ")Import[] importList) {
+	public Imports importsStatement(@DSLParameter(arrayDelimiter = " ")Import[] importList) {
 		return new Imports(new ArrayList<Import>(Arrays.asList(importList)));
 	}
 	
@@ -480,14 +480,14 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// p0[p1]
 	@DSLMethod(production = "p0 [ p1 ]", topLevel = false)
 	
-	public Import importModuleWithParameters(ModuleId moduleName, @DSL(arrayDelimiter = ",")Symbol[] params) {
+	public Import importModuleWithParameters(ModuleId moduleName, @DSLParameter(arrayDelimiter = ",")Symbol[] params) {
 		return new Import(moduleName.toString(), new ArrayList<Symbol>(Arrays.asList(params)));
 	}
 	
 	// p0[p1]
 	@DSLMethod(production = "p0 [ p1 ]", topLevel = false)
 	
-	public Import importModuleWithRenamings(ModuleId moduleName, @DSL(arrayDelimiter = ",")Renaming[] renamings) {
+	public Import importModuleWithRenamings(ModuleId moduleName, @DSLParameter(arrayDelimiter = ",")Renaming[] renamings) {
 		return new Import(moduleName.toString(),
 				new ArrayList<Symbol>(),
 				new ArrayList<Renaming>(Arrays.asList(renamings)));
@@ -497,8 +497,8 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	@DSLMethod(production = "p0 [ p1 ] [ p2 ]", topLevel = false)
 	
 	public Import importModuleWithParametersAndRenamings(ModuleId moduleName,
-			@DSL(arrayDelimiter = ",")Symbol[] params,
-			@DSL(arrayDelimiter = ",")Renaming[] renamings) {
+			@DSLParameter(arrayDelimiter = ",")Symbol[] params,
+			@DSLParameter(arrayDelimiter = ",")Renaming[] renamings) {
 		return new Import(moduleName.toString(),
 				new ArrayList<Symbol>(Arrays.asList(params)),
 				new ArrayList<Renaming>(Arrays.asList(renamings)));
@@ -514,42 +514,42 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// sorts p0
 	@DSLMethod(production = "sorts  p0", topLevel = false)
 	
-	public Sorts sortsDeclaration(@DSL(arrayDelimiter = " ")SortSymbol[] sortSymbols) {
+	public Sorts sortsDeclaration(@DSLParameter(arrayDelimiter = " ")SortSymbol[] sortSymbols) {
 		return new Sorts(new ArrayList<SortSymbol>(Arrays.asList(sortSymbols)));
 	}
 	
 	// lexical syntax p0
 	@DSLMethod(production = "lexical  syntax  p0", topLevel = false)
 	
-	public LexicalSyntax lexicalSyntax(@DSL(arrayDelimiter = " ")Production[] productions) {
+	public LexicalSyntax lexicalSyntax(@DSLParameter(arrayDelimiter = " ")Production[] productions) {
 		return new LexicalSyntax(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
 	// context-free syntax p0
 	@DSLMethod(production = "context-free  syntax  p0", topLevel = false)
 	
-	public ContextFreeSyntax contextFreeSyntax(@DSL(arrayDelimiter = " ")Production[] productions) {
+	public ContextFreeSyntax contextFreeSyntax(@DSLParameter(arrayDelimiter = " ")Production[] productions) {
 		return new ContextFreeSyntax(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
 	// lexical start-symbols p0
 	@DSLMethod(production = "lexical  start-symbols  p0", topLevel = false)
 	
-	public LexicalStartSymbols lexicalStartSymbols(@DSL(arrayDelimiter = " ")Symbol[] symbols) {
+	public LexicalStartSymbols lexicalStartSymbols(@DSLParameter(arrayDelimiter = " ")Symbol[] symbols) {
 		return new LexicalStartSymbols(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// context-free start-symbols p0
 	@DSLMethod(production = "context-free  start-symbols  p0", topLevel = false)
 	
-	public ContextFreeStartSymbols contextFreeStartSymbols(@DSL(arrayDelimiter = " ")Symbol[] symbols) {
+	public ContextFreeStartSymbols contextFreeStartSymbols(@DSLParameter(arrayDelimiter = " ")Symbol[] symbols) {
 		return new ContextFreeStartSymbols(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// aliases p0
 	@DSLMethod(production = "aliases  p0", topLevel = false)
 	
-	public Aliases aliases(@DSL(arrayDelimiter = " ")Alias[] aliases) {
+	public Aliases aliases(@DSLParameter(arrayDelimiter = " ")Alias[] aliases) {
 		return new Aliases(new ArrayList<Alias>(Arrays.asList(aliases)));
 	}
 	
@@ -563,7 +563,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// p0 -> p1		(production)
 	@DSLMethod(production = "p0 -> p1", topLevel = false)
 	
-	public Production production(@DSL(arrayDelimiter = " ")Symbol[] lhs, Symbol rhs) {
+	public Production production(@DSLParameter(arrayDelimiter = " ")Symbol[] lhs, Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(Arrays.asList(lhs)), rhs);
 	}
 	

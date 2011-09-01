@@ -42,7 +42,7 @@ public class LogoDSLTest extends DSLTransformationTestBase {
 				sb.toString(), newGrammar);
 		//Verify
 		String expected = loadResourceString("logojapanese.expected");
-		StringUtils.equalsIgnoringWhitspace(output, expected);
+		StringUtils.equalsIgnoringWhitspace(expected, output);
 	}
 
 	private String loadResourceString(String name) throws IOException {

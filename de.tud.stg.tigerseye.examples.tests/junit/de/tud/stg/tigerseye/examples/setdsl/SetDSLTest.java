@@ -1,7 +1,6 @@
 package de.tud.stg.tigerseye.examples.setdsl;
 
-import static org.junit.Assert.*;
-import junit.framework.ComparisonFailure;
+import org.junit.ComparisonFailure;
 
 import org.junit.Ignore;
 import org.junit.Test;

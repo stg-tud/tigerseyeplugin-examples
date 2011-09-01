@@ -1,13 +1,9 @@
 package de.tud.stg.tigerseye.examples.statefuldsl;
 
-import groovy.lang.Closure;
+import groovy.lang.Closure
 
-import java.util.HashMap;
-import java.util.Map;
-
-import de.tud.stg.popart.builder.core.annotations.DSL;
-import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
-import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
+import java.util.HashMap
+import java.util.Map
 
 /**
  * {@link StatefulDSL} is a small DSL showing the possibility of setting and retrieving variables.
@@ -15,7 +11,6 @@ import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeywor
  * @author Kamil Erhard
  * 
  */
-@DSL
 public class StatefulDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 	public Object eval(HashMap map, Closure cl) {
