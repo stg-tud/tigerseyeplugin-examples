@@ -5,7 +5,7 @@ Bundle-SymbolicName: de.tud.stg.tigerseye.examples.unitsdsl;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Require-Bundle: de.tud.stg.tigerseye;bundle-version="0.0.1",
  de.tud.stg.tigerseye.core;bundle-version="0.0.1"
-Eclipse-RegisterBuddy: de.tud.stg.tigerseye.eclipse.core
+Eclipse-RegisterBuddy: de.tud.stg.tigerseye.core
 Bundle-ClassPath: lib/jscience.jar,
  .
 Export-Package: de.tud.stg.tigerseye.example.dzoneunits,

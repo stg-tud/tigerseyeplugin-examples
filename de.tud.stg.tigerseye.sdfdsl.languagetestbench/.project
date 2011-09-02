@@ -6,7 +6,7 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>de.tud.stg.tigerseye.eclipse.core.tigerseyeBuilder</name>
+			<name>de.tud.stg.tigerseye.core.tigerseyeBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -19,6 +19,6 @@
 	<natures>
 		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>de.tud.stg.tigerseye.eclipse.core.tigerseyeNature</nature>
+		<nature>de.tud.stg.tigerseye.core.tigerseyeNature</nature>
 	</natures>
 </projectDescription>

@@ -23,15 +23,14 @@ class UnitsDSL extends Interpreter{
 		return cl.call();
 	}
 
-	@DSLMethod(production="p0__kg")
+	@DSLMethod(production="p0_kg")
 	
 	public Amount kilogram(Object n){
 		return amountFor(n,"kg");
 	}
 	
-	@DSLMethod(production="p0__g")
-	
-	public Amount gram(Object n){
+	@DSLMethod(production="p0_g")	
+	public Amount gram(int n){
 		return amountFor(n,"g");
 	}
 
@@ -48,52 +47,46 @@ class UnitsDSL extends Interpreter{
 		return Amount.valueOf(Double.valueOf(strVal), Unit.valueOf(unit))
 	}
 
-	@DSLMethod(production="p0__cm")
+	@DSLMethod(production="p0_cm")
 	
 	public Amount centimeter(Object n){
 		return amountFor(n,"cm")
 	}
 
-	@DSLMethod(production="p0__km")
+	@DSLMethod(production="p0_km")
 	
 	public Amount kilometer(Object n){
 		return amountFor(n,"km")
 	}
 
-	@DSLMethod(production="p0__min")
+	@DSLMethod(production="p0_min")
 	
 	public Amount minutes(Object n){
 		return amountFor(n,"min")
 	}
 
-	@DSLMethod(production="p0__m")
+	@DSLMethod(production="p0_m")
 	
 	public Amount meter(Object n){
 		return amountFor(n,"m")
 	}
 
-	@DSLMethod(production="p0__h")
+	@DSLMethod(production="p0_h")
 	
 	public Amount hours(Object n){
 		return amountFor(n,"h")
 	}
 
-	@DSLMethod(production="p0__s")
+	@DSLMethod(production="p0_s")
 	
 	public Amount seconds(Object n){
 		return amountFor(n,"s")
 	}
 
-	@DSLMethod(production="p0__in")
+	@DSLMethod(production="p0_in")
 	
 	public Amount inch(Object n){
 		return amountFor(n,"in")
 	}
 
-	@DSLMethod(production = "SELECT__p0__FROM__p1")
-	
-	public void selectFrom(String[] columns, String[] tables) {
-		System.out.println("SimpleSqlDSL.selectFrom()"
-				+ Arrays.toString(columns) + Arrays.toString(tables));
-	}
 }

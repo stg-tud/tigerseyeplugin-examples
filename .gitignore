@@ -2,4 +2,4 @@
 OPTIONAL/*/bin/
 */*/generated/*
 .tmp*~
-*/src-tigerseye
+*/src-tigerseye/*

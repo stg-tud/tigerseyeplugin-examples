@@ -1,3 +1,5 @@
+package de.tud.stg.tigerseye.example.dzoneunits
+
 import de.tud.stg.tigerseye.example.dzoneunits.GroovyDefinitionForUnitsDSL
 import org.jscience.physics.amount.Amount
 import javax.measure.quantity.Velocity
