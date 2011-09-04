@@ -22,7 +22,7 @@ public class TinySQLTest extends DSLTransformationTestBase {
 		Closure dslProgram = {
 			selectFrom(["NAME"] as String[],["PERSON"] as String[])
 		}		
-		List<Map> result = new TinySQL().eval dslProgram		
+		List<Map> result = new TinySQL().eval(dslProgram)		
 		assert result != null
 	}
 

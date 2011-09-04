@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Rule;
 import org.junit.Test;
 
 import utilities.DSLTransformationTestBase;
+import utilities.PluginTest;
+import utilities.PluginTestRule;
 import utilities.StringUtils;
 
 import de.tud.stg.tigerseye.eclipse.core.builder.transformers.textual.KeywordTranslationTransformation;
@@ -19,7 +22,12 @@ import de.tud.stg.tigerseye.test.TransformationUtils;
 
 public class LogoDSLTest extends DSLTransformationTestBase {
 
+	
+	@Rule
+	public PluginTestRule ptr = new PluginTestRule();
+	
 	@Test
+	@PluginTest
 	public void testJapaneseCharacters() throws Exception {
 		String name = "logojapanese.input";
 		String japLogoInput = loadResourceString(name);
