@@ -17,11 +17,11 @@ import de.tud.stg.tigerseye.examples.mapdsl.Entry
 
 map(name:'MapTest'){	
 	
-	def hanspeter = [Integer,String: 1="hans",2="peter"]	
+	def hanspeter = [Integer,String: 1="hans"]	
 	
 	println hanspeter
 	
-	def doubleint = [Double , Integer : 0=0,1=1,2=2,3=3, 4=4,5=5,6=6,7=7,8=8,9=9,10=10]
+	def doubleint = [Integer , Integer : 0=0]
 	println doubleint
  
 	def hans = [String, Object : "name"="Hans", "lastname"="Häuser", "age"=21 , "married"=false]	

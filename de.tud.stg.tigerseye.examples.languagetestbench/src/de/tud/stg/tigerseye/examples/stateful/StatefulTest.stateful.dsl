@@ -14,18 +14,18 @@ package de.tud.stg.tigerseye.examples.stateful
 
 
 stateful(name:'StatefulTest'){
-	
-	
-	set "OS" = "unix"	
+
+	set "OS" = "unix"
 	set "isValid" = true
 	
 	println "isValid is:" + get "isValid"
 	
-	if("notValid") set "isValid" = false
+	if("notValid") set"isValid"=false
 	
 	println "isValid is:" + get "isValid"
 		
 	println "OS is: " + get "OS"
 	
-	
+	println "OS is: " + get"OS"
+
 }

@@ -3,8 +3,9 @@ package de.tud.stg.tigerseye.examples.logo
 //Preferences->Tigerseye->Transformations: choose dsl for this extension,
 //choose Edit DSL specific Transformers and activate the TranslationTransformer 
 
-//The path to the actual translation file has to be provided as absolute path. 
-@Translation(file="absolutePathTo/translation.jpn")
+//The path to the actual translation file has to be provided either as project relative path beginning with a "/"
+// or as relative path to the folder of the defining file. 
+@Translation(file="translation.jpn")
 logo(name:'Test'){
 	オンワード 50
 	みぎ 90
@@ -13,4 +14,4 @@ logo(name:'Test'){
 	ひだり 90
 	オンワード  50
 	みぎ 90
-}  
+}     

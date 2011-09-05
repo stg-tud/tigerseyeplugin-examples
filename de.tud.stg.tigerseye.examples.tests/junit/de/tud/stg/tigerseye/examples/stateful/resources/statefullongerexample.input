@@ -1,0 +1,32 @@
+	set "OS" = "unix"	
+	set "isValid" = true
+	
+	set "key1" = "val1"
+	println get"key1"
+	set"key2"="val2"
+	println get"key2"
+	set"key3" =                  
+	
+	
+	
+	"val3"
+	println get"key3"
+	
+	println "isValid is:" + get "isValid"
+	
+	if("notValid") set "isValid" = false
+	
+	println "isValid is:" + get "isValid"
+		
+	println "OS1 is: " + get "OS"
+	
+	println "OS2 is: " + get"OS"
+	
+	println "OS3 is: " + get           
+	
+	
+	
+	
+	
+	
+	 "OS";

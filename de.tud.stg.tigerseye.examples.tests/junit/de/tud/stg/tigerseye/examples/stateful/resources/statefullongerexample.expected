@@ -1,0 +1,41 @@
+set__p0__equals__p1(
+"OS",
+"unix")	
+	set__p0__equals__p1(
+"isValid",
+true)
+	
+	set__p0__equals__p1(
+"key1",
+"val1")
+	println get__p0(
+"key1")
+	set__p0__equals__p1(
+"key2",
+"val2")
+	println get__p0(
+"key2")
+	set__p0__equals__p1(
+"key3",
+"val3")
+	println get__p0(
+"key3")
+	
+	println "isValid is:" + get__p0(
+"isValid")
+	
+	if("notValid") set__p0__equals__p1(
+"isValid",
+false)
+	
+	println "isValid is:" + get__p0(
+"isValid")
+		
+	println "OS1 is: " + get__p0(
+"OS")
+	
+	println "OS2 is: " + get__p0(
+"OS")
+	
+	println "OS3 is: " + get__p0(
+"OS");
