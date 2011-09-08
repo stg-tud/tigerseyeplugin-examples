@@ -15,15 +15,32 @@ package sdf.model;
 public class CaseInsensitiveLiteralSymbol extends LiteralSymbol {
 
 	public CaseInsensitiveLiteralSymbol(String text) {
-		super(stripQuotationMarks(text), false);
+		super(getStringContents(text), false);
 	}
 	
 	public CaseInsensitiveLiteralSymbol(String text, String label) {
-		super(stripQuotationMarks(text), false, label);
+		super(getStringContents(text), false, label);
 	}
 	
-	private static String stripQuotationMarks(String input) {
-		return input.substring(1, input.length() - 1);
+	/**
+	 * Returns the string inside the quotation marks.
+	 * Since this class is used by the type handler, the text contains
+	 * both the quotation marks around the string as well as escape codes.
+	 * E.g. for the case-insensitive literal 'hello\'world', this class
+	 * would be created with text = "'hello\\'world'".
+	 * This method removes the quotation marks around the string and
+	 * processes the escapes. For the example above, it would return "hello'world".
+	 * 
+	 * @param input
+	 * @return
+	 */
+	private static String getStringContents(String input) {
+		// strip quotation marks
+		String result = input.substring(1, input.length() - 1);
+		// replace escapes
+		result = result.replace("\\'", "'");
+		result = result.replace("\\\\", "\\");
+		return result;
 	}
 
 }

@@ -602,8 +602,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 		@Override
 		public String getRegularExpression() {
-			// TODO: escapes (\] etc) inside the class
-			return "\\[([^\\]]+)\\]";
+//			return "\\[([^\\]]+)\\]";
+			// this version allows all escapes inside the character class
+			return "\\[([^\\]\\\\]|\\\\.)*\\]";
 		}
 		
 	}
@@ -617,7 +618,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 		@Override
 		public String getRegularExpression() {
-			return "'(.*?)'";
+			// matches single quoted strings.
+			// allowed escapes inside the string: \' and \\
+			return "'([^'\\\\]|\\\\['\\\\])*'";
 		}
 		
 	}
