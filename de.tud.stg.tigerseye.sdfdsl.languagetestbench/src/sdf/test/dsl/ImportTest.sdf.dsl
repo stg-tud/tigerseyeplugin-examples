@@ -63,7 +63,7 @@ sdf(name:'ImportTest'){
 		
 		
 		
-	printGeneratedGrammarHTML "SimpleLang" "debug/ImportTest"
+	printGeneratedGrammarHTML "SimpleLang" "debug/ImportTest.html"
 	parse "SimpleLang" "print 4 + 8 * (15 / (16+23)) - 42; print 1+2; exit"
 	
 	

@@ -2,9 +2,6 @@ package sdf.test.dsl
 
 import sdf.model.*
 
-// TODO: grammarware muss manuell zum buildpath hinzugefuegt werden?
-// TODO: ebenso parlex zum ausfuehren
-
 sdf(name:'SimpleTest2'){
 
 	module LeesPlank
