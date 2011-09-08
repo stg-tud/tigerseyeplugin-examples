@@ -208,8 +208,8 @@ public class ModuleMerger implements Visitor {
 	public Object visitSorts(Sorts sor, Object o) {
 		ArrayList<SortSymbol> newSymbols = new ArrayList<SortSymbol>(sor.getSymbols().size());
 		
-		// TODO: replacement hier? problem ist, es könnte durch ein anderes nicht-sort symbol ersetzt werden
-		// das darf hier aber nicht aufreten.
+		// don't replace symbols here (because they could be replaced by non-sort symbols, which would be
+		// invalid in a sorts declaration)
 		for (SortSymbol s : sor.getSymbols()) {
 			newSymbols.add(new SortSymbol(s.getName(), s.getLabel()));
 		}
@@ -221,8 +221,6 @@ public class ModuleMerger implements Visitor {
 	public Object visitContextFreeSyntax(ContextFreeSyntax syn, Object o) {
 		ArrayList<Production> newProductions = new ArrayList<Production>(syn.getProductions().size());
 
-		// TODO: muss hier was mit namespaces beachtet werden? offenbar nicht...?
-		
 		for (Production p : syn.getProductions()) {
 			newProductions.add((Production)p.visit(this, null));
 		}
