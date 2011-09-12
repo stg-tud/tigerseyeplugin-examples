@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import sdf.ruleannotations.CustomATermAnnotation;
+
 import de.tud.stg.parlex.core.*;
 import de.tud.stg.parlex.core.groupcategories.*;
 import de.tud.stg.parlex.core.ruleannotations.*;
@@ -284,6 +286,8 @@ public class GrammarDebugPrinter {
 			}
 			sb.append(")");
 			return sb.toString();
+		} else if (ann instanceof CustomATermAnnotation) {
+			return "CustomATerm( " + ((CustomATermAnnotation)ann).getAterm().toString() + " )";
 		} else {
 			return ann.toString();
 		}

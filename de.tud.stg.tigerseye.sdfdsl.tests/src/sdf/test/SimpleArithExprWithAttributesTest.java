@@ -47,7 +47,7 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  * context-free syntax
  * Expr "+" Expr		-> Expr {left}
  * Expr "-" Expr		-> Expr {left}
- * Number				-> Expr
+ * Number				-> Expr {custom("test",123)}
  * }
  * </pre>
  * 
@@ -97,8 +97,14 @@ public class SimpleArithExprWithAttributesTest {
 						new ATerm[] {
 							sdf.customATerm("left")
 						}),
-				sdf.production(new Symbol[] { sdf.sortSymbol("Number") },
-						sdf.sortSymbol("Expr")), });
+				sdf.productionWithAttributes(
+						new Symbol[] {
+								sdf.sortSymbol("Number")
+						},
+						sdf.sortSymbol("Expr"),
+						new ATerm[] {
+							sdf.customATerm("custom(\"test\",123)")
+						}), });
 
 		StartSymbols startSymbols = sdf
 				.contextFreeStartSymbols(new Symbol[] { sdf.sortSymbol("Expr") });

@@ -40,6 +40,7 @@ import sdf.model.Sorts;
 import sdf.model.Symbol;
 import sdf.model.TupleSymbol;
 import sdf.model.Visitor;
+import sdf.ruleannotations.CustomATermAnnotation;
 import de.tud.stg.parlex.core.*;
 import de.tud.stg.parlex.core.groupcategories.StringCategory;
 import de.tud.stg.parlex.core.ruleannotations.*;
@@ -596,7 +597,8 @@ public class SdfToParlexGrammarConverter implements Visitor {
 				} else if (attr.equals(atermReject)) {
 					generatedRule.addAnnotation(new RejectAnnotation());
 				} else {
-					// TODO: store custom aterm annotation
+					// custom attribute, stored in a custom annotation
+					generatedRule.addAnnotation(new CustomATermAnnotation(attr));
 				}
 				
 			}
