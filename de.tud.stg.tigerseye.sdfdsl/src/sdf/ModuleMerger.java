@@ -29,7 +29,9 @@ public class ModuleMerger implements Visitor {
 	// state information
 	private Module newMod;
 	private HashMap<Symbol,Symbol> replacements;
+	private HashMap<Production,Production> lexProductions, cfProductions;
 	private boolean inHiddens;
+	private boolean inCFSyntax;
 	
 	public ModuleMerger(SdfDSL dsl) {
 		this.dsl = dsl;
@@ -61,6 +63,10 @@ public class ModuleMerger implements Visitor {
 	public Module processModule(Module mod, ArrayList<Symbol> parameters, HashMap<Symbol,Symbol> renamings) {
 		
 		if (DEBUG) System.out.println("*** ModuleMerger.processModule(" + mod.getName() + ")");
+		
+		// reset production maps
+		this.lexProductions = new HashMap<Production, Production>();
+		this.cfProductions = new HashMap<Production, Production>();
 		
 		// set up replacement table
 		this.replacements = new HashMap<Symbol, Symbol>();
@@ -155,6 +161,7 @@ public class ModuleMerger implements Visitor {
 		newMod.setParameters(new ArrayList<Symbol>(mod.getParameters()));
 		// imports at module level are treated like imports in an exports section
 		this.inHiddens = false;
+		this.inCFSyntax = false;
 		for (Imports impSect : mod.getImportSections()) {
 			impSect.visit(this, null);
 		}
@@ -223,6 +230,8 @@ public class ModuleMerger implements Visitor {
 	public Object visitContextFreeSyntax(ContextFreeSyntax syn, Object o) {
 		ArrayList<Production> newProductions = new ArrayList<Production>(syn.getProductions().size());
 
+		this.inCFSyntax = true;
+		
 		for (Production p : syn.getProductions()) {
 			newProductions.add((Production)p.visit(this, null));
 		}
@@ -234,6 +243,8 @@ public class ModuleMerger implements Visitor {
 	public Object visitLexicalSyntax(LexicalSyntax syn, Object o) {
 		ArrayList<Production> newProductions = new ArrayList<Production>(syn.getProductions().size());
 
+		this.inCFSyntax = false;
+		
 		for (Production p : syn.getProductions()) {
 			newProductions.add((Production)p.visit(this, null));
 		}
@@ -244,6 +255,8 @@ public class ModuleMerger implements Visitor {
 	@Override
 	public Object visitLexicalStartSymbols(LexicalStartSymbols sta, Object o) {
 		ArrayList<Symbol> newSymbols = new ArrayList<Symbol>();
+		
+		this.inCFSyntax = false;
 
 		for (Symbol s : sta.getSymbols()) {
 			newSymbols.add((Symbol)s.visit(this, null));
@@ -256,6 +269,8 @@ public class ModuleMerger implements Visitor {
 	public Object visitContextFreeStartSymbols(ContextFreeStartSymbols sta,
 			Object o) {
 		ArrayList<Symbol> newSymbols = new ArrayList<Symbol>();
+		
+		this.inCFSyntax = true;
 
 		for (Symbol s : sta.getSymbols()) {
 			newSymbols.add((Symbol)s.visit(this, null));
@@ -274,13 +289,41 @@ public class ModuleMerger implements Visitor {
 		
 		Symbol newRhs = (Symbol) pro.getRhs().visit(this, null);
 		
+		Production newPro;
 		if (pro.getAttributes() == null) {
-			return new Production(newLhs, newRhs);
+			newPro = new Production(newLhs, newRhs);
 		} else {
 			ArrayList<ATerm> newAttributes = new ArrayList<ATerm>(pro.getAttributes());
-			return new Production(newLhs, newRhs, newAttributes);
+			newPro = new Production(newLhs, newRhs, newAttributes);
 		}
 		
+		// check if an equal production already exists.
+		// a production is equal if the lhs + rhs are equal. attributes are not considered.
+		HashMap<Production, Production> map = inCFSyntax ? cfProductions : lexProductions;
+		Production existingPro = map.get(newPro);
+		
+		if (existingPro != null) {
+			// an equal production already exists. in this case, we need to merge the attributes.
+			if (newPro.hasAttributes()) {
+				// new production has attributes that need to be merged into the
+				// existing production.
+				existingPro.addAttributes(newPro.getAttributes());
+				newPro = existingPro;
+			} else {
+				// new production doesn't have any attributes.
+				// in this case, we can just reuse the old one.
+				newPro = existingPro;
+			}
+			// TODO: as an optimization, it would be even better to remove this production
+			// when it already exists. however, this could cause problems if the first occurence
+			// is in a hiddens section, and a later occurence is in an exports section.
+			// the current implementation retains all productions. this is valid since parlex
+			// uses a rule set and therefore removes duplicate rules.
+		} else {
+			map.put(newPro, newPro);
+		}
+		
+		return newPro;
 	}
 
 	@Override

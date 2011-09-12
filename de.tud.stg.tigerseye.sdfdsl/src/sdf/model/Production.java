@@ -66,6 +66,28 @@ public class Production extends SdfElement {
 		this.attributes = attributes;
 	}
 	
+	public boolean hasAttributes() {
+		return (attributes != null) && !attributes.isEmpty();
+	}
+	
+	public void addAttributes(ArrayList<ATerm> newAttributes) {
+		if (hasAttributes()) {
+			for (ATerm attr : newAttributes) {
+				if (!this.attributes.contains(attr)) {
+					this.attributes.add(attr);
+				}
+			}
+		} else {
+			setAttributes(new ArrayList<ATerm>(newAttributes));
+		}
+	}
+	
+	public void addAttribute(ATerm newAttribute) {
+		ArrayList<ATerm> list = new ArrayList<ATerm>(1);
+		list.add(newAttribute);
+		addAttributes(list);
+	}
+	
 	@Override
 	public Object visit(Visitor visitor, Object o) {
 		return visitor.visitProduction(this, o);
@@ -84,4 +106,38 @@ public class Production extends SdfElement {
 		
 		return sb.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((lhs == null) ? 0 : lhs.hashCode());
+		result = prime * result + ((rhs == null) ? 0 : rhs.hashCode());
+		return result;
+	}
+
+	@Override
+	// note that attributes are not included in the comparison (this is intended).
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Production other = (Production) obj;
+		if (lhs == null) {
+			if (other.lhs != null)
+				return false;
+		} else if (!lhs.equals(other.lhs))
+			return false;
+		if (rhs == null) {
+			if (other.rhs != null)
+				return false;
+		} else if (!rhs.equals(other.rhs))
+			return false;
+		return true;
+	}
+	
+	
 }

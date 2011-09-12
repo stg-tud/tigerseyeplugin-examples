@@ -46,8 +46,9 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  * 
  * context-free syntax
  * Expr "+" Expr		-> Expr {left}
+ * Expr "+" Expr		-> Expr {cons("add")}			%% to test production merging
  * Expr "-" Expr		-> Expr {left}
- * Number				-> Expr {custom("test",123)}
+ * Number				-> Expr {custom("test",123)}	%% to test custom aterm attributes
  * }
  * </pre>
  * 
@@ -88,6 +89,14 @@ public class SimpleArithExprWithAttributesTest {
 						sdf.sortSymbol("Expr"),
 						new ATerm[] {
 							sdf.customATerm("left")
+						}),
+				sdf.productionWithAttributes(
+						new Symbol[] { sdf.sortSymbol("Expr"),
+								sdf.caseSensitiveLiteralSymbol("+"),
+								sdf.sortSymbol("Expr") },
+								sdf.sortSymbol("Expr"),
+						new ATerm[] {
+							sdf.customATerm("cons(\"add\")")
 						}),
 				sdf.productionWithAttributes(
 						new Symbol[] { sdf.sortSymbol("Expr"),

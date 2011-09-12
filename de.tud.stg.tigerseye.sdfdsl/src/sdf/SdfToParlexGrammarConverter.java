@@ -579,8 +579,8 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	 * @param generatedRule
 	 */
 	private void processProductionAttributes(Production production, Rule generatedRule) {
-		List<ATerm> attributes = production.getAttributes();
-		if (attributes != null && !attributes.isEmpty()) {
+		if (production.hasAttributes()) {
+			List<ATerm> attributes = production.getAttributes();
 			
 			for (ATerm attr : attributes) {
 				
