@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import de.tud.stg.parlex.core.*;
 import de.tud.stg.parlex.core.groupcategories.*;
+import de.tud.stg.parlex.core.ruleannotations.*;
 
 /**
  * Outputs an HTML file listing all the categories and rules in the grammar (for debug purposes).
@@ -86,6 +90,7 @@ public class GrammarDebugPrinter {
 		out.println(".inline {background: #eee;}");
 		out.println(".inline .inline {background: #ddd;}");
 		out.println(".inline .inline .inline {background: #ccc;}");
+		out.println(".annotations {background: #FFE491;}");
 		out.println("</style>");
 		out.println("</head><body>");
 		
@@ -146,7 +151,8 @@ public class GrammarDebugPrinter {
 		String lastCatId = null;
 		int ruleId = 1;
 		
-		for (IRule<String> rule : ruleList) {
+		for (IRule<String> irule : ruleList) {
+			Rule rule = (Rule)irule;
 			ICategory<String> lhsCat = rule.getLhs();
 			String catId = catIds.get(lhsCat);
 			
@@ -163,10 +169,14 @@ public class GrammarDebugPrinter {
 			} else {
 				out.print("<b>");
 			}
+			// lhs
 			out.print(escape(catString(lhsCat)) + "</b> -&gt; ");
+			// rhs
 			for (ICategory<String> cat : rule.getRhs()) {
 				printRhsCategory(cat);
 			}
+			// annotations
+			printRuleAnnotations(rule);
 			out.println("</li>");
 			ruleId++;
 		}
@@ -198,6 +208,23 @@ public class GrammarDebugPrinter {
 		}
 	}
 	
+	private void printRuleAnnotations(Rule rule) {
+		List<IRuleAnnotation> annotations = rule.getAnnotations();
+		
+		if (annotations != null && !annotations.isEmpty()) {
+			out.print(" <div class=\"annotations\">{ ");
+			
+			for (Iterator<IRuleAnnotation> it = annotations.iterator(); it.hasNext(); ) {
+				IRuleAnnotation ann = it.next();
+				out.print(annotationString(ann));
+				if (it.hasNext())
+					out.print(", ");
+			}
+			
+			out.print(" }</div>");
+		}
+	}
+	
 	private String catString(ICategory<String> cat) {
 		if (cat.isTerminal()) {
 			if (cat instanceof WaterCategory) {
@@ -221,6 +248,44 @@ public class GrammarDebugPrinter {
 		} else {
 			// non terminal
 			return "<" + cat.getName() + ">";
+		}
+	}
+	
+	private String annotationString(IRuleAnnotation ann) {
+		if (ann instanceof AbsolutePriorityAnnotation) {
+			return "AbsolutePriority(" + ((AbsolutePriorityAnnotation)ann).getPriority() + ")";
+		} else if (ann instanceof AssociativityAnnotation) {
+			return "Associativity(" + ((AssociativityAnnotation)ann).getAssociativity().toString() + ")";
+		} else if (ann instanceof AvoidAnnotation) {
+			return "Avoid";
+		} else if (ann instanceof PreferAnnotation) {
+			return "Prefer";
+		} else if (ann instanceof RejectAnnotation) {
+			return "Reject";
+		} else if (ann instanceof RelativePriorityAnnotation) {
+			RelativePriorityAnnotation rpa = (RelativePriorityAnnotation)ann;
+			Set<IRule<String>> lowerPriorityRules = rpa.getLowerPriorityRules();
+			StringBuilder sb = new StringBuilder();
+			sb.append("RelativePriority(higher priority than: ");
+			for (Iterator<IRule<String>> it = lowerPriorityRules.iterator(); it.hasNext(); ) {
+				IRule<String> rule = it.next();
+				sb.append("<span class=\"inline\">");
+				
+				// print rule
+				String lhsCatId = catIds.get(rule.getLhs());
+				out.print("<a href=\"#" + lhsCatId + "_rule1\">" + escape(catString(rule.getLhs())) + "</a> -&gt; ");
+				for (ICategory<String> rhsCat : rule.getRhs()) {
+					printRhsCategory(rhsCat);
+				}
+				
+				sb.append("</span> ");
+				if (it.hasNext())
+					sb.append(", ");
+			}
+			sb.append(")");
+			return sb.toString();
+		} else {
+			return ann.toString();
 		}
 	}
 	
