@@ -195,6 +195,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		System.out.println("== SDF: Testing module " + topLevelModule + " with input: \"" + input + "\" ==");
 		
 		EarleyParser parser = new EarleyParser(grammar);
+		parser.detectUsedOracles();
 		Chart chart = (Chart) parser.parse(input);
 		chart.rparse((de.tud.stg.parlex.core.Rule)grammar.getStartRule());
 		System.out.println(chart.toString());
