@@ -3,6 +3,8 @@ package sdf;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import aterm.ATerm;
+
 import sdf.model.*;
 
 /**
@@ -272,7 +274,13 @@ public class ModuleMerger implements Visitor {
 		
 		Symbol newRhs = (Symbol) pro.getRhs().visit(this, null);
 		
-		return new Production(newLhs, newRhs);
+		if (pro.getAttributes() == null) {
+			return new Production(newLhs, newRhs);
+		} else {
+			ArrayList<ATerm> newAttributes = new ArrayList<ATerm>(pro.getAttributes());
+			return new Production(newLhs, newRhs, newAttributes);
+		}
+		
 	}
 
 	@Override

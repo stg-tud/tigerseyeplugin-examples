@@ -31,6 +31,7 @@ public class Production extends SdfElement {
 		super();
 		this.lhs = lhs;
 		this.rhs = rhs;
+		this.attributes = null;
 	}
 
 	public Production(ArrayList<Symbol> lhs, Symbol rhs,

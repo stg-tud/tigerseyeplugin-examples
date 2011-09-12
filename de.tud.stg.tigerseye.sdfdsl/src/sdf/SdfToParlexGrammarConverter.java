@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import aterm.*;
+
 import sdf.model.Alias;
 import sdf.model.Aliases;
 import sdf.model.AlternativeSymbol;
@@ -40,6 +42,8 @@ import sdf.model.TupleSymbol;
 import sdf.model.Visitor;
 import de.tud.stg.parlex.core.*;
 import de.tud.stg.parlex.core.groupcategories.StringCategory;
+import de.tud.stg.parlex.core.ruleannotations.*;
+import de.tud.stg.parlex.core.ruleannotations.AssociativityAnnotation.Associativity;
 
 /**
  * Converts an SDF definition into a parlex grammar.
@@ -71,10 +75,23 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	private Rule startRule;
 	private Category optLayoutCat;
 	
+	private ATermFactory atermFactory;
+	private ATerm atermLeft, atermRight, atermNonAssoc, atermAssoc;
+	private ATerm atermPrefer, atermAvoid, atermReject;
+	
 	
 	public SdfToParlexGrammarConverter(SdfDSL sdfDSL) {
 		this.sdfDSL = sdfDSL;
 		this.grammar = new Grammar();
+		this.atermFactory = sdfDSL.getAtermFactory();
+		
+		this.atermLeft = atermFactory.makeAppl(atermFactory.makeAFun("left", 0, false));
+		this.atermRight = atermFactory.makeAppl(atermFactory.makeAFun("right", 0, false));
+		this.atermNonAssoc = atermFactory.makeAppl(atermFactory.makeAFun("non-assoc", 0, false));
+		this.atermAssoc = atermFactory.makeAppl(atermFactory.makeAFun("assoc", 0, false));
+		this.atermPrefer = atermFactory.makeAppl(atermFactory.makeAFun("prefer", 0, false));
+		this.atermAvoid = atermFactory.makeAppl(atermFactory.makeAFun("avoid", 0, false));
+		this.atermReject = atermFactory.makeAppl(atermFactory.makeAFun("reject", 0, false));
 	}
 	
 	public Grammar getGrammar(Module topLevelModule) {
@@ -251,7 +268,11 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		rhsCategory = (Category)pro.getRhs().visit(this, null);
 		
 		// Add rule
-		addRule(getCurrentNamespace(), rhsCategory, lhsCategories);
+		Rule rule = addRule(getCurrentNamespace(), rhsCategory, lhsCategories);
+		
+		// Process any production attributes (i.e. turn left-attributes into the corresponding
+		// parlex annotations)
+		processProductionAttributes(pro, rule);
 		
 		// Add <rhs-LEX> -> <rhs-CF> rule for LEX rules
 		if (!inCFSyntax) {
@@ -550,7 +571,38 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		return inCFSyntax ? NS_CF : NS_LEX;
 	}
 
-
+	/**
+	 * Checks if the production has attributes and converts them to rule annotations
+	 * for the generated rule.
+	 * @param production
+	 * @param generatedRule
+	 */
+	private void processProductionAttributes(Production production, Rule generatedRule) {
+		List<ATerm> attributes = production.getAttributes();
+		if (attributes != null && !attributes.isEmpty()) {
+			
+			for (ATerm attr : attributes) {
+				
+				if (attr.equals(atermLeft) || attr.equals(atermAssoc)) {
+					generatedRule.addAnnotation(new AssociativityAnnotation(Associativity.LEFT));
+				} else if (attr.equals(atermRight)) {
+					generatedRule.addAnnotation(new AssociativityAnnotation(Associativity.RIGHT));
+				} else if (attr.equals(atermNonAssoc)) {
+					generatedRule.addAnnotation(new AssociativityAnnotation(Associativity.NONE));
+				} else if (attr.equals(atermPrefer)) {
+					generatedRule.addAnnotation(new PreferAnnotation());
+				} else if (attr.equals(atermAvoid)) {
+					generatedRule.addAnnotation(new AvoidAnnotation());
+				} else if (attr.equals(atermReject)) {
+					generatedRule.addAnnotation(new RejectAnnotation());
+				} else {
+					// TODO: store custom aterm annotation
+				}
+				
+			}
+			
+		}
+	}
 
 
 

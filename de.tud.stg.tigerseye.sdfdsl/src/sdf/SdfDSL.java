@@ -119,6 +119,11 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		}
 	}
 	
+	public ATermFactory getAtermFactory() {
+		return atermFactory;
+	}
+
+
 	public Object eval(HashMap map, Closure cl) {
 		cl.setDelegate(this);
 		cl.setResolveStrategy(Closure.DELEGATE_FIRST);
@@ -650,6 +655,11 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// to get an ATerm.
 	public AFun aterm(ATermTypeHandlers.FunctionNameTypeHandler.FunctionNameConstant helper) {
 		return helper.getATerm();
+	}
+	
+	// helper function
+	public ATerm customATerm(String text) {
+		return atermFactory.parse(text);
 	}
 	
 	
