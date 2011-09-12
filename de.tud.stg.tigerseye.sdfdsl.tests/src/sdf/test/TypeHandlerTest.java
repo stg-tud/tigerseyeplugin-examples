@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import sdf.ATermTypeHandlers;
 import sdf.SdfDSL;
 import sdf.model.CaseInsensitiveLiteralSymbol;
 
@@ -72,6 +73,62 @@ public class TypeHandlerTest {
 		assertEquals("this is a 'test' too", new CaseInsensitiveLiteralSymbol("'this is a \\'test\\' too'").getText());
 		assertEquals("c:\\test.txt", new CaseInsensitiveLiteralSymbol("'c:\\\\test.txt'").getText());
 	}
+	
+	@Test
+	public void testATermIntConstantType() {
+		Pattern pattern = getPattern(new ATermTypeHandlers.IntConstantTypeHandler());
+		
+		assertMatch(pattern, "0");
+		assertMatch(pattern, "123");
+		assertMatch(pattern, "+42");
+		assertMatch(pattern, "-42");
+	}
+	
+	@Test
+	public void testATermRealConstantType() {
+		Pattern pattern = getPattern(new ATermTypeHandlers.RealConstantTypeHandler());
+		
+		assertMatch(pattern, "3.14");
+		assertMatch(pattern, "+3.14");
+		assertMatch(pattern, "-3.14");
+		assertMatch(pattern, "1.23e5");
+		assertMatch(pattern, "1.23e-5");
+	}
+	
+	@Test
+	public void testATermFunctionNameType() {
+		Pattern pattern = getPattern(new ATermTypeHandlers.FunctionNameTypeHandler());
+		
+		assertMatch(pattern, "foo");
+		assertMatch(pattern, "fooBar42");
+		assertMatch(pattern, "\"hello world\"");
+		assertMatch(pattern, "\"c:\\\\test.txt\"");
+		assertMatch(pattern, "\"simple \\\"test\\\" string\"");
+		assertMatch(pattern, "\"\"");
+	}
+	
+	@Test
+	public void testATermFunctionNameConversion() {
+		assertEquals(
+				"foo",
+				new ATermTypeHandlers.FunctionNameTypeHandler.FunctionNameConstant(
+						"foo").getATerm().getName());
+		assertEquals(
+				"foo",
+				new ATermTypeHandlers.FunctionNameTypeHandler.FunctionNameConstant(
+						"\"foo\"").getATerm().getName());
+		assertEquals(
+				"c:\\test.txt",
+				new ATermTypeHandlers.FunctionNameTypeHandler.FunctionNameConstant(
+						"\"c:\\\\test.txt\"").getATerm().getName());
+		assertEquals(
+				"simple \"test\" string",
+				new ATermTypeHandlers.FunctionNameTypeHandler.FunctionNameConstant(
+						"\"simple \\\"test\\\" string\"").getATerm().getName());
+	}
+	
+	
+	// helper methods
 
 	private Pattern getPattern(TypeHandler typeHandler) {
 		// for this test, the whole string must match

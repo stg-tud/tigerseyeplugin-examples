@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import aterm.*;
+import aterm.pure.SingletonFactory;
+
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
@@ -27,6 +30,7 @@ import sdf.util.GrammarDebugPrinter;
  * 
  * @author Pablo Hoch
  * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html">SDF Documentation</a>
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/technology/aterm-guide/aterm-guide.html">ATerm Documentation</a>
  * @see sdf.model
  *
  */
@@ -36,14 +40,27 @@ import de.tud.stg.popart.builder.core.annotations.DSLClass;
 				SdfDSL.SortSymbolType.class,
 				SdfDSL.ModuleIdType.class,
 				SdfDSL.CharacterClassSymbolType.class,
-				SdfDSL.CaseInsensitiveLiteralSymbolType.class
+				SdfDSL.CaseInsensitiveLiteralSymbolType.class,
+				// ATerm type handlers (used inside production attributes)
+				ATermTypeHandlers.IntConstantTypeHandler.class,
+				ATermTypeHandlers.RealConstantTypeHandler.class,
+				ATermTypeHandlers.FunctionNameTypeHandler.class
 		})
 public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 	/**
 	 * All unmodified modules as they appear in the input specification
 	 */
-	private HashMap<String, Module> modules = new HashMap<String, Module>();
+	private HashMap<String, Module> modules;
+	
+	private ATermFactory atermFactory;
+	
+	
+	public SdfDSL() {
+		this.modules = new HashMap<String, Module>();
+		this.atermFactory = SingletonFactory.getInstance();
+	}
+
 	
 	public HashMap<String, Module> getModules() {
 		return modules;
@@ -516,6 +533,29 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return new Production(new ArrayList<Symbol>(), rhs);
 	}
 	
+	// p0 -> p1		(production with attributes)
+	@DSLMethod(production = "p0 -> p1", topLevel = false)
+	public Production productionWithAttributes(
+			@DSLParameter(arrayDelimiter = " ")Symbol[] lhs,
+			Symbol rhs,
+			@DSLParameter(arrayDelimiter=",")ATerm[] attributes) {
+		return new Production(
+				new ArrayList<Symbol>(Arrays.asList(lhs)),
+				rhs,
+				new ArrayList<ATerm>(Arrays.asList(attributes)));
+	}
+
+	//  -> p0		(production with empty LHS but attributes)
+	@DSLMethod(production = " -> p0", topLevel = false)
+	public Production productionWithAttributes(
+			Symbol rhs,
+			@DSLParameter(arrayDelimiter=",")ATerm[] attributes) {
+		return new Production(
+				new ArrayList<Symbol>(),
+				rhs,
+				new ArrayList<ATerm>(Arrays.asList(attributes)));
+	}
+	
 	
 	// Methods to convert grammar elements to GrammarElement
 	
@@ -546,6 +586,71 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	@DSLMethod(production = "p0", topLevel = false)
 	public GrammarElement syntax(Aliases e) { return e; }
 	
+	
+	
+	//// PRODUCTION ATTRIBUTES /////
+	
+	
+	@DSLMethod(production = "p0 ( p1 )", topLevel = false)
+	public ATerm atermFunctionApplication(AFun fun, @DSLParameter(arrayDelimiter=",")ATerm[] args) {
+		// fix arity, because it is initially set to 0 in the typehandler
+		AFun fixedFun = atermFactory.makeAFun(fun.getName(), args.length, fun.isQuoted());
+		return atermFactory.makeAppl(fixedFun, args);
+	}
+	
+	@DSLMethod(production = "p0", topLevel = false)
+	public ATerm atermFunctionApplication(AFun fun) {
+		return atermFactory.makeAppl(fun);
+	}
+	
+	// additional method required for tigerseye
+	@DSLMethod(production = "p0 ( )", topLevel = false)
+	public ATerm atermFunctionApplicationWithoutArguments(AFun fun) {
+		return atermFactory.makeAppl(fun);
+	}
+	
+	@DSLMethod(production = "[ p0 ]", topLevel = false)
+	public ATerm atermList(@DSLParameter(arrayDelimiter=",")ATerm[] items) {
+		if (items.length == 0) {
+			// this cannot happen when called from tigerseye, but can happen when called manually
+			return atermFactory.makeList();
+		}
+		
+		// build list
+		ATermList list = atermFactory.makeList(items[items.length - 1]);
+		
+		for (int i = items.length - 2; i > 0; i--) {
+			list = atermFactory.makeList(items[i], list);
+		}
+		
+		return list;
+	}
+	
+	@DSLMethod(production = "[ ]", topLevel = false)
+	public ATerm atermList() {
+		return atermFactory.makeList();
+	}
+	
+	// Methods to convert the type handler helper classes to ATerms
+	// (all ATerms are returned as "ATerm", because we don't need to differentiate between
+	// them here. the only exception is AFun, which needs to be turned into a function application).
+	
+	@DSLMethod(production = "p0", topLevel = false)
+	public ATerm aterm(ATermTypeHandlers.IntConstantTypeHandler.IntConstant helper) {
+		return helper.getATerm();
+	}
+	
+	@DSLMethod(production = "p0", topLevel = false)
+	public ATerm aterm(ATermTypeHandlers.RealConstantTypeHandler.RealConstant helper) {
+		return helper.getATerm();
+	}
+	
+	@DSLMethod(production = "p0", topLevel = false)
+	// notice that this function returns AFun. this must then be passed to atermFunctionApplication
+	// to get an ATerm.
+	public AFun aterm(ATermTypeHandlers.FunctionNameTypeHandler.FunctionNameConstant helper) {
+		return helper.getATerm();
+	}
 	
 	
 	
