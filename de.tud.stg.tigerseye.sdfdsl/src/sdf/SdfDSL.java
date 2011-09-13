@@ -562,6 +562,50 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 				new ArrayList<ATerm>(Arrays.asList(attributes)));
 	}
 	
+	// lexical priorities p0
+	@DSLMethod(production = "lexical  priorities  p0", topLevel = false)
+	public LexicalPriorities lexicalPriorities(
+			@DSLParameter(arrayDelimiter=",")Priority[] priorities) {
+		return new LexicalPriorities(new ArrayList<Priority>(Arrays.asList(priorities)));
+	}
+	
+	// context-free priorities p0
+	@DSLMethod(production = "context-free  priorities  p0", topLevel = false)
+	public ContextFreePriorities contextFreePriorities(
+			@DSLParameter(arrayDelimiter=",")Priority[] priorities) {
+		return new ContextFreePriorities(new ArrayList<Priority>(Arrays.asList(priorities)));
+	}
+	
+	// TODO: currently in the DSL only transitive priorities are possible.
+	// in order to also parse non-transitive priorities (>. instead of >),
+	// some intermediate classes are needed.
+	// (the model classes are modelled after the SDF syntax definition written in SDF.
+	//  however, in the SDF *syntax definition*, groups ending with a "." are considered
+	//  non-transitive (i.e. .>). in the *documentation*, >. is used instead. not sure
+	//  which one is correct...)
+	
+	// p0
+	@DSLMethod(production = "p0", topLevel = false)
+	public Priority priority(
+			@DSLParameter(arrayDelimiter=">")PriorityGroup[] groups) {
+		return new Priority(new ArrayList<PriorityGroup>(Arrays.asList(groups)));
+	}
+	
+	// p0
+	@DSLMethod(production = "p0", topLevel = false)
+	public PriorityGroup priorityGroup(
+			@DSLParameter(arrayDelimiter=" ")Production[] productions) {
+		return new PriorityGroup(new ArrayList<Production>(Arrays.asList(productions)));
+	}
+	
+	// p0: p1
+	@DSLMethod(production = "p0  :  p1", topLevel = false)
+	public PriorityGroup priorityGroupWithAssociativityAnnotation(
+			ATerm associativityAnnotation,
+			@DSLParameter(arrayDelimiter=" ")Production[] productions) {
+		return new PriorityGroup(new ArrayList<Production>(Arrays.asList(productions)),
+				associativityAnnotation, true);
+	}
 	
 	// Methods to convert grammar elements to GrammarElement
 	
@@ -578,6 +622,15 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	public GrammarElement grammarElement(Syntax e) { return e; }
 	
 	@DSLMethod(production = "p0", topLevel = false)
+	public GrammarElement grammarElement(LexicalPriorities e) { return e; }
+	
+	@DSLMethod(production = "p0", topLevel = false)
+	public GrammarElement grammarElement(ContextFreePriorities e) { return e; }
+	
+	@DSLMethod(production = "p0", topLevel = false)
+	public GrammarElement grammarElement(Aliases e) { return e; }
+	
+	@DSLMethod(production = "p0", topLevel = false)
 	public StartSymbols startSymbols(ContextFreeStartSymbols e) { return e; }
 	
 	@DSLMethod(production = "p0", topLevel = false)
@@ -590,7 +643,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	public Syntax syntax(LexicalSyntax e) { return e; }
 	
 	@DSLMethod(production = "p0", topLevel = false)
-	public GrammarElement syntax(Aliases e) { return e; }
+	public GrammarElement syntax(Syntax e) { return e; }
+	
+	
 	
 	
 	
