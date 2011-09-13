@@ -91,6 +91,11 @@ public class ModuleMerger implements Visitor {
 		
 		Module processedModule = (Module)mod.visit(this, null);
 //		dsl.setProcessedModule(mod.getName(), processedModule);
+		
+		// no longer needed
+		this.lexProductions.clear();
+		this.cfProductions.clear();
+		
 		return processedModule;
 	}
 	
@@ -552,6 +557,12 @@ public class ModuleMerger implements Visitor {
 	@Override
 	public Object visitPriorityGroup(PriorityGroup grp, Object o) {
 		ArrayList<Production> newProductions = new ArrayList<Production>(grp.getProductions().size());
+		
+		// TODO: maybe add the associativity annotation to the productions.
+		// this is not entirely clear, as the groups have associativity attributes
+		// that conflict with the attributes of the productions in the example at
+		// http://homepages.cwi.nl/~daybuild/daily-books/syntax/2-sdf/sdf.html#section.priorities
+		// (also the closing } for the second group is missing in the example).
 		
 		for (Production pro : grp.getProductions()) {
 			newProductions.add((Production)pro.visit(this, null));

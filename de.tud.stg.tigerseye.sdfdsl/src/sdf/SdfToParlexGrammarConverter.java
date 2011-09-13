@@ -2,8 +2,11 @@ package sdf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import aterm.*;
@@ -79,6 +82,8 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	private int startRuleCount;
 	private Rule startRule;
 	private Category optLayoutCat;
+	private HashMap<Production,Rule> generatedLexRules, generatedCFRules;
+	private HashSet<PrioritySpecification> prioritySpecsLex, prioritySpecsCF;
 	
 	private ATermFactory atermFactory;
 	private ATerm atermLeft, atermRight, atermNonAssoc, atermAssoc;
@@ -105,6 +110,10 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		
 		this.startRuleCount = 0;
 		this.startRule = null;
+		this.generatedCFRules = new HashMap<Production, Rule>();
+		this.generatedLexRules = new HashMap<Production, Rule>();
+		this.prioritySpecsCF = new HashSet<SdfToParlexGrammarConverter.PrioritySpecification>();
+		this.prioritySpecsLex = new HashSet<SdfToParlexGrammarConverter.PrioritySpecification>();
 		
 		// Layout symbol
 		this.optLayoutCat = createNonTerminal("LAYOUT?");
@@ -124,9 +133,24 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		}
 		grammar.setStartRule(startRule);
 		
+		// no longer needed
+		this.generatedCFRules.clear();
+		this.generatedLexRules.clear();
+		this.prioritySpecsCF.clear();
+		this.prioritySpecsLex.clear();
+		
 		return grammar;
 	}
 	
+	private void storeGeneratedRule(Production pro, Rule rule) {
+		HashMap<Production, Rule> map = inCFSyntax ? generatedCFRules : generatedLexRules;
+		map.put(pro, rule);
+	}
+	
+	private Rule getGeneratedRule(Production pro) {
+		HashMap<Production, Rule> map = inCFSyntax ? generatedCFRules : generatedLexRules;
+		return map.get(pro);
+	}
 	
 	//// VISITOR METHODS ////
 
@@ -149,6 +173,9 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		for (ExportOrHiddenSection section : mod.getExportOrHiddenSections()) {
 			section.visit(this, null);
 		}
+		
+		// process priority specifications (i.e. create the rule annotations)
+		processPrioritySpecifications();
 		
 		if (DEBUG) System.out.println();
 		return null;
@@ -272,12 +299,19 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		this.inLHS = false;
 		rhsCategory = (Category)pro.getRhs().visit(this, null);
 		
-		// Add rule
-		Rule rule = addRule(getCurrentNamespace(), rhsCategory, lhsCategories);
-		
-		// Process any production attributes (i.e. turn left-attributes into the corresponding
-		// parlex annotations)
-		processProductionAttributes(pro, rule);
+		// Check if a rule for this production has already been generated
+		Rule rule = getGeneratedRule(pro);
+		if (rule == null) {
+			// Add rule
+			rule = addRule(getCurrentNamespace(), rhsCategory, lhsCategories);
+			
+			// Process any production attributes (i.e. turn left-attributes into the corresponding
+			// parlex annotations)
+			processProductionAttributes(pro, rule);
+			
+			// Store production -> rule mapping
+			storeGeneratedRule(pro, rule);
+		}
 		
 		// Add <rhs-LEX> -> <rhs-CF> rule for LEX rules
 		if (!inCFSyntax) {
@@ -493,25 +527,64 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	
 	@Override
 	public Object visitLexicalPriorities(LexicalPriorities pri, Object o) {
-		// TODO Auto-generated method stub
+		this.inCFSyntax = false;
+		for (Priority p : pri.getPriorities()) {
+			p.visit(this, null);
+		}
 		return null;
 	}
 
 	@Override
 	public Object visitContextFreePriorities(ContextFreePriorities pri, Object o) {
-		// TODO Auto-generated method stub
+		this.inCFSyntax = true;
+		for (Priority p : pri.getPriorities()) {
+			p.visit(this, null);
+		}
 		return null;
 	}
-
+	
 	@Override
 	public Object visitPriority(Priority pri, Object o) {
-		// TODO Auto-generated method stub
+		List<PriorityGroup> groups = pri.getGroups();
+		HashSet<PrioritySpecification> specs = inCFSyntax ? prioritySpecsCF : prioritySpecsLex;
+
+		// visit the groups
+		// TODO: is this needed? attributes are already merged and productions should be
+		// specified in a syntax definition, too.
+//		for (PriorityGroup grp : groups) {
+//			grp.visit(this, null);
+//		}
+		
+		// if there is only 1 group, no priorities are defined
+		if (groups.size() < 2) return null;
+		
+		// save priorities
+		Iterator<PriorityGroup> it = groups.iterator();
+		PriorityGroup higherGroup = it.next();
+		
+		while (it.hasNext()) {
+			boolean transitive = higherGroup.isTransitive();
+			PriorityGroup lowerGroup = it.next();
+			
+			for (Production higherPro : higherGroup.getProductions()) {
+				for (Production lowerPro : lowerGroup.getProductions()) {
+					specs.add(new PrioritySpecification(higherPro, lowerPro, transitive));
+				}
+			}
+			
+			higherGroup = lowerGroup;
+		}
+		
 		return null;
 	}
 
 	@Override
 	public Object visitPriorityGroup(PriorityGroup grp, Object o) {
-		// TODO Auto-generated method stub
+
+		for (Production pro : grp.getProductions()) {
+			pro.visit(this, null);
+		}
+		
 		return null;
 	}
 
@@ -633,6 +706,149 @@ public class SdfToParlexGrammarConverter implements Visitor {
 			
 		}
 	}
+	
+	private void processPrioritySpecifications() {
+		processPrioritySpecifications(false);
+		processPrioritySpecifications(true);
+	}
+	
+	private void processPrioritySpecifications(boolean cfSyntax) {
+		this.inCFSyntax = cfSyntax;
+		HashSet<PrioritySpecification> specs = inCFSyntax ? prioritySpecsCF : prioritySpecsLex;
+		
+		// 1st part: extract transitive priorities
+		HashMap<Rule, Set<Rule>> transitiveHigherPriority = new HashMap<Rule, Set<Rule>>();
+		for (Iterator<PrioritySpecification> it = specs.iterator(); it.hasNext(); ) {
+			PrioritySpecification spec = it.next();
+			if (spec.transitive) {
+				// map to generated rules
+				Rule higherPriorityRule = getGeneratedRule(spec.higherPriority);
+				Rule lowerPriorityRule = getGeneratedRule(spec.lowerPriority);
+				
+				// store in map
+				Set<Rule> lowerRules = transitiveHigherPriority.get(higherPriorityRule);
+				if (lowerRules == null) {
+					lowerRules = new HashSet<Rule>();
+					transitiveHigherPriority.put(higherPriorityRule, lowerRules);
+				}
+				lowerRules.add(lowerPriorityRule);
+				
+				// remove from set
+				it.remove();
+			}
+		}
+		
+		// now recursively add annotations for the transitive priorities
+		for (Rule higherPriorityRule : transitiveHigherPriority.keySet()) {
+			Set<Rule> lowerPriorityRules = transitiveHigherPriority.get(higherPriorityRule);
+			addTransitivePriorityAnnotations(transitiveHigherPriority,
+					higherPriorityRule, lowerPriorityRules);
+		}
+		
+		// 2nd part: process non-transitive priorities
+		for (Iterator<PrioritySpecification> it = specs.iterator(); it.hasNext(); ) {
+			PrioritySpecification spec = it.next();
+			// (spec is non-transitive, because transitive specs were already
+			//  removed from the set in the loop above)
+			
+			// map to generated rules
+			Rule higherPriorityRule = getGeneratedRule(spec.higherPriority);
+			Rule lowerPriorityRule = getGeneratedRule(spec.lowerPriority);
+			
+			// add annotation
+			addPriorityAnnotation(higherPriorityRule, lowerPriorityRule);
+			
+			// remove from set
+			it.remove();
+		}
+	}
+
+	private void addTransitivePriorityAnnotations(
+			HashMap<Rule, Set<Rule>> transitiveHigherPriority,
+			Rule higherPriorityRule, Set<Rule> lowerPriorityRules) {
+		for (Rule lowerPriorityRule : lowerPriorityRules) {
+			addPriorityAnnotation(higherPriorityRule, lowerPriorityRule);
+			
+			// transitive
+			Set<Rule> recursiveLowerPriority = transitiveHigherPriority.get(lowerPriorityRule);
+			if (recursiveLowerPriority != null) {
+				addTransitivePriorityAnnotations(transitiveHigherPriority, higherPriorityRule, recursiveLowerPriority);
+			}
+			
+			// TODO: maybe check for loops and report an error in that case.
+		}
+	}
+
+	
+	private void addPriorityAnnotation(Rule higherPriorityRule, Rule lowerPriorityRule) {
+		RelativePriorityAnnotation rpAnnotation = null;
+		// find existing annotation
+		for (IRuleAnnotation ann : higherPriorityRule.getAnnotations()) {
+			if (ann instanceof RelativePriorityAnnotation) {
+				rpAnnotation = (RelativePriorityAnnotation)ann;
+				break;
+			}
+		}
+		// if no existing annotation exists, create and add a new one
+		if (rpAnnotation == null) {
+			rpAnnotation = new RelativePriorityAnnotation();
+			higherPriorityRule.addAnnotation(rpAnnotation);
+		}
+		// add lower priority rule to the annotation
+		rpAnnotation.addLowerPriorityRule(lowerPriorityRule);
+	}
 
 
+	/**
+	 * Internal helper class that stores a relative priority between two productions.
+	 * Also stores if the priority is transitive or not.
+	 */
+	private static class PrioritySpecification {
+		Production higherPriority, lowerPriority;
+		boolean transitive;
+		
+		public PrioritySpecification(Production higherPriority,
+				Production lowerPriority, boolean transitive) {
+			super();
+			this.higherPriority = higherPriority;
+			this.lowerPriority = lowerPriority;
+			this.transitive = transitive;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime
+					* result
+					+ ((higherPriority == null) ? 0 : higherPriority.hashCode());
+			result = prime * result
+					+ ((lowerPriority == null) ? 0 : lowerPriority.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			PrioritySpecification other = (PrioritySpecification) obj;
+			if (higherPriority == null) {
+				if (other.higherPriority != null)
+					return false;
+			} else if (!higherPriority.equals(other.higherPriority))
+				return false;
+			if (lowerPriority == null) {
+				if (other.lowerPriority != null)
+					return false;
+			} else if (!lowerPriority.equals(other.lowerPriority))
+				return false;
+			return true;
+		}
+		
+	}
+	
 }
