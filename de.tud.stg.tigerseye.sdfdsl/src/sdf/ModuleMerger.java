@@ -511,4 +511,52 @@ public class ModuleMerger implements Visitor {
 		this.replacements.put(ali.getAliasName(), ali.getOriginal());
 		return null;
 	}
+
+	@Override
+	public Object visitLexicalPriorities(LexicalPriorities pri, Object o) {
+		ArrayList<Priority> newPriorities = new ArrayList<Priority>(pri.getPriorities().size());
+		
+		this.inCFSyntax = false;
+		
+		for (Priority p : pri.getPriorities()) {
+			newPriorities.add((Priority)p.visit(this, null));
+		}
+		
+		return new LexicalPriorities(newPriorities);
+	}
+
+	@Override
+	public Object visitContextFreePriorities(ContextFreePriorities pri, Object o) {
+		ArrayList<Priority> newPriorities = new ArrayList<Priority>(pri.getPriorities().size());
+		
+		this.inCFSyntax = true;
+		
+		for (Priority p : pri.getPriorities()) {
+			newPriorities.add((Priority)p.visit(this, null));
+		}
+		
+		return new ContextFreePriorities(newPriorities);
+	}
+
+	@Override
+	public Object visitPriority(Priority pri, Object o) {
+		ArrayList<PriorityGroup> newGroups = new ArrayList<PriorityGroup>(pri.getGroups().size());
+		
+		for (PriorityGroup grp : pri.getGroups()) {
+			newGroups.add((PriorityGroup)grp.visit(this, null));
+		}
+		
+		return new Priority(newGroups);
+	}
+
+	@Override
+	public Object visitPriorityGroup(PriorityGroup grp, Object o) {
+		ArrayList<Production> newProductions = new ArrayList<Production>(grp.getProductions().size());
+		
+		for (Production pro : grp.getProductions()) {
+			newProductions.add((Production)pro.visit(this, null));
+		}
+		
+		return new PriorityGroup(newProductions, grp.getAssociativity(), grp.isTransitive());
+	}
 }

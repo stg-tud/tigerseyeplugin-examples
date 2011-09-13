@@ -16,6 +16,7 @@ import sdf.model.CharacterClassDifference;
 import sdf.model.CharacterClassIntersection;
 import sdf.model.CharacterClassSymbol;
 import sdf.model.CharacterClassUnion;
+import sdf.model.ContextFreePriorities;
 import sdf.model.ContextFreeStartSymbols;
 import sdf.model.ContextFreeSyntax;
 import sdf.model.Definition;
@@ -26,12 +27,15 @@ import sdf.model.GrammarElement;
 import sdf.model.Hiddens;
 import sdf.model.Import;
 import sdf.model.Imports;
+import sdf.model.LexicalPriorities;
 import sdf.model.LexicalStartSymbols;
 import sdf.model.LexicalSyntax;
 import sdf.model.ListSymbol;
 import sdf.model.LiteralSymbol;
 import sdf.model.Module;
 import sdf.model.OptionalSymbol;
+import sdf.model.Priority;
+import sdf.model.PriorityGroup;
 import sdf.model.Production;
 import sdf.model.RepetitionSymbol;
 import sdf.model.SequenceSymbol;
@@ -486,6 +490,30 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		
 		return createNonTerminal(sym.toString());
 	}
+	
+	@Override
+	public Object visitLexicalPriorities(LexicalPriorities pri, Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visitContextFreePriorities(ContextFreePriorities pri, Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visitPriority(Priority pri, Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visitPriorityGroup(PriorityGroup grp, Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	
@@ -605,8 +633,6 @@ public class SdfToParlexGrammarConverter implements Visitor {
 			
 		}
 	}
-
-
 
 
 }

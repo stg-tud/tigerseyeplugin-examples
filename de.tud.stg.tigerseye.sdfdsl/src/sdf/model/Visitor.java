@@ -25,11 +25,15 @@ public interface Visitor {
 	public Object visitLexicalStartSymbols(LexicalStartSymbols sta, Object o);
 	public Object visitContextFreeStartSymbols(ContextFreeStartSymbols sta, Object o);
 	public Object visitAliases(Aliases ali, Object o);
+	public Object visitLexicalPriorities(LexicalPriorities pri, Object o);
+	public Object visitContextFreePriorities(ContextFreePriorities pri, Object o);
 	
 	// Grammar subelements
 	public Object visitProduction(Production pro, Object o);
 	public Object visitImport(Import imp, Object o);
 	public Object visitAlias(Alias ali, Object o);
+	public Object visitPriority(Priority pri, Object o);
+	public Object visitPriorityGroup(PriorityGroup grp, Object o);
 	
 	// Symbols
 	public Object visitCharacterClassSymbol(CharacterClassSymbol sym, Object o);
