@@ -1,0 +1,170 @@
+% requires the tuddesign packages from http://exp1.fkp.physik.tu-darmstadt.de/tuddesign/ 
+\documentclass[article,linedtoc,colorback,accentcolor=tud4c,10pt]{tudreport}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[ngerman,english]{babel}
+\usepackage[english]{hyperref}
+
+\usepackage[stable]{footmisc}
+
+\usepackage{float}
+\usepackage{listings}
+
+% don't indent the first line of each paragraph
+\usepackage[parfill]{parskip}
+
+\newcommand{\myTitle}{Implementing the\\ Syntax Definition Formalism as an Embedded Language}
+\newcommand{\myAuthor}{Pablo Hoch}
+
+% font for code listings
+% possibilities include: cmtt (latex default), pcr (courier), txtt (tuddesign default).
+% cmtt does not have a bold version for keywords.
+\renewcommand{\ttdefault}{pcr}
+
+% some macros used to format class names and code examples etc.
+\newcommand{\J}[1]{\textit{#1}}
+\newcommand{\C}[1]{\texttt{#1}}
+\newcommand{\Jclass}[1]{\J{#1}}
+\newcommand{\Jpkg}[1]{\J{#1}}
+\newcommand{\Jfile}[1]{\J{#1}}
+
+% http://www.tug.org/applications/hyperref/manual.html
+\hypersetup{%
+	pdftitle={\myTitle},
+	pdfauthor={\myAuthor},
+	%pdfsubject={SDF DSL},
+	pdfview=FitH,
+	pdfstartview=FitH,
+	pdfpagelayout=OneColumn
+}
+
+\definecolor{DarkRed}{RGB}{163, 21, 21} %200, 20, 20
+
+% listings configuration
+\lstset{ %
+	numbers=left,
+	numbersep=5pt,
+	%numberstyle=\tiny,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	breaklines=true,
+	captionpos=b,
+	basicstyle=\ttfamily,
+	extendedchars=true,
+	inputencoding=utf8x,
+	frame=single,
+	tabsize=2,
+	keywordstyle=\color{blue}\bfseries,
+	commentstyle=\color{green},
+	stringstyle=\color{DarkRed}
+	% emph={key,words,foo,bar}, emphstyle=\color{blue},
+	% emph={more,keywords}, emphstyle=\color{red}
+	% (\definecolor{name}{rgb}{0.12, 0.34, 0.56}) / {RGB}{123, 255, 100}
+}
+
+% simple sdf highlighting for listings package.
+% this does NOT include all sdf keywords, just the ones used in my example below.
+% http://mirror.hmc.edu/ctan/macros/latex/contrib/listings/listings.pdf
+\lstdefinelanguage{SDF}{%
+	morekeywords={%
+		module,exports,context-free,lexical,start-symbols,sorts,syntax,sorts
+	},
+	alsodigit={-}, % because some sdf-keywords contain hyphens
+	sensitive=true,
+	morecomment=[l]{\%\%},
+	morecomment=[s]{\%}{\%},
+	morestring=[b]",
+	morestring=[b]'
+	% morekeywords=[1]{foo, bar}, keywordstyle=[1]\color{blue}\bfseries etc.
+}
+
+% highlighting for sdf dsl (sdf + some additional keywords)
+\lstdefinelanguage[DSL]{SDF}[]{SDF}{%
+	morekeywords={%
+		parse,printGeneratedGrammarHTML,
+		import
+	}
+}
+
+\title{\myTitle}
+\subtitle{\myAuthor}
+
+\begin{document}
+\maketitle
+
+  \section{Introduction}
+
+SDF DSL is an implementation of the Syntax Definition Formalism (SDF) as an Embedded Domain Specific Language (EDSL).
+It transforms a grammar specification written in SDF into a simple BNF grammar that is then used by \emph{9am}, a Java implementation of an Earley parser. SDF grammars can be specified either by calling the methods of the \Jclass{SdfDSL} class or by using the TigersEye Eclipse plugin, which allows embedding of standard SDF syntax.
+The implementation is based on the language described in \href{http://homepages.cwi.nl/~daybuild/daily-books/syntax/2-sdf/sdf.html}{\emph{The Syntax Definition Formalism Reference Manual}}\footnote{\url{http://www.syntax-definition.org/Sdf/SdfDocumentation} (version 2007-10-22 17:18:09 +0200)}.
+This document gives a quick overview over the implementation of SDF as well as an example of how to specify a simple grammar using SDF and parse an input string with the generated \emph{9am} grammar.
+
+\hspace{0.5em}
+	\section{Implementation}
+
+The implementation of the SDF DSL consists of two main parts. The first part is the \Jclass{SdfDSL} class, which provides the interface to users of the DSL to specify an SDF grammar and retrieve the generated \emph{9am} grammar, which can then be used directly with the Earley parser. The SdfDSL class provides methods to specify every SDF construct such as modules, symbols and productions.
+By calling these methods, a tree representing the SDF grammar is created internally using classes from the \Jpkg{sdf.model} package. This model represents the complete input grammar, without any transformations applied and is basically an AST of the SDF grammar specification. The names of these methods and model classes correspond to the names used in the SDF documentation. Also, all classes in the \Jpkg{sdf.model} package include JavaDoc documentation with links to the respective parts of the SDF documentation.
+
+After all SDF modules have been specified, a \emph{9am} grammar is generated from the model representing the SDF grammar.
+This is done in two steps. First, since SDF grammars can consist of multiple modules, all modules have to be merged into one module by resolving all imports. This is done by the \Jclass{ModuleMerger} class, which is implemented as a visitor for the model classes and takes the name of the top-level module as a parameter. Note that the \Jclass{ModuleMerger} does not modify the original model, but creates a new model with all imports resolved.
+\Jclass{ModuleMerger} performs two important tasks:
+
+\begin{itemize}
+\item When encountering an \emph{import statement}, the specified module is processed recursively by using a \Jclass{ModuleMerger}, resulting in a module without unresolved imports. The imported statements are then added to the current module in a new \emph{exports} or \emph{hiddens section}, depending on where the import statement occurs.
+\item Symbol renamings are also performed in the \Jclass{ModuleMerger}. This includes parameters and renamings specified in \emph{import statements} (which will only be applied to the imported module) as well as \emph{aliases}. The renamings are performed when visiting a symbol in the \Jclass{ModuleMerger}.
+\end{itemize}
+
+Once the model has been processed by the \Jclass{ModuleMerger}, it consists of exactly one module which does not contain any \emph{import statements} or unresolved \emph{aliases}. This model is then passed to the \Jclass{SdfToParlexGrammarConverter} class, which buils an equivalent BNF grammar for the \emph{9am} Earley Parser. This is done by applying the transformations described in the SDF documentation. The following list provides an overview of the most important transformations.
+
+\begin{itemize}
+\item Basic \emph{sort symbols}, e.g. \C{Expr} or \C{Number} (represented by \J{sdf.model.SortSymbol}), are turned into non-terminal categories.
+\item \emph{Case-sensitive literal symbols}, such as \C{"true"} (represented by \J{sdf.model.LiteralSymbol}), are turned into terminal categories. \emph{Case-insensitive literal symbols}, e.g. \C{'true'}, are processed using regular expressions in the \emph{9am} parser.
+\item Compound symbols, such as \emph{optional symbols} and \emph{repetition symbols}, create additional rules as described in the SDF documentation. For example, the \emph{alternative symbol} \C{"true"|"false"} (represented by \J{sdf.model.AlternativeSymbol}) results in two rules, \C{$\alpha$ ::= "true"} and \C{$\alpha$ ::= "false"}, where $\alpha$ is a special non-terminal representing the alternative symbol.
+\item \emph{Character class symbols}, e.g. \C{[a-z]} (represented by \J{sdf.model.CharacterClassSymbol}), are implemented using regular expressions. Complex character classes that are combined using the set operators, e.g. \C{[a-z] \textbackslash/ [0-9]}, also result in a single regular expression, thanks to the extended regular expressions supported by Java\footnote{\url{http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html}}.
+\item At the end, symbols are renamed to include the namespace they occur in (e.g. symbols occuring in a context-free grammar specification are renamed to include the ``CF''-namespace, so a sort symbol \C{Expr} would become \C{<Expr-CF>}). Also, optional layout symbols are inserted on the left-hand side of productions in a context-free grammar.
+\item For productions with \emph{attributes} (e.g. \C{left, right, prefer, avoid, reject}), the generated rules are annotated with \emph{9am} rule annotations (e.g. associativity annotations). The \emph{9am} Earley parser uses these annotations to select the desired AST.
+\item \emph{Priorities} result in priority rule annotations, which are also processed by the Earley parser.
+\end{itemize}
+
+At the end, a \Jclass{GrammarCleaner} is invoked by default. \Jclass{GrammarCleaner} checks the generated \emph{9am} grammar and removes all rules and categories that are not required, i.e. cannot be reached from the start rule. This step is optional and can be disabled.
+
+The resulting \emph{9am} grammar can then be directly passed to the \emph{9am} Earley parser in order to parse input strings.
+
+Other parts of the SDF DSL implementation include:
+\begin{itemize}
+\item Test cases in the seperate project \Jpkg{de.tud.stg.tigerseye.sdfdsl.tests}. These also demonstrate how to use the \Jclass{SdfDSL} class directly.
+\item Example SDF DSL programs using the concrete syntax in the \Jpkg{de.tud.stg.tigerseye.sdfdsl.languagetestbench} project. These examples require the Tigerseye plugin.
+\item A \Jclass{GrammarDebugPrinter} class (in the \Jpkg{sdf.util} package) that can be used to create an HTML file that lists all categories and productions of a \emph{9am} grammar. Categories are linked to productions having that category on the left-hand side, which can be useful for debugging a grammar. An example output can be found in the \Jpkg{de.tud.stg.tigerseye.sdfdsl.languagetestbench} project (\Jfile{debug/ArithExpr.html}, created by the \Jfile{ArithExpr.sdf.dsl} file).
+\end{itemize}
+
+\hspace{0.5em}
+  \section{Using the SDF DSL}
+
+There are two ways to use the SDF DSL, either by calling the methods of the \Jclass{SdfDSL} class directly to specify the grammar (abstract syntax), or by using standard SDF syntax (concrete syntax) in a Tigerseye DSL file.
+The grammar in listing~\ref{src:ArithExpr.sdf} can be used to parse simple arithmetic expressions and uses some of the SDF specific features such as character classes, repetitions and layout (i.e. whitespace is allowed in the input string).
+To demonstrate how developers can implement the example grammar with both methods, listing~\ref{src:ArithExpr.java} shows the version that directly calls the \Jclass{SdfDSL} class methods to create the grammar. Also included is a simple example that shows how to parse an input string. The code shown in the listing is a shortened version of the file \Jfile{sdf/test/ArithExprSdfTest.java} from the \Jpkg{de.tud.stg.tigerseye.sdfdsl.tests} project.
+
+Listing~\ref{src:ArithExpr.sdf.dsl} shows the version using the concrete SDF syntax. This file must be run from inside the Tigerseye plugin. This code is included in the \Jpkg{de.tud.stg.tigerseye.sdfdsl.languagetestbench} project in the \Jfile{sdf/test/dsl/ArithExpr.sdf.dsl} file. The specification of the SDF grammar has been directly copied from the SDF file and some additional code to parse an example string has been added.
+
+\lstinputlisting[language=SDF,caption={ArithExpr.sdf},label=src:ArithExpr.sdf]{src/ArithExpr.sdf}
+
+\lstinputlisting[language=Java,caption={ArithExpr.java},label=src:ArithExpr.java]{src/ArithExpr.java}
+
+\lstinputlisting[language={[DSL]SDF},caption={ArithExpr.sdf.dsl},label=src:ArithExpr.sdf.dsl]{src/ArithExpr.sdf.dsl}
+
+\hspace{0.5em}
+  \section{Limitations of the SDF DSL}
+
+The following features of SDF are currently not implemented in the SDF DSL:
+
+\begin{itemize}
+\item For priorities, \emph{priorities in specific arguments}\footnote{\url{http://homepages.cwi.nl/~daybuild/daily-books/syntax/2-sdf/sdf.html\#section.priorities}} are not supported. Also, relative associativity labels inside groups are not supported.
+\item \emph{Variables}\footnote{\url{http://homepages.cwi.nl/~daybuild/daily-books/syntax/2-sdf/sdf.html\#section.variables}} are not supported since their purpose is not clear from the SDF documentation.
+\item \emph{Follow restrictions}\footnote{\url{http://homepages.cwi.nl/~daybuild/daily-books/syntax/2-sdf/sdf.html\#section.restrictions}} are not supported, because they are not needed for most languages. Support for follow restrictions could be added using a custom disambiguation oracle for the \emph{9am} Earley parser.
+\end{itemize}
+
+
+\end{document}
