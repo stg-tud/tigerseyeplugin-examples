@@ -543,7 +543,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0 -> p1		(production with attributes)
-	@DSLMethod(production = "p0  ->  p1", topLevel = false)
+	@DSLMethod(production = "p0  ->  p1  {  p2  }", topLevel = false)
 	public Production productionWithAttributes(
 			@DSLParameter(arrayDelimiter = " ")Symbol[] lhs,
 			Symbol rhs,
@@ -555,7 +555,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 
 	//  -> p0		(production with empty LHS but attributes)
-	@DSLMethod(production = "  ->  p0", topLevel = false)
+	@DSLMethod(production = "  ->  p0  {  p1  }", topLevel = false)
 	public Production productionWithAttributes(
 			Symbol rhs,
 			@DSLParameter(arrayDelimiter=",")ATerm[] attributes) {
@@ -595,14 +595,20 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0
-	@DSLMethod(production = "p0", topLevel = false)
+	@DSLMethod(production = "{  p0  }", topLevel = false)
 	public PriorityGroup priorityGroup(
 			@DSLParameter(arrayDelimiter=" ")Production[] productions) {
 		return new PriorityGroup(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
+	// p0
+	@DSLMethod(production = "p0", topLevel = false)
+	public PriorityGroup priorityGroup(Production production) {
+		return new PriorityGroup(new ArrayList<Production>(Arrays.asList(production)));
+	}
+	
 	// p0: p1
-	@DSLMethod(production = "p0  :  p1", topLevel = false)
+	@DSLMethod(production = "{  p0  :  p1  }", topLevel = false)
 	public PriorityGroup priorityGroupWithAssociativityAnnotation(
 			ATerm associativityAnnotation,
 			@DSLParameter(arrayDelimiter=" ")Production[] productions) {
