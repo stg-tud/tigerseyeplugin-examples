@@ -130,6 +130,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return cl.call();
 	}
 	
+	public Object sdf(Closure cl) {
+		return eval(null,cl);
+	}
 	
 	//// TOP LEVEL ELEMENTS ////
 	
@@ -142,7 +145,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	// - modules with neither imports nor exports (makes no sense, but still legal)
 
 	// module p0 p1 p2 (imports, no parameters)
-	@DSLMethod(production = "module  p0  p1  p2", topLevel = true)
+	@DSLMethod(production = "module p0 p1 p2", topLevel = true)
 	public Module moduleWithoutParameters(
 			ModuleId name,
 			@DSLParameter(arrayDelimiter = " ") Imports[] imports,
@@ -158,7 +161,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// module p0 p1 (no imports, no parameters)
-	@DSLMethod(production = "module  p0  p1", topLevel = true)
+	@DSLMethod(production = "module p0 p1", topLevel = true)
 	public Module moduleWithoutParameters(
 			ModuleId name,
 			@DSLParameter(arrayDelimiter = " ") ExportOrHiddenSection[] exportOrHiddenSections) {
@@ -172,7 +175,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// module p0[p1] p2 p3
-	@DSLMethod(production = "module  p0 [ p1 ]  p2  p3")
+	@DSLMethod(production = "module p0  [  p1  ] p2 p3")
 	public Module moduleWithParameters(
 			ModuleId name,
 			@DSLParameter(arrayDelimiter = ",") Symbol[] params,
@@ -188,7 +191,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	// for testing purposes
 	
-	@DSLMethod(production = "parse  p0  p1")
+	@DSLMethod(production = "parse p0 p1")
 	public boolean parseString(String topLevelModule, String input) {
 		Grammar grammar = getGrammar(topLevelModule);
 		
@@ -215,7 +218,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return valid;
 	}
 	
-	@DSLMethod(production = "printGeneratedGrammar  p0")
+	@DSLMethod(production = "printGeneratedGrammar p0")
 	public void printGeneratedGrammar(String topLevelModule) {
 		Grammar grammar = getGrammar(topLevelModule);
 		
@@ -224,7 +227,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		System.out.println();
 	}
 	
-	@DSLMethod(production = "printGeneratedGrammarHTML  p0  p1")
+	@DSLMethod(production = "printGeneratedGrammarHTML p0 p1")
 	public void printGeneratedGrammarHTML(String topLevelModule, String fileName) {
 		Grammar grammar = getGrammar(topLevelModule);
 		
@@ -283,79 +286,79 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// ~p0
-	@DSLMethod(production = "~ p0", topLevel = false)
+	@DSLMethod(production = "~  p0", topLevel = false)
 	public CharacterClassComplement characterClassComplement(CharacterClassSymbol sym) {
 		return new CharacterClassComplement(sym);
 	}
 	
 	// p0/p1
-	@DSLMethod(production = "p0 / p1", topLevel = false)
+	@DSLMethod(production = "p0  /  p1", topLevel = false)
 	public CharacterClassDifference characterClassDifference(CharacterClassSymbol left, CharacterClassSymbol right) {
 		return new CharacterClassDifference(left, right);
 	}
 	
 	// p0/\p1
-	@DSLMethod(production = "p0 /\\ p1", topLevel = false)
+	@DSLMethod(production = "p0  /\\  p1", topLevel = false)
 	public CharacterClassIntersection characterClassIntersection(CharacterClassSymbol left, CharacterClassSymbol right) {
 		return new CharacterClassIntersection(left, right);
 	}
 	
 	// p0\/p1
-	@DSLMethod(production = "p0 \\/ p1", topLevel = false)
+	@DSLMethod(production = "p0  \\/  p1", topLevel = false)
 	public CharacterClassUnion characterClassUnion(CharacterClassSymbol left, CharacterClassSymbol right) {
 		return new CharacterClassUnion(left, right);
 	}
 	
 	// p0?
-	@DSLMethod(production = "p0 ?", topLevel = false)
+	@DSLMethod(production = "p0  ?", topLevel = false)
 	public OptionalSymbol optionalSymbol(Symbol symbol) {
 		return new OptionalSymbol(symbol);
 	}
 	
 	// p0*
-	@DSLMethod(production = "p0 *", topLevel = false)
+	@DSLMethod(production = "p0  *", topLevel = false)
 	public RepetitionSymbol repetitionSymbolAtLeastZero(Symbol symbol) {
 		return new RepetitionSymbol(symbol, false);
 	}
 	
 	// p0+
-	@DSLMethod(production = "p0 +", topLevel = false)
+	@DSLMethod(production = "p0  +", topLevel = false)
 	public RepetitionSymbol repetitionSymbolAtLeastOnce(Symbol symbol) {
 		return new RepetitionSymbol(symbol, true);
 	}
 	
 	// (p0)
-	@DSLMethod(production = "( p0 )", topLevel = false)
+	@DSLMethod(production = "(  p0  )", topLevel = false)
 	public SequenceSymbol sequenceSymbol(@DSLParameter(arrayDelimiter = " ")Symbol[] symbols) {
 		return new SequenceSymbol(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// {p0 p1}*
-	@DSLMethod(production = "{ p0 p1 } *", topLevel = false)
+	@DSLMethod(production = "{  p0 p1  }  *", topLevel = false)
 	public ListSymbol listSymbolAtLeastZero(Symbol element, Symbol seperator) {
 		return new ListSymbol(element, seperator, false);
 	}
 	
 	// {p0 p1}+
-	@DSLMethod(production = "{ p0 p1 } +", topLevel = false)
+	@DSLMethod(production = "{  p0 p1  }  +", topLevel = false)
 	public ListSymbol listSymbolAtLeastOnce(Symbol element, Symbol seperator) {
 		return new ListSymbol(element, seperator, true);
 	}
 	
 	// p0 | p1
-	@DSLMethod(production = "p0 | p1", topLevel = false)
+	@DSLMethod(production = "p0  |  p1", topLevel = false)
 	public AlternativeSymbol alternativeSymbol(Symbol left, Symbol right) {
 		return new AlternativeSymbol(left, right);
 	}
 	
 	// <p0>
-	@DSLMethod(production = "< p0 >", topLevel = false)
+	@DSLMethod(production = "<  p0  >", topLevel = false)
 	public TupleSymbol tupleSymbol(@DSLParameter(arrayDelimiter = ",")Symbol[] symbol) {
 		return new TupleSymbol(new ArrayList<Symbol>(Arrays.asList(symbol)));
 	}
 	
 	// (p0 => p1)
-	@DSLMethod(production = "( p0 => p1 )", topLevel = false)
+	@DSLMethod(production = "(  p0  =>  p1  )", topLevel = false)
 	public FunctionSymbol functionSymbol(@DSLParameter(arrayDelimiter = " ")Symbol[] left, Symbol right) {
 		return new FunctionSymbol(new ArrayList<Symbol>(Arrays.asList(left)), right);
 	}
@@ -418,12 +421,12 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	
 	
-	@DSLMethod(production = "exports  p0", topLevel = false)
+	@DSLMethod(production = "exports p0", topLevel = false)
 	public Exports exports(@DSLParameter(arrayDelimiter = " ")GrammarElement[] grammarElements) {
 		return new Exports(new ArrayList<GrammarElement>(Arrays.asList(grammarElements)));
 	}
 	
-	@DSLMethod(production = "hiddens  p0", topLevel = false)
+	@DSLMethod(production = "hiddens p0", topLevel = false)
 	public Hiddens hiddens(@DSLParameter(arrayDelimiter = " ")GrammarElement[] grammarElements) {
 		return new Hiddens(new ArrayList<GrammarElement>(Arrays.asList(grammarElements)));
 	}
@@ -444,7 +447,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	
 	// imports p0
-	@DSLMethod(production = "imports  p0", topLevel = false)
+	@DSLMethod(production = "imports p0", topLevel = false)
 	public Imports importsStatement(@DSLParameter(arrayDelimiter = " ")Import[] importList) {
 		return new Imports(new ArrayList<Import>(Arrays.asList(importList)));
 	}
@@ -456,13 +459,13 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0[p1]
-	@DSLMethod(production = "p0 [ p1 ]", topLevel = false)
+	@DSLMethod(production = "p0  [  p1  ]", topLevel = false)
 	public Import importModuleWithParameters(ModuleId moduleName, @DSLParameter(arrayDelimiter = ",")Symbol[] params) {
 		return new Import(moduleName.toString(), new ArrayList<Symbol>(Arrays.asList(params)));
 	}
 	
 	// p0[p1]
-	@DSLMethod(production = "p0 [ p1 ]", topLevel = false)
+	@DSLMethod(production = "p0  [  p1  ]", topLevel = false)
 	public Import importModuleWithRenamings(ModuleId moduleName, @DSLParameter(arrayDelimiter = ",")Renaming[] renamings) {
 		return new Import(moduleName.toString(),
 				new ArrayList<Symbol>(),
@@ -470,7 +473,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0[p1][p2]
-	@DSLMethod(production = "p0 [ p1 ] [ p2 ]", topLevel = false)
+	@DSLMethod(production = "p0  [  p1  ]  [  p2  ]", topLevel = false)
 	public Import importModuleWithParametersAndRenamings(ModuleId moduleName,
 			@DSLParameter(arrayDelimiter = ",")Symbol[] params,
 			@DSLParameter(arrayDelimiter = ",")Renaming[] renamings) {
@@ -480,67 +483,67 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0 => p1
-	@DSLMethod(production = "p0 => p1", topLevel = false)
+	@DSLMethod(production = "p0  =>  p1", topLevel = false)
 	public Renaming renaming(Symbol oldSymbol, Symbol newSymbol) {
 		return new Renaming(oldSymbol, newSymbol);
 	}
 	
 	// sorts p0
-	@DSLMethod(production = "sorts  p0", topLevel = false)
+	@DSLMethod(production = "sorts p0", topLevel = false)
 	public Sorts sortsDeclaration(@DSLParameter(arrayDelimiter = " ")SortSymbol[] sortSymbols) {
 		return new Sorts(new ArrayList<SortSymbol>(Arrays.asList(sortSymbols)));
 	}
 	
 	// lexical syntax p0
-	@DSLMethod(production = "lexical  syntax  p0", topLevel = false)
+	@DSLMethod(production = "lexical syntax p0", topLevel = false)
 	public LexicalSyntax lexicalSyntax(@DSLParameter(arrayDelimiter = " ")Production[] productions) {
 		return new LexicalSyntax(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
 	// context-free syntax p0
-	@DSLMethod(production = "context-free  syntax  p0", topLevel = false)
+	@DSLMethod(production = "context-free syntax p0", topLevel = false)
 	public ContextFreeSyntax contextFreeSyntax(@DSLParameter(arrayDelimiter = " ")Production[] productions) {
 		return new ContextFreeSyntax(new ArrayList<Production>(Arrays.asList(productions)));
 	}
 	
 	// lexical start-symbols p0
-	@DSLMethod(production = "lexical  start-symbols  p0", topLevel = false)
+	@DSLMethod(production = "lexical start-symbols p0", topLevel = false)
 	public LexicalStartSymbols lexicalStartSymbols(@DSLParameter(arrayDelimiter = " ")Symbol[] symbols) {
 		return new LexicalStartSymbols(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// context-free start-symbols p0
-	@DSLMethod(production = "context-free  start-symbols  p0", topLevel = false)
+	@DSLMethod(production = "context-free start-symbols p0", topLevel = false)
 	public ContextFreeStartSymbols contextFreeStartSymbols(@DSLParameter(arrayDelimiter = " ")Symbol[] symbols) {
 		return new ContextFreeStartSymbols(new ArrayList<Symbol>(Arrays.asList(symbols)));
 	}
 	
 	// aliases p0
-	@DSLMethod(production = "aliases  p0", topLevel = false)
+	@DSLMethod(production = "aliases p0", topLevel = false)
 	public Aliases aliases(@DSLParameter(arrayDelimiter = " ")Alias[] aliases) {
 		return new Aliases(new ArrayList<Alias>(Arrays.asList(aliases)));
 	}
 	
 	// p0 -> p1		(alias)
-	@DSLMethod(production = "p0 -> p1", topLevel = false)
+	@DSLMethod(production = "p0  ->  p1", topLevel = false)
 	public Alias alias(Symbol original, Symbol aliasName) {
 		return new Alias(original, aliasName);
 	}
 	
 	// p0 -> p1		(production)
-	@DSLMethod(production = "p0 -> p1", topLevel = false)
+	@DSLMethod(production = "p0  ->  p1", topLevel = false)
 	public Production production(@DSLParameter(arrayDelimiter = " ")Symbol[] lhs, Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(Arrays.asList(lhs)), rhs);
 	}
 	
 	//  -> p0		(production with empty LHS)
-	@DSLMethod(production = " -> p0", topLevel = false)
+	@DSLMethod(production = "  -> p0", topLevel = false)
 	public Production production(Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(), rhs);
 	}
 	
 	// p0 -> p1		(production with attributes)
-	@DSLMethod(production = "p0 -> p1", topLevel = false)
+	@DSLMethod(production = "p0  ->  p1", topLevel = false)
 	public Production productionWithAttributes(
 			@DSLParameter(arrayDelimiter = " ")Symbol[] lhs,
 			Symbol rhs,
@@ -552,7 +555,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 
 	//  -> p0		(production with empty LHS but attributes)
-	@DSLMethod(production = " -> p0", topLevel = false)
+	@DSLMethod(production = "  ->  p0", topLevel = false)
 	public Production productionWithAttributes(
 			Symbol rhs,
 			@DSLParameter(arrayDelimiter=",")ATerm[] attributes) {
@@ -563,14 +566,14 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// lexical priorities p0
-	@DSLMethod(production = "lexical  priorities  p0", topLevel = false)
+	@DSLMethod(production = "lexical priorities p0", topLevel = false)
 	public LexicalPriorities lexicalPriorities(
 			@DSLParameter(arrayDelimiter=",")Priority[] priorities) {
 		return new LexicalPriorities(new ArrayList<Priority>(Arrays.asList(priorities)));
 	}
 	
 	// context-free priorities p0
-	@DSLMethod(production = "context-free  priorities  p0", topLevel = false)
+	@DSLMethod(production = "context-free priorities p0", topLevel = false)
 	public ContextFreePriorities contextFreePriorities(
 			@DSLParameter(arrayDelimiter=",")Priority[] priorities) {
 		return new ContextFreePriorities(new ArrayList<Priority>(Arrays.asList(priorities)));
@@ -652,7 +655,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	//// PRODUCTION ATTRIBUTES /////
 	
 	
-	@DSLMethod(production = "p0 ( p1 )", topLevel = false)
+	@DSLMethod(production = "p0  (  p1  )", topLevel = false)
 	public ATerm atermFunctionApplication(AFun fun, @DSLParameter(arrayDelimiter=",")ATerm[] args) {
 		// fix arity, because it is initially set to 0 in the typehandler
 		AFun fixedFun = atermFactory.makeAFun(fun.getName(), args.length, fun.isQuoted());
@@ -665,12 +668,12 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// additional method required for tigerseye
-	@DSLMethod(production = "p0 ( )", topLevel = false)
+	@DSLMethod(production = "p0  (  )", topLevel = false)
 	public ATerm atermFunctionApplicationWithoutArguments(AFun fun) {
 		return atermFactory.makeAppl(fun);
 	}
 	
-	@DSLMethod(production = "[ p0 ]", topLevel = false)
+	@DSLMethod(production = "[  p0  ]", topLevel = false)
 	public ATerm atermList(@DSLParameter(arrayDelimiter=",")ATerm[] items) {
 		if (items.length == 0) {
 			// this cannot happen when called from tigerseye, but can happen when called manually
@@ -687,7 +690,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return list;
 	}
 	
-	@DSLMethod(production = "[ ]", topLevel = false)
+	@DSLMethod(production = "[  ]", topLevel = false)
 	public ATerm atermList() {
 		return atermFactory.makeList();
 	}
