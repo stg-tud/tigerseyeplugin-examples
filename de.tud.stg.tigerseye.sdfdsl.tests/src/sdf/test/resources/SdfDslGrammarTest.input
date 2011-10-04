@@ -5,7 +5,7 @@ import sdf.model.*
 sdf(name:'SimpleTest2'){
 
 	module LeesPlank
-	imports Test
+	
 	exports
 		context-free start-symbols LeesPlank
 		sorts Aap Noot Mies LeesPlank
@@ -15,5 +15,7 @@ sdf(name:'SimpleTest2'){
 			"mies"			-> Mies
 			App Noot Mies	-> LeesPlank
 	
+	printGeneratedGrammar "LeesPlank"
+	parse "LeesPlank" "AaPnootmies"
 	
 }

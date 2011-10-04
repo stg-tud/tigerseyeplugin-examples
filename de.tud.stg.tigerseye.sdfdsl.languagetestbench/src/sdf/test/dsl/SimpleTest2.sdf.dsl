@@ -5,7 +5,6 @@ import sdf.model.*
 sdf(name:'SimpleTest2'){
 
 	module LeesPlank
-	
 	exports
 		context-free start-symbols LeesPlank
 		sorts Aap Noot Mies LeesPlank
