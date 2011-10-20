@@ -3,8 +3,6 @@
 	<name>de.tud.stg.tigerseye.sdfdsl</name>
 	<comment></comment>
 	<projects>
-		<project>parlex</project>
-		<project>tigerseye</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -24,7 +22,6 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
 	</natures>

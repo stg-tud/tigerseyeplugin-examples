@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LogoDSL Plug-in
 Bundle-SymbolicName: de.tud.stg.tigerseye.examples.LogoDSL;singleton:=true
 Bundle-Version: 0.0.3.qualifier
-Require-Bundle: de.tud.stg.tigerseye;bundle-version="0.1.0",
- de.tud.stg.tigerseye.core
+Require-Bundle: de.tud.stg.tigerseye.dslsupport;bundle-version="0.0.1",
+ org.codehaus.groovy;bundle-version="1.8.0"
 Bundle-ClassPath: lib/javalogo.jar,
  .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

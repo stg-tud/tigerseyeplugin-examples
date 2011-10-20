@@ -4,6 +4,6 @@ Bundle-Name: SimpleSQLDSL
 Bundle-SymbolicName: de.tud.stg.tigerseye.examples.SimpleSQLDSL;singleton:=true
 Bundle-Version: 0.0.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: de.tud.stg.tigerseye,
- de.tud.stg.tigerseye.core
+Require-Bundle: de.tud.stg.tigerseye.dslsupport;bundle-version="0.0.1",
+ org.codehaus.groovy;bundle-version="1.8.0"
 Export-Package: de.tud.stg.tigerseye.examples.simplesql
