@@ -18,11 +18,8 @@
    </license>
 
    <requires>
-      <import plugin="de.tud.stg.tigerseye" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="de.tud.stg.tigerseye.core" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="org.slf4j"/>
-      <import plugin="de.tud.stg.tigerseye" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="de.tud.stg.tigerseye.core" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="de.tud.stg.tigerseye.dslsupport" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="org.codehaus.groovy" version="1.8.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -77,13 +74,6 @@
          download-size="0"
          install-size="0"
          version="0.1.0.qualifier"
-         unpack="false"/>
-
-   <plugin
-         id="de.tud.stg.tigerseye.sdfdsl"
-         download-size="0"
-         install-size="0"
-         version="1.0.0.qualifier"
          unpack="false"/>
 
 </feature>
