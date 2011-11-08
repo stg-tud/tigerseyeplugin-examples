@@ -4,17 +4,17 @@ import sdf.model.*;
 import aterm.*;
 
 /*
- * This file is currently not transformed correctly.
- * 
- * Problem:
- * the "add" inside the annotation cons("add")
- * gets transformed into
- * new FunctionNameConstant(""add"")
- * 
- * additionally, CustomCategory does not allow parsing of
- * numbers, so numbers in aterms don't work either :(
- *
- */
+* This file is currently not transformed correctly.
+*
+* Problem:
+* the "add" inside the annotation cons("add")
+* gets transformed into
+* new FunctionNameConstant(""add"")
+*
+* additionally, CustomCategory does not allow parsing of
+* numbers, so numbers in aterms don't work either :(
+*
+*/
 
 sdf(name:'SimpleArithExprWithAttributes'){
 
