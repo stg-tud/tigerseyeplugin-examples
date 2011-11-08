@@ -17,12 +17,12 @@ import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
 
+import de.tud.stg.popart.builder.core.annotations.DSLMethod.PreferencePriority;
 import de.tud.stg.popart.builder.core.annotations.DSLParameter;
 import de.tud.stg.popart.builder.core.annotations.DSLMethod;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.typeHandling.TypeHandler;
 
 import sdf.model.*;
-import sdf.util.ASTPrettyPrinter;
 import sdf.util.GrammarDebugPrinter;
 
 /**
@@ -531,19 +531,24 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 	
 	// p0 -> p1		(production)
-	@DSLMethod(production = "p0  ->  p1", topLevel = false)
+	@DSLMethod(production = "p0  ->  p1", topLevel = false/*,
+			uniqueIdentifier = "sdf.production"*/)
 	public Production production(@DSLParameter(arrayDelimiter = " ")Symbol[] lhs, Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(Arrays.asList(lhs)), rhs);
 	}
 	
 	//  -> p0		(production with empty LHS)
-	@DSLMethod(production = "  -> p0", topLevel = false)
+	@DSLMethod(production = "  -> p0", topLevel = false/*,
+			uniqueIdentifier = "sdf.production.empty"*/)
 	public Production production(Symbol rhs) {
 		return new Production(new ArrayList<Symbol>(), rhs);
 	}
 	
 	// p0 -> p1		(production with attributes)
-	@DSLMethod(production = "p0  ->  p1  {  p2  }", topLevel = false)
+	@DSLMethod(production = "p0  ->  p1  {  p2  }", topLevel = false/*,
+			uniqueIdentifier = "sdf.production+attr",
+			priorityHigherThan = "sdf.production"*/,
+			preferencePriority = PreferencePriority.Prefer)
 	public Production productionWithAttributes(
 			@DSLParameter(arrayDelimiter = " ")Symbol[] lhs,
 			Symbol rhs,
@@ -555,7 +560,10 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	}
 
 	//  -> p0		(production with empty LHS but attributes)
-	@DSLMethod(production = "  ->  p0  {  p1  }", topLevel = false)
+	@DSLMethod(production = "  ->  p0  {  p1  }", topLevel = false/*,
+			uniqueIdentifier = "sdf.production.empty+attr",
+			priorityHigherThan = "sdf.production.empty"*/,
+			preferencePriority = PreferencePriority.Prefer)
 	public Production productionWithAttributes(
 			Symbol rhs,
 			@DSLParameter(arrayDelimiter=",")ATerm[] attributes) {
