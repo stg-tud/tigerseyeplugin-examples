@@ -1,21 +1,29 @@
 package sdf.test.dsl
 
-import sdf.model.*
+import sdf.model.*;
+import aterm.*;
 
-sdf(name:'SimpleTest2'){
+sdf(name:'SimpleArithExprWithAttributes'){
 
-	module LeesPlank
-	
+	module SimpleArithExprWithAttributes
 	exports
-		context-free start-symbols LeesPlank
-		sorts Aap Noot Mies LeesPlank
+		context-free start-symbols Expr
+		sorts Expr Number
+	 
 		lexical syntax
-			"aap"			-> Aap
-			"noot"			-> Noot
-			"mies"			-> Mies
-			App Noot Mies	-> LeesPlank
+			[0-9]+				-> Number
+			[ ]+				-> LAYOUT
+	 
+		context-free syntax
+			Expr "+" Expr		-> Expr {left}
+			Expr "+" Expr		-> Expr {cons("add")}
+			Expr "-" Expr		-> Expr {left}
+			Number				-> Expr {custom("test",123)}
+	 
+	 
 	
-	printGeneratedGrammar "LeesPlank"
-	parse "LeesPlank" "AaPnootmies"
+	printGeneratedGrammar "SimpleArithExprWithAttributes"
+	printGeneratedGrammarHTML "SimpleArithExprWithAttributes" "debug/SimpleArithExprWithAttributes.html"
+	parse "SimpleArithExprWithAttributes" "2+3+4"
 	
 }

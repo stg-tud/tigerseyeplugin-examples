@@ -62,8 +62,8 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  * 
  */
 public class ArithExprSdfTest {
-	SdfDSL sdf;
-	Grammar grammar;
+	public SdfDSL sdf;
+	public Grammar grammar;
 
 	@Before
 	public void setUp() {
