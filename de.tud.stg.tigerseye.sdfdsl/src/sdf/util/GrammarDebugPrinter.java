@@ -271,16 +271,22 @@ public class GrammarDebugPrinter {
 			sb.append("RelativePriority(higher priority than: ");
 			for (Iterator<IRule<String>> it = lowerPriorityRules.iterator(); it.hasNext(); ) {
 				IRule<String> rule = it.next();
-				sb.append("<span class=\"inline\">");
+//				sb.append("<span class=\"inline\">");
 				
 				// print rule
 				String lhsCatId = catIds.get(rule.getLhs());
-				out.print("<a href=\"#" + lhsCatId + "_rule1\">" + escape(catString(rule.getLhs())) + "</a> -&gt; ");
+//				out.print("<a href=\"#" + lhsCatId + "_rule1\">" + escape(catString(rule.getLhs())) + "</a> -&gt; ");
+//				for (ICategory<String> rhsCat : rule.getRhs()) {
+//					printRhsCategory(rhsCat);
+//				}
+				
+				sb.append("<a href=\"#" + lhsCatId + "_rule1\">" + escape(catString(rule.getLhs())) + "</a> -&gt; ");
 				for (ICategory<String> rhsCat : rule.getRhs()) {
-					printRhsCategory(rhsCat);
+					sb.append(escape(catString(rhsCat)));
+					sb.append(" ");
 				}
 				
-				sb.append("</span> ");
+//				sb.append("</span> ");
 				if (it.hasNext())
 					sb.append(", ");
 			}
