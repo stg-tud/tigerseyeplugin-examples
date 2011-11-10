@@ -22,7 +22,8 @@ public class SetDSLTest extends DSLTransformationTestBase {
 		assertTransformedDSLEqualsExpected(setdsl, SetDSL.class);
 	}
 	
-	@Test(expected=ComparisonFailure.class)
+	//worked after oracle activation
+	@Test
 	public void shouldTransformNewSetWithoutSemicolon() throws Exception {
 		doTest("setdslnewnosemicolon");
 	}
@@ -32,17 +33,19 @@ public class SetDSLTest extends DSLTransformationTestBase {
 		doTest("setdslunion");
 	}
 	
-	@Test(expected=ComparisonFailure.class)
+	@Test(expected=ComparisonFailure.class) // Intersection element is not transformed
 	public void shouldTransformIntersection() throws Exception {
 		doTest("setdslintersection");
 	}
 	
-	@Test(expected=ComparisonFailure.class)
+	//worked after oracle activation
+	@Test
 	public void shouldTransformNewSetAndUnion() throws Exception {
 		doTest("setdslnewandunion");
 	}
 	
-	@Test(expected=ComparisonFailure.class)
+	//worked after oracle activation
+	@Test
 	public void shouldTransformSetVarAndUnion() throws Exception {
 		doTest("setdslsetvarandunion");
 	}
