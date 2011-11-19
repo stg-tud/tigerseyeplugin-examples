@@ -16,11 +16,10 @@ import org.slf4j.LoggerFactory;
 
 import utilities.DSLTransformationTestBase;
 
-
+import de.tud.stg.tigerseye.examples.statemachine.StateMachineDSL;
 import de.tud.stg.parlex.core.IGrammar;
 import de.tud.stg.parlex.core.IRule;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.GrammarBuilder;
-import de.tud.stg.tigerseye.examples.statemachine.StateMachineDSL;
 import de.tud.stg.tigerseye.test.CodePrinterFactory;
 import de.tud.stg.tigerseye.test.PrettyGroovyCodePrinterFactory;
 import de.tud.stg.tigerseye.test.TestDSLTransformation;

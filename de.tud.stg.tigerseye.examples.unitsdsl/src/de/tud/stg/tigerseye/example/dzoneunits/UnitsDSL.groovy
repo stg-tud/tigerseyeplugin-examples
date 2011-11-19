@@ -3,9 +3,9 @@ package de.tud.stg.tigerseye.example.dzoneunits
 import javax.measure.unit.Unit;
 import org.jscience.physics.amount.Amount;
 
-import de.tud.stg.popart.builder.core.annotations.DSLParameter;
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
-import de.tud.stg.popart.dslsupport.Interpreter
+import de.tud.stg.tigerseye.dslsupport.Interpreter;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLParameter;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
 
 class UnitsDSL extends Interpreter{
 

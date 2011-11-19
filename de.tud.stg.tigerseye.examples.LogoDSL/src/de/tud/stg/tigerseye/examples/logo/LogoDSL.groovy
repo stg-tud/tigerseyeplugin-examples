@@ -1,15 +1,15 @@
 package de.tud.stg.tigerseye.examples.logo;
-import static de.tud.stg.popart.builder.core.annotations.DSLMethod.DslMethodType.*;
-import de.tud.stg.popart.builder.core.annotations.DSLMethod.DslMethodType;
-
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
+import static de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod.DslMethodType.*;
 
 
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.Interpreter;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
 import de.tud.stg.popart.dslsupport.*;
 
 import org.javalogo.*;
-import java.awt.Color;/**
+import java.awt.Color;
+import javax.swing.text.MaskFormatter.LiteralCharacter;
+/**
  * This class implements the Logo toy language.
  */
 public class LogoDSL extends Interpreter implements ILogoDSL {

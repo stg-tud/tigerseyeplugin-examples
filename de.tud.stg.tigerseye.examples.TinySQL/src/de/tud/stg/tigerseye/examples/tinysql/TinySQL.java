@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
-import de.tud.stg.popart.dslsupport.Interpreter;
 import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
 import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
+import de.tud.stg.tigerseye.dslsupport.Interpreter;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
 
 public class TinySQL extends Interpreter implements ITinySQL {
 

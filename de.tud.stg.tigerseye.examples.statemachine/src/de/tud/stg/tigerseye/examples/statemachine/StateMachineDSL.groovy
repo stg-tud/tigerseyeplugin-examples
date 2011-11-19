@@ -1,6 +1,6 @@
 package de.tud.stg.tigerseye.examples.statemachine;
 
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
 import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
 import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
 import de.tud.stg.tigerseye.examples.statemachine.examples.actions.ClosureAction

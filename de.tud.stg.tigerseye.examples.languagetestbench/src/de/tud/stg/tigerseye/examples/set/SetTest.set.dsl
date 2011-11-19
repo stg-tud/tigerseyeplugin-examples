@@ -24,13 +24,15 @@ set(name:'SetTest'){
 	 */  
 
 	
-	/*
+	
 	Set b = { "2"} ⋂ { "6", "8", "2"}
 	Set bres = { "2" }
-	*/
+	println b
+	println bres
+	
 	
 	Set a = { "2"} ⋃ { "6", "8", "2"}; 
-	Set ares = { "2", "6", "8"};
+	Set ares = { "2", "6", "8"};  
 		
 	println a
 	println ares

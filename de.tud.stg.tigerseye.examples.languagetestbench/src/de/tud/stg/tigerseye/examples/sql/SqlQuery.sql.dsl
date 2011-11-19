@@ -8,16 +8,14 @@ package de.tud.stg.tigerseye.examples.sql
  *  Object eval(HashMap, Closure)
  */
 
-
-
-
-sql(name:'SqlQuery'){ 
-
-	def q11 = selectFrom( ["NAME","AGE"] as String[] , ["PERSONS"]  as String[] )
+tigerseyeblock(sqlblock){ 
+ 
+	def q11 = selectFrom( ["NAME1","AGE"] as String[] , ["PERSONS"]  as String[] )
 	
-	def q12 = SELECT "NAME","AGE" FROM "PERSONS"
+	def q12 = SELECT "NAME2","AGE" FROM "PERSONS"
 	
-	def q21 = selectFromWhere(["NAME","AGE"] as String[] , ["PERSONS"]  as String[], ["AGE>20"] as String[])
+	def q21 = selectFromWhere(["NAME3","AGE"] as String[] , ["PERSONS"]  as String[], ["AGE>20"] as String[])
 	
-	def q22 = SELECT "NAME","AGE" FROM "PERSONS" WHERE "AGE>20"
-}
+	def q22 = SELECT "NAME4","AGE" FROM "PERSONS" WHERE "AGE>20"
+
+} 

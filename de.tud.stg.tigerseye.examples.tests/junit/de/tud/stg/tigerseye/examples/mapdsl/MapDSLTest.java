@@ -4,6 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import utilities.DSLTransformationTestBase;
+import utilities.TodoTest;
 
 public class MapDSLTest extends DSLTransformationTestBase {
 
@@ -13,13 +14,15 @@ public class MapDSLTest extends DSLTransformationTestBase {
 				MapDSL.class);
 	}
 
-	@Ignore("fails because priorization of Number before String was removed")
+//	@Ignore("fails because priorization of Number before String was removed")
+	@TodoTest
 	@Test
 	public void testAMapDSLTransformation() throws Exception {
 		assertTransformedDSLEqualsExpected("MapDSL", MapDSL.class);
 	}
 
-	@Ignore("fails because priorization of Number before String was removed")
+//	@Ignore("fails because priorization of Number before String was removed")
+	@TodoTest
 	@Test
 	public void testmultipleMapstatementstransformations() throws Exception {
 		assertTransformedDSLEqualsExpected("MapDSLlonger",

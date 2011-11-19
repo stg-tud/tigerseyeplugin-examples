@@ -1,7 +1,8 @@
 package de.tud.stg.tigerseye.examples.logo;
 
-import de.tud.stg.popart.dslsupport.Interpreter
 import de.tud.stg.tigerseye.*;
+import de.tud.stg.tigerseye.dslsupport.Interpreter;
+
 import org.javalogo.*;
 import java.awt.Color;
 
