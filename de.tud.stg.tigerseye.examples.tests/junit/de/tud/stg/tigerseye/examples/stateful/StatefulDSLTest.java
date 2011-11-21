@@ -7,8 +7,10 @@ import junit.framework.ComparisonFailure;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import utilities.SystemPropertyRule;
 import utilities.TodoTest;
 
 import de.tud.stg.tigerseye.examples.statefuldsl.StatefulDSL;
@@ -16,6 +18,9 @@ import de.tud.stg.tigerseye.test.TransformationUtils;
 
 public class StatefulDSLTest {
 
+	@Rule
+	public SystemPropertyRule spr = new SystemPropertyRule();
+	
 	@Before
 	public void beforeEachTest() throws Exception {
 

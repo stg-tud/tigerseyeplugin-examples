@@ -1,5 +1,5 @@
 int a = 1
 int b = 2
 Map m = buildMap(Integer.class,String.class, [
-             buildEntry(a,"Hans") as Entry[] ,
-              buildEntry(b,"Peter") as Entry[] ])
+             buildEntry(a,"Hans") ,
+              buildEntry(b,"Peter") ] as Entry[])
