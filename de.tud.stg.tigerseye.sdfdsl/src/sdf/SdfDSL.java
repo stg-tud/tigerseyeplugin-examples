@@ -35,7 +35,7 @@ import sdf.util.GrammarDebugPrinter;
  *
  */
 import de.tud.stg.popart.builder.core.annotations.DSLClass;
-@DSLClass(	whitespaceEscape = " ",
+@DSLClass(	whitespaceEscape = " ", stringQuotation = "(\"([^\"\\\\]|\\\\.)*\")",
 		typeRules = {
 				SdfDSL.SortSymbolType.class,
 				SdfDSL.ModuleIdType.class,
