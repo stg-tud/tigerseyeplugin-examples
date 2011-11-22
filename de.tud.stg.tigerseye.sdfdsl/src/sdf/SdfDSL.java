@@ -744,6 +744,11 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	
 	//// TYPE HANDLERS ////
+
+	// taken from Sdf2.sdf - a list of keywords that may not be used as module ids/sort symbols
+	static final String SDF_KEYWORDS = "aliases|lexical|priorities|context-free|definition|syntax|variables|" +
+			"module|imports|exports|hiddens|left|right|assoc|non-assoc|bracket|sorts|restrictions";
+	static final String REJECT_SDF_KEYWORDS = "(?!" + SDF_KEYWORDS + ")";
 	
 	/**
 	 * A sort corresponds to a non-terminal, e.g., Bool. Sort names always start with a capital letter and may be followed by
@@ -761,7 +766,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 		@Override
 		public String getRegularExpression() {
-			return "([A-Z][-A-Za-z0-9]*)";
+			return REJECT_SDF_KEYWORDS + "([A-Z][-A-Za-z0-9]*)";
 		}
 		
 	}
@@ -782,7 +787,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 
 		@Override
 		public String getRegularExpression() {
-			return "(/?([-_A-Za-z0-9]+)(/[-_A-Za-z0-9]+)*)";
+			return REJECT_SDF_KEYWORDS + "(/?([-_A-Za-z0-9]+)(/[-_A-Za-z0-9]+)*)";
 		}
 		
 	}
