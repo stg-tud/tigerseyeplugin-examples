@@ -41,6 +41,7 @@ import de.tud.stg.popart.builder.core.annotations.DSLClass;
 				SdfDSL.ModuleIdType.class,
 				SdfDSL.CharacterClassSymbolType.class,
 				SdfDSL.CaseInsensitiveLiteralSymbolType.class,
+				SdfDSL.SymbolLabelType.class,
 				// ATerm type handlers (used inside production attributes)
 				ATermTypeHandlers.IntConstantTypeHandler.class,
 				ATermTypeHandlers.RealConstantTypeHandler.class,
@@ -355,9 +356,17 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		return new FunctionSymbol(new ArrayList<Symbol>(Arrays.asList(left)), right);
 	}
 	
-	// p1:p0
-	public Symbol labelledSymbol(Symbol sym, String label) {
+	// p0:p1
+	@DSLMethod(production = "p0  :  p1", topLevel = false)
+	public Symbol labeledSymbol(String label, Symbol sym) {
 		sym.setLabel(label);
+		return sym;
+	}
+	
+	// p0:p1
+	@DSLMethod(production = "p0  :  p1", topLevel = false)
+	public Symbol labeledSymbol(SymbolLabel label, Symbol sym) {
+		sym.setLabel(label.getLabel());
 		return sym;
 	}
 	
@@ -806,6 +815,34 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 			// matches single quoted strings.
 			// allowed escapes inside the string: \' and \\
 			return "'([^'\\\\]|\\\\['\\\\])*'";
+		}
+		
+	}
+	
+	public static class SymbolLabelType extends TypeHandler {
+
+		@Override
+		public Class<?> getMainType() {
+			return SymbolLabel.class;
+		}
+
+		@Override
+		public String getRegularExpression() {
+			return "[a-zA-Z_][a-zA-Z0-9_]*";
+		}
+		
+	}
+	
+	public static class SymbolLabel {
+		private String label;
+
+		public SymbolLabel(String label) {
+			super();
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
 		}
 		
 	}
