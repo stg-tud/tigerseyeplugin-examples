@@ -239,6 +239,14 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		System.out.println("Grammar for module " + topLevelModule + " saved to: " + file.toURI().toString());
 	}
 	
+	/**
+	 * Returns this SdfDSL instance. Can be used in .dsl files.
+	 * @return this
+	 */
+	public SdfDSL getSdfInstance() {
+		return this;
+	}
+	
 	
 	
 	
