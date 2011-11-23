@@ -10,51 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import sdf.model.Alias;
-import sdf.model.Aliases;
-import sdf.model.AlternativeSymbol;
-import sdf.model.CaseInsensitiveLiteralSymbol;
-import sdf.model.CharacterClass;
-import sdf.model.CharacterClassComplement;
-import sdf.model.CharacterClassDifference;
-import sdf.model.CharacterClassIntersection;
-import sdf.model.CharacterClassSymbol;
-import sdf.model.CharacterClassUnion;
-import sdf.model.ContextFreePriorities;
-import sdf.model.ContextFreeStartSymbols;
-import sdf.model.ContextFreeSyntax;
-import sdf.model.ExportOrHiddenSection;
-import sdf.model.Exports;
-import sdf.model.FunctionSymbol;
-import sdf.model.GrammarElement;
-import sdf.model.Hiddens;
-import sdf.model.Import;
-import sdf.model.Imports;
-import sdf.model.LexicalPriorities;
-import sdf.model.LexicalStartSymbols;
-import sdf.model.LexicalSyntax;
-import sdf.model.ListSymbol;
-import sdf.model.LiteralSymbol;
-import sdf.model.Module;
-import sdf.model.ModuleId;
-import sdf.model.OptionalSymbol;
-import sdf.model.Priority;
-import sdf.model.PriorityGroup;
-import sdf.model.Production;
-import sdf.model.Renaming;
-import sdf.model.RepetitionSymbol;
-import sdf.model.SequenceSymbol;
-import sdf.model.SortSymbol;
-import sdf.model.Sorts;
-import sdf.model.StartSymbols;
-import sdf.model.Symbol;
-import sdf.model.Syntax;
-import sdf.model.TupleSymbol;
-import sdf.util.GrammarDebugPrinter;
-import aterm.AFun;
-import aterm.ATerm;
-import aterm.ATermFactory;
-import aterm.ATermList;
+import aterm.*;
 import aterm.pure.SingletonFactory;
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
@@ -65,12 +21,26 @@ import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
 import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod.PreferencePriority;
 import de.tud.stg.tigerseye.dslsupport.annotations.DSLParameter;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.typeHandling.TypeHandler;
-@DSLClass(	whitespaceEscape = " ",
+
+import sdf.util.GrammarDebugPrinter;
+import sdf.model.*;
+
+/**
+ * An implementation of the Syntax Definition Formalism (SDF) as a DSL.
+ * 
+ * @author Pablo Hoch
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html">SDF Documentation</a>
+ * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/technology/aterm-guide/aterm-guide.html">ATerm Documentation</a>
+ * @see sdf.model
+ *
+ */
+@DSLClass(	whitespaceEscape = " ", stringQuotation = "(\"([^\"\\\\]|\\\\.)*\")",
 		typeRules = {
 				SdfDSL.SortSymbolType.class,
 				SdfDSL.ModuleIdType.class,
 				SdfDSL.CharacterClassSymbolType.class,
 				SdfDSL.CaseInsensitiveLiteralSymbolType.class,
+				SdfDSL.SymbolLabelType.class,
 				// ATerm type handlers (used inside production attributes)
 				ATermTypeHandlers.IntConstantTypeHandler.class,
 				ATermTypeHandlers.RealConstantTypeHandler.class,
@@ -268,6 +238,14 @@ public class SdfDSL implements DSL {
 		System.out.println("Grammar for module " + topLevelModule + " saved to: " + file.toURI().toString());
 	}
 	
+	/**
+	 * Returns this SdfDSL instance. Can be used in .dsl files.
+	 * @return this
+	 */
+	public SdfDSL getSdfInstance() {
+		return this;
+	}
+	
 	
 	
 	
@@ -385,9 +363,17 @@ public class SdfDSL implements DSL {
 		return new FunctionSymbol(new ArrayList<Symbol>(Arrays.asList(left)), right);
 	}
 	
-	// p1:p0
-	public Symbol labelledSymbol(Symbol sym, String label) {
+	// p0:p1
+	@DSLMethod(production = "p0  :  p1", topLevel = false)
+	public Symbol labeledSymbol(String label, Symbol sym) {
 		sym.setLabel(label);
+		return sym;
+	}
+	
+	// p0:p1
+	@DSLMethod(production = "p0  :  p1", topLevel = false)
+	public Symbol labeledSymbol(SymbolLabel label, Symbol sym) {
+		sym.setLabel(label.getLabel());
 		return sym;
 	}
 	
@@ -765,6 +751,11 @@ public class SdfDSL implements DSL {
 	
 	
 	//// TYPE HANDLERS ////
+
+	// taken from Sdf2.sdf - a list of keywords that may not be used as module ids/sort symbols
+	static final String SDF_KEYWORDS = "aliases|lexical|priorities|context-free|definition|syntax|variables|" +
+			"module|imports|exports|hiddens|left|right|assoc|non-assoc|bracket|sorts|restrictions";
+	static final String REJECT_SDF_KEYWORDS = "(?!" + SDF_KEYWORDS + ")";
 	
 	/**
 	 * A sort corresponds to a non-terminal, e.g., Bool. Sort names always start with a capital letter and may be followed by
@@ -782,7 +773,7 @@ public class SdfDSL implements DSL {
 
 		@Override
 		public String getRegularExpression() {
-			return "([A-Z][-A-Za-z0-9]*)";
+			return REJECT_SDF_KEYWORDS + "([A-Z][-A-Za-z0-9]*)";
 		}
 		
 	}
@@ -803,7 +794,7 @@ public class SdfDSL implements DSL {
 
 		@Override
 		public String getRegularExpression() {
-			return "(/?([-_A-Za-z0-9]+)(/[-_A-Za-z0-9]+)*)";
+			return REJECT_SDF_KEYWORDS + "(/?([-_A-Za-z0-9]+)(/[-_A-Za-z0-9]+)*)";
 		}
 		
 	}
@@ -836,6 +827,34 @@ public class SdfDSL implements DSL {
 			// matches single quoted strings.
 			// allowed escapes inside the string: \' and \\
 			return "'([^'\\\\]|\\\\['\\\\])*'";
+		}
+		
+	}
+	
+	public static class SymbolLabelType extends TypeHandler {
+
+		@Override
+		public Class<?> getMainType() {
+			return SymbolLabel.class;
+		}
+
+		@Override
+		public String getRegularExpression() {
+			return "[a-zA-Z_][a-zA-Z0-9_]*";
+		}
+		
+	}
+	
+	public static class SymbolLabel {
+		private String label;
+
+		public SymbolLabel(String label) {
+			super();
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
 		}
 		
 	}

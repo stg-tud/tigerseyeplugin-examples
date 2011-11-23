@@ -1,5 +1,8 @@
 package sdf.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * A simple character class literal.
  * 
@@ -103,11 +106,28 @@ public class CharacterClassSymbol extends CharacterClass {
 			return false;
 		return true;
 	}
+	
+	static final Pattern decimalEscapePattern = Pattern.compile("\\\\([0-9]{1,3})");
 
 	@Override
 	public String getRegexpPattern() {
-		// TODO: escapes
-		return pattern;
+		// SDF uses a different syntax for escaping non-printable characters.
+		// SDF syntax: \decimal, e.g. \0, \31, \255
+		// Java regex syntax: \xHH (hexadecimal), e.g. \x00, \x1f, \xff
+		// These escapes are converted in the following loop
+		
+		Matcher m = decimalEscapePattern.matcher(pattern);
+		StringBuffer sb = new StringBuffer();
+		while (m.find()) {
+			String decimal = m.group(1);
+			String hex = Integer.toString(Integer.parseInt(decimal), 16);
+			if (hex.length() == 1) hex = "0" + hex;
+			String newEscape = "\\x" + hex;
+			m.appendReplacement(sb, Matcher.quoteReplacement(newEscape));
+		}
+		m.appendTail(sb);
+		
+		return sb.toString();
 	}
 
 	
