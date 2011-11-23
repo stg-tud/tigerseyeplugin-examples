@@ -22,7 +22,7 @@ package de.tud.stg.tigerseye.examples.logo
  */
 
 funclogo(name:'FuncLogoTest'){
-	
+
 
 	fun("polygon") { int length, int edges ->
 		int angle = (int)(360 / edges)

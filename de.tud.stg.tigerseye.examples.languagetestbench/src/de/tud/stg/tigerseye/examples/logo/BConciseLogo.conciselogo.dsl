@@ -26,7 +26,7 @@ package de.tud.stg.tigerseye.examples.logo
  */
 
 conciselogo(name:'BConciseLogo'){
-	// This is the example from ASimpleLogoTest
+	/* This is the example from ASimpleLogoTest:*/
 	left 30
 	forward 150
 	left 120
@@ -34,7 +34,7 @@ conciselogo(name:'BConciseLogo'){
 	left 120
 	forward 150	
 	
-	//A similar example in shortened form as to that in ASimpleLogoTest:
+	/*A similar example in shortened form as to that in ASimpleLogoTest:*/
 	lt 90
 	bd 15
 	rt 30
@@ -44,5 +44,5 @@ conciselogo(name:'BConciseLogo'){
 	rt 120
 	bd 150
 	
-	
+
 }

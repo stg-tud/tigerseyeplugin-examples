@@ -6,7 +6,7 @@ package de.tud.stg.tigerseye.examples.logo
 //The path to the actual translation file has to be provided either as project relative path beginning with a "/"
 // or as relative path to the folder of the defining file. 
 @Translation(file="translation.jpn")
-sf(name:'Test'){
+logo(name:'japlogo'){
 	オンワード 50
 	みぎ 90
 	あと 50
@@ -14,4 +14,4 @@ sf(name:'Test'){
 	ひだり 90
 	オンワード 50
 	みぎ 90
-}     
+}
