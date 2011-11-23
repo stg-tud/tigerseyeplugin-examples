@@ -5,6 +5,8 @@ import static junit.framework.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import sdf.GeneratedGrammar;
+import sdf.ParseResult;
 import sdf.SdfDSL;
 import sdf.model.ExportOrHiddenSection;
 import sdf.model.Exports;
@@ -19,8 +21,6 @@ import sdf.model.StartSymbols;
 import sdf.model.Symbol;
 import sdf.model.Syntax;
 import de.tud.stg.parlex.core.Grammar;
-import de.tud.stg.parlex.parser.earley.Chart;
-import de.tud.stg.parlex.parser.earley.EarleyParser;
 
 /**
  * 
@@ -62,8 +62,9 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  * 
  */
 public class CharacterClassTest {
+	private static final String MAIN_MODULE_NAME = "CharClassTest";
 	SdfDSL sdf;
-	Grammar grammar;
+	GeneratedGrammar generatedGrammar;
 
 	@Before
 	public void setUp() {
@@ -135,14 +136,15 @@ public class CharacterClassTest {
 				sorts, lexSyntax, cfSyntax });
 
 		Module module = sdf.moduleWithoutParameters(new ModuleId(
-				"CharClassTest"), new Imports[] {},
+				MAIN_MODULE_NAME), new Imports[] {},
 				new ExportOrHiddenSection[] { exports });
 
-		grammar = sdf.getGrammar("CharClassTest");
+		generatedGrammar = sdf.getGrammar(MAIN_MODULE_NAME);
 	}
 
 	@Test
 	public void testGrammar() {
+		Grammar grammar = generatedGrammar.getGrammar();
 		System.out.println("== CharacterClassTest: Grammar ==");
 		System.out.println(grammar.toString());
 		System.out.println();
@@ -151,14 +153,12 @@ public class CharacterClassTest {
 	@Test
 	public void testEarleyParserWithExpr1() {
 		System.out.println("== CharacterClassTest: Parser ==");
-		EarleyParser parser = new EarleyParser(grammar);
-		Chart chart = (Chart) parser.parse("123,0755,0xcaFE123,d,f");
-		chart.rparse((de.tud.stg.parlex.core.Rule) grammar.getStartRule());
-		System.out.println(chart.toString());
-		assertTrue(chart.isValidParse());
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, "123,0755,0xcaFE123,d,f");
+		
+		assertTrue(result.isValid());
 
 		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+		System.out.println(result.getParseTree());
 		System.out.println();
 	}
 }

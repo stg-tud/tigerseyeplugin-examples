@@ -5,6 +5,8 @@ import static junit.framework.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import sdf.GeneratedGrammar;
+import sdf.ParseResult;
 import sdf.SdfDSL;
 import sdf.model.ContextFreeStartSymbols;
 import sdf.model.ExportOrHiddenSection;
@@ -49,8 +51,9 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  */
 public class SimpleSdfTest {
 
+	private static final String MAIN_MODULE_NAME = "LeesPlank";
 	SdfDSL sdf;
-	Grammar grammar;
+	GeneratedGrammar generatedGrammar;
 
 	@Before
 	public void setUp() {
@@ -58,7 +61,7 @@ public class SimpleSdfTest {
 
 		Sorts sorts = sdf.sortsDeclaration(new SortSymbol[] {
 				sdf.sortSymbol("Aap"), sdf.sortSymbol("Noot"),
-				sdf.sortSymbol("Mies"), sdf.sortSymbol("LeesPlank") });
+				sdf.sortSymbol("Mies"), sdf.sortSymbol(MAIN_MODULE_NAME) });
 
 		LexicalSyntax lexSyntax = sdf
 				.lexicalSyntax(new Production[] {
@@ -75,7 +78,7 @@ public class SimpleSdfTest {
 								new Symbol[] { sdf.sortSymbol("Aap"),
 										sdf.sortSymbol("Noot"),
 										sdf.sortSymbol("Mies") },
-								sdf.sortSymbol("LeesPlank")),
+								sdf.sortSymbol(MAIN_MODULE_NAME)),
 				// sdf.production(new Symbol[]{
 				// sdf.caseInsensitiveLiteralSymbol(" ") },
 				// sdf.sortSymbol("LAYOUT")),
@@ -83,19 +86,20 @@ public class SimpleSdfTest {
 
 		ContextFreeStartSymbols startSymbols = sdf
 				.contextFreeStartSymbols(new Symbol[] { sdf
-						.sortSymbol("LeesPlank") });
+						.sortSymbol(MAIN_MODULE_NAME) });
 
 		Exports exports = sdf.exports(new GrammarElement[] { startSymbols,
 				sorts, lexSyntax });
 
-		Module module = sdf.moduleWithoutParameters(new ModuleId("LeesPlank"),
+		Module module = sdf.moduleWithoutParameters(new ModuleId(MAIN_MODULE_NAME),
 				new Imports[] {}, new ExportOrHiddenSection[] { exports });
 
-		grammar = sdf.getGrammar("LeesPlank");
+		generatedGrammar = sdf.getGrammar(MAIN_MODULE_NAME);
 	}
 
 	@Test
 	public void testGrammar() {
+		Grammar grammar = generatedGrammar.getGrammar();
 		System.out.println("== SimpleSdfTest: Grammar ==");
 		System.out.println(grammar.toString());
 		System.out.println();
@@ -104,14 +108,12 @@ public class SimpleSdfTest {
 	@Test
 	public void testEarleyParserWithBnfDSL() {
 		System.out.println("== SimpleSdfTest: Parser ==");
-		EarleyParser parser = new EarleyParser(grammar);
-		Chart chart = (Chart) parser.parse("aapnootmies");
-		chart.rparse((de.tud.stg.parlex.core.Rule) grammar.getStartRule());
-		System.out.println(chart.toString());
-		assertTrue(chart.isValidParse());
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, "aapnootmies");
+		
+		assertTrue(result.isValid());
 
 		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+		System.out.println(result.getParseTree());
 		System.out.println();
 	}
 }

@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import aterm.ATerm;
 
+import sdf.GeneratedGrammar;
+import sdf.ParseResult;
 import sdf.SdfDSL;
 import sdf.model.ExportOrHiddenSection;
 import sdf.model.Exports;
@@ -25,8 +27,6 @@ import sdf.model.StartSymbols;
 import sdf.model.Symbol;
 import sdf.model.Syntax;
 import de.tud.stg.parlex.core.Grammar;
-import de.tud.stg.parlex.parser.earley.Chart;
-import de.tud.stg.parlex.parser.earley.EarleyParser;
 
 /**
  * 
@@ -75,7 +75,7 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  */
 public class ArithExprWithPrioritiesTest {
 	SdfDSL sdf;
-	Grammar grammar;
+	GeneratedGrammar generatedGrammar;
 	
 	private static final String MAIN_MODULE_NAME = "ArithExprWithPriorities";
 
@@ -165,11 +165,12 @@ public class ArithExprWithPrioritiesTest {
 		Module module = sdf.moduleWithoutParameters(new ModuleId(MAIN_MODULE_NAME),
 				new Imports[] {}, new ExportOrHiddenSection[] { exports });
 
-		grammar = sdf.getGrammar(MAIN_MODULE_NAME);
+		generatedGrammar = sdf.getGrammar(MAIN_MODULE_NAME);
 	}
 
 	@Test
 	public void testGrammar() {
+		Grammar grammar = generatedGrammar.getGrammar();
 		System.out.println("== ArithExprWithPrioritiesTest: Grammar ==");
 		System.out.println(grammar.toString());
 		System.out.println();
@@ -184,31 +185,24 @@ public class ArithExprWithPrioritiesTest {
 	@Test
 	public void testEarleyParserWithExpr1() {
 		System.out.println("== ArithExprWithPrioritiesTest: Parser: 2+3*5 ==");
-		EarleyParser parser = new EarleyParser(grammar);
-		parser.detectUsedOracles();
-		Chart chart = (Chart) parser.parse("2+3*5");
-		chart.rparse((de.tud.stg.parlex.core.Rule) grammar.getStartRule());
-		System.out.println(chart.toString());
-		assertTrue(chart.isValidParse());
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, "2+3*5");
+		
+		assertTrue(result.isValid());
 
 		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+		System.out.println(result.getParseTree());
 		System.out.println();
 	}
 
 	@Test
 	public void testEarleyParserWithExpr2() {
-		System.out
-				.println("== ArithExprWithPrioritiesTest: Parser: 4 + 8 * (15 / (16+23)) - 42 ==");
-		EarleyParser parser = new EarleyParser(grammar);
-		parser.detectUsedOracles();
-		Chart chart = (Chart) parser.parse("4 + 8 * (15 / (16+23)) - 42");
-		chart.rparse((de.tud.stg.parlex.core.Rule) grammar.getStartRule());
-		System.out.println(chart.toString());
-		assertTrue(chart.isValidParse());
+		System.out.println("== ArithExprWithPrioritiesTest: Parser: 4 + 8 * (15 / (16+23)) - 42 ==");
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, "4 + 8 * (15 / (16+23)) - 42");
+		
+		assertTrue(result.isValid());
 
 		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+		System.out.println(result.getParseTree());
 		System.out.println();
 	}
 }

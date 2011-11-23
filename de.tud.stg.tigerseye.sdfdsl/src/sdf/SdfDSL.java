@@ -86,7 +86,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	 * @param topLevelModuleName	name of the top-level module
 	 * @return the generated Grammar for the given Module
 	 */
-	public Grammar getGrammar(String topLevelModuleName) {
+	public GeneratedGrammar getGrammar(String topLevelModuleName) {
 		return getGrammar(topLevelModuleName, true);
 	}
 	
@@ -100,7 +100,7 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	 * @param cleanGrammar			if true, unused rules are removed from the generated grammar.
 	 * @return the generated Grammar for the given Module
 	 */
-	public Grammar getGrammar(String topLevelModuleName, boolean cleanGrammar) {
+	public GeneratedGrammar getGrammar(String topLevelModuleName, boolean cleanGrammar) {
 		// find top level module
 		Module topLevelModule = modules.get(topLevelModuleName);
 		
@@ -110,14 +110,13 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 		
 		// convert sdf model -> parlex grammar
 		SdfToParlexGrammarConverter converter = new SdfToParlexGrammarConverter(this);
-		Grammar g = converter.getGrammar(mainModule);
+		GeneratedGrammar g = converter.getGrammar(mainModule);
 
 		// remove unused rules if requested
 		if (cleanGrammar) {
-			return GrammarCleaner.clean(g);
-		} else {
-			return g;
+			g.setGrammar(GrammarCleaner.clean(g.getGrammar()));
 		}
+		return g;
 	}
 	
 	public ATermFactory getAtermFactory() {
@@ -201,9 +200,9 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	 */
 	@DSLMethod(production = "parse p0 p1")
 	public ParseResult parseString(String topLevelModule, String input) {
-		Grammar grammar = getGrammar(topLevelModule);
+		GeneratedGrammar grammar = getGrammar(topLevelModule);
 		
-		EarleyParser parser = new EarleyParser(grammar);
+		EarleyParser parser = new EarleyParser(grammar.getGrammar());
 		parser.detectUsedOracles();
 		Chart chart = (Chart) parser.parse(input);
 		
@@ -213,21 +212,21 @@ public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
 	
 	@DSLMethod(production = "printGeneratedGrammar p0")
 	public void printGeneratedGrammar(String topLevelModule) {
-		Grammar grammar = getGrammar(topLevelModule);
+		GeneratedGrammar grammar = getGrammar(topLevelModule);
 		
 		System.out.println("Generated grammar for module " + topLevelModule + ":");
-		System.out.println(grammar);
+		System.out.println(grammar.getGrammar());
 		System.out.println();
 	}
 	
 	@DSLMethod(production = "printGeneratedGrammarHTML p0 p1")
 	public void printGeneratedGrammarHTML(String topLevelModule, String fileName) {
-		Grammar grammar = getGrammar(topLevelModule);
+		GeneratedGrammar grammar = getGrammar(topLevelModule);
 		
 		File file = new File(fileName);
 		try {
 			FileOutputStream fos = new FileOutputStream(fileName);
-			GrammarDebugPrinter gdp = new GrammarDebugPrinter(grammar, fos);
+			GrammarDebugPrinter gdp = new GrammarDebugPrinter(grammar.getGrammar(), fos);
 			gdp.printGrammar(topLevelModule + " Grammar");
 			fos.close();
 		} catch (FileNotFoundException e) {

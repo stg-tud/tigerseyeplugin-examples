@@ -1,8 +1,7 @@
 package sdf.test.treeviewer;
 
-import static junit.framework.Assert.assertTrue;
-import aterm.ATerm;
-import sdf.ATermConstructor;
+import sdf.GeneratedGrammar;
+import sdf.ParseResult;
 import sdf.SdfDSL;
 import sdf.model.ExportOrHiddenSection;
 import sdf.model.Exports;
@@ -19,14 +18,12 @@ import sdf.model.Syntax;
 import treeviewer.tree.aterms.ATermTreeBuilder;
 import treeviewer.tree.parlex.ParseTreeBuilder;
 import treeviewer.ui.MultiTreeViewer;
+import aterm.ATerm;
 import de.tud.stg.parlex.ast.IAbstractNode;
-import de.tud.stg.parlex.core.Grammar;
-import de.tud.stg.parlex.parser.earley.Chart;
-import de.tud.stg.parlex.parser.earley.EarleyParser;
 
 public class SimpleCons {
 	private SdfDSL sdf;
-	private Grammar grammar;
+	private GeneratedGrammar generatedGrammar;
 	
 	private static final String MAIN_MODULE_NAME = "SimpleCons";
 	
@@ -216,24 +213,21 @@ public class SimpleCons {
 				new ExportOrHiddenSection[] { exports }
 		);
 
-		grammar = sdf.getGrammar(MAIN_MODULE_NAME);
+		generatedGrammar = sdf.getGrammar(MAIN_MODULE_NAME);
 		
 		sdf.printGeneratedGrammarHTML(MAIN_MODULE_NAME, "src/sdf/test/treeviewer/SimpleCons.html");
 	}
 	
 	public void parse(String input) {
-		EarleyParser parser = new EarleyParser(grammar);
-		parser.detectUsedOracles();
-		Chart chart = (Chart) parser.parse(input);
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, input);
 		
-		System.out.println(chart);
+		System.out.println(result.getParseChart());
 		
-		IAbstractNode parseTree = chart.getAST();
+		IAbstractNode parseTree = result.getParseTree();
 		
 		System.out.println(parseTree);
 		
-		ATermConstructor constructor = new ATermConstructor(parseTree);
-		ATerm atermTree = constructor.constructTree();
+		ATerm atermTree = result.getConsTree();
 		
 		System.out.println("ATerm: " + atermTree);
 		

@@ -20,8 +20,10 @@ public class ParseResult {
 	private boolean valid;
 	private IAbstractNode parseTree;
 	private ATerm consTree;
+	private Chart chart;
 	
 	public ParseResult(Chart chart) {
+		this.chart = chart;
 		this.valid = chart.isValidParse();
 		if (valid) {
 			this.parseTree = chart.getAST();
@@ -49,4 +51,7 @@ public class ParseResult {
 		return consTree;
 	}
 	
+	public Chart getParseChart() {
+		return chart;
+	}
 }

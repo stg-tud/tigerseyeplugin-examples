@@ -83,6 +83,7 @@ public class SdfToParlexGrammarConverter implements Visitor {
 	private Rule startRule;
 	private Category optLayoutCat;
 	private HashMap<Production,Rule> generatedLexRules, generatedCFRules;
+	private HashMap<Rule,ProductionMapping> productionMappings;
 	private HashSet<PrioritySpecification> prioritySpecsLex, prioritySpecsCF;
 	
 	private ATermFactory atermFactory;
@@ -104,7 +105,7 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		this.atermReject = atermFactory.makeAppl(atermFactory.makeAFun("reject", 0, false));
 	}
 	
-	public Grammar getGrammar(Module topLevelModule) {
+	public GeneratedGrammar getGrammar(Module topLevelModule) {
 		
 		if (DEBUG) System.out.println("*** SDF -> Parlex Grammar ***");
 		
@@ -112,6 +113,7 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		this.startRule = null;
 		this.generatedCFRules = new HashMap<Production, Rule>();
 		this.generatedLexRules = new HashMap<Production, Rule>();
+		this.productionMappings = new HashMap<Rule, ProductionMapping>();
 		this.prioritySpecsCF = new HashSet<SdfToParlexGrammarConverter.PrioritySpecification>();
 		this.prioritySpecsLex = new HashSet<SdfToParlexGrammarConverter.PrioritySpecification>();
 		
@@ -139,12 +141,35 @@ public class SdfToParlexGrammarConverter implements Visitor {
 		this.prioritySpecsCF.clear();
 		this.prioritySpecsLex.clear();
 		
-		return grammar;
+		GeneratedGrammar generatedGrammar = new GeneratedGrammar(grammar, productionMappings);
+		
+		return generatedGrammar;
 	}
 	
 	private void storeGeneratedRule(Production pro, Rule rule) {
 		HashMap<Production, Rule> map = inCFSyntax ? generatedCFRules : generatedLexRules;
 		map.put(pro, rule);
+		
+		// store mapping rule -> production, including symbol labels
+		ProductionMapping mapping = new ProductionMapping(pro, rule);
+		int ruleIndex = 0;
+		ArrayList<Symbol> lhs = pro.getLhs();
+		for (int proIndex = 0; proIndex < lhs.size(); proIndex++) {
+			
+			Symbol sym = lhs.get(proIndex);
+			String label = sym.getLabel();
+			
+			if (label != null)
+				mapping.setLabelForCategoryAtPosition(ruleIndex, label);
+			
+			// go to next category, skip layout categories in cf rules
+			if (inCFSyntax)
+				ruleIndex += 2;
+			else
+				ruleIndex++;
+		}
+		
+		productionMappings.put(rule, mapping);
 	}
 	
 	private Rule getGeneratedRule(Production pro) {

@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import aterm.ATerm;
 
+import sdf.GeneratedGrammar;
+import sdf.ParseResult;
 import sdf.SdfDSL;
 import sdf.model.ExportOrHiddenSection;
 import sdf.model.Exports;
@@ -58,7 +60,7 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  */
 public class SimpleArithExprWithAttributesTest {
 	SdfDSL sdf;
-	Grammar grammar;
+	GeneratedGrammar generatedGrammar;
 	
 	private static final String MAIN_MODULE_NAME = "SimpleArithExprWithAttributes";
 
@@ -125,11 +127,12 @@ public class SimpleArithExprWithAttributesTest {
 				MAIN_MODULE_NAME), new Imports[] {},
 				new ExportOrHiddenSection[] { exports });
 
-		grammar = sdf.getGrammar(MAIN_MODULE_NAME);
+		generatedGrammar = sdf.getGrammar(MAIN_MODULE_NAME);
 	}
 
 	@Test
 	public void testGrammar() {
+		Grammar grammar = generatedGrammar.getGrammar();
 		System.out.println("== SimpleArithExprWithAttributesTest: Grammar ==");
 		System.out.println(grammar.toString());
 		System.out.println();
@@ -140,15 +143,12 @@ public class SimpleArithExprWithAttributesTest {
 	@Test
 	public void testEarleyParserWithExpr1() {
 		System.out.println("== SimpleArithExprWithAttributesTest: Parser ==");
-		EarleyParser parser = new EarleyParser(grammar);
-		parser.detectUsedOracles();
-		Chart chart = (Chart) parser.parse("2+3+4");
-		chart.rparse((de.tud.stg.parlex.core.Rule) grammar.getStartRule());
-		System.out.println(chart.toString());
-		assertTrue(chart.isValidParse());
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, "2+3+4");
+		
+		assertTrue(result.isValid());
 
 		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+		System.out.println(result.getParseTree());
 		System.out.println();
 	}
 }

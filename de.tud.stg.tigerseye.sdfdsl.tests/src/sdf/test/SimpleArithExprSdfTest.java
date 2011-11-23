@@ -5,6 +5,8 @@ import static junit.framework.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import sdf.GeneratedGrammar;
+import sdf.ParseResult;
 import sdf.SdfDSL;
 import sdf.model.ExportOrHiddenSection;
 import sdf.model.Exports;
@@ -54,8 +56,9 @@ import de.tud.stg.parlex.parser.earley.EarleyParser;
  * 
  */
 public class SimpleArithExprSdfTest {
+	private static final String MAIN_MODULE_NAME = "SimpleArithExpr";
 	SdfDSL sdf;
-	Grammar grammar;
+	GeneratedGrammar generatedGrammar;
 
 	@Before
 	public void setUp() {
@@ -94,14 +97,15 @@ public class SimpleArithExprSdfTest {
 				sorts, lexSyntax, cfSyntax });
 
 		Module module = sdf.moduleWithoutParameters(new ModuleId(
-				"SimpleArithExpr"), new Imports[] {},
+				MAIN_MODULE_NAME), new Imports[] {},
 				new ExportOrHiddenSection[] { exports });
 
-		grammar = sdf.getGrammar("SimpleArithExpr");
+		generatedGrammar = sdf.getGrammar(MAIN_MODULE_NAME);
 	}
 
 	@Test
 	public void testGrammar() {
+		Grammar grammar = generatedGrammar.getGrammar();
 		System.out.println("== SimpleArithExprSdfTest: Grammar ==");
 		System.out.println(grammar.toString());
 		System.out.println();
@@ -110,14 +114,12 @@ public class SimpleArithExprSdfTest {
 	@Test
 	public void testEarleyParserWithExpr1() {
 		System.out.println("== SimpleArithExprSdfTest: Parser ==");
-		EarleyParser parser = new EarleyParser(grammar);
-		Chart chart = (Chart) parser.parse("2+3-5");
-		chart.rparse((de.tud.stg.parlex.core.Rule) grammar.getStartRule());
-		System.out.println(chart.toString());
-		assertTrue(chart.isValidParse());
+		ParseResult result = sdf.parseString(MAIN_MODULE_NAME, "2+3-5");
+		
+		assertTrue(result.isValid());
 
 		System.out.println("AST:");
-		System.out.println(chart.getAST().toString());
+		System.out.println(result.getParseTree());
 		System.out.println();
 	}
 }
