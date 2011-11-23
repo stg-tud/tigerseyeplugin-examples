@@ -10,31 +10,61 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import aterm.*;
+import sdf.model.Alias;
+import sdf.model.Aliases;
+import sdf.model.AlternativeSymbol;
+import sdf.model.CaseInsensitiveLiteralSymbol;
+import sdf.model.CharacterClass;
+import sdf.model.CharacterClassComplement;
+import sdf.model.CharacterClassDifference;
+import sdf.model.CharacterClassIntersection;
+import sdf.model.CharacterClassSymbol;
+import sdf.model.CharacterClassUnion;
+import sdf.model.ContextFreePriorities;
+import sdf.model.ContextFreeStartSymbols;
+import sdf.model.ContextFreeSyntax;
+import sdf.model.ExportOrHiddenSection;
+import sdf.model.Exports;
+import sdf.model.FunctionSymbol;
+import sdf.model.GrammarElement;
+import sdf.model.Hiddens;
+import sdf.model.Import;
+import sdf.model.Imports;
+import sdf.model.LexicalPriorities;
+import sdf.model.LexicalStartSymbols;
+import sdf.model.LexicalSyntax;
+import sdf.model.ListSymbol;
+import sdf.model.LiteralSymbol;
+import sdf.model.Module;
+import sdf.model.ModuleId;
+import sdf.model.OptionalSymbol;
+import sdf.model.Priority;
+import sdf.model.PriorityGroup;
+import sdf.model.Production;
+import sdf.model.Renaming;
+import sdf.model.RepetitionSymbol;
+import sdf.model.SequenceSymbol;
+import sdf.model.SortSymbol;
+import sdf.model.Sorts;
+import sdf.model.StartSymbols;
+import sdf.model.Symbol;
+import sdf.model.Syntax;
+import sdf.model.TupleSymbol;
+import sdf.util.GrammarDebugPrinter;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermFactory;
+import aterm.ATermList;
 import aterm.pure.SingletonFactory;
-
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
-
-import de.tud.stg.popart.builder.core.annotations.DSLMethod.PreferencePriority;
-import de.tud.stg.popart.builder.core.annotations.DSLParameter;
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.DSL;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLClass;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod.PreferencePriority;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLParameter;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.typeHandling.TypeHandler;
-
-import sdf.model.*;
-import sdf.util.GrammarDebugPrinter;
-
-/**
- * An implementation of the Syntax Definition Formalism (SDF) as a DSL.
- * 
- * @author Pablo Hoch
- * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/syntax/sdf/sdf.html">SDF Documentation</a>
- * @see <a href="http://homepages.cwi.nl/~daybuild/daily-books/technology/aterm-guide/aterm-guide.html">ATerm Documentation</a>
- * @see sdf.model
- *
- */
-import de.tud.stg.popart.builder.core.annotations.DSLClass;
 @DSLClass(	whitespaceEscape = " ",
 		typeRules = {
 				SdfDSL.SortSymbolType.class,
@@ -46,7 +76,7 @@ import de.tud.stg.popart.builder.core.annotations.DSLClass;
 				ATermTypeHandlers.RealConstantTypeHandler.class,
 				ATermTypeHandlers.FunctionNameTypeHandler.class
 		})
-public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
+public class SdfDSL implements DSL {
 
 	/**
 	 * All unmodified modules as they appear in the input specification
