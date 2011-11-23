@@ -24,7 +24,7 @@ public class StatefulDSL implements de.tud.stg.tigerseye.dslsupport.DSL {
 
 	private Map<String, Object> variables = new HashMap<String, Object>();
 
-	
+	@DSLMethod(isUnicodeEncoding=true)
 	public void set__p0__equals__p1(String key, Object value) {
 		this.variables.put(key, value);
 	}

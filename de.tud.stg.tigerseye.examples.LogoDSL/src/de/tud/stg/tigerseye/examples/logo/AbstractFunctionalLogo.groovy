@@ -75,10 +75,10 @@ public abstract class AbstractFunctionalLogo extends Interpreter implements IFun
 	public int getYellow() { return 0; }
 	public int getWhite() { return 0; }
 	
-	public abstract void forward(int n);
-	public abstract void backward(int n);
-	public abstract void right(int n);
-	public abstract void left(int n);
+	public abstract void forward__p0(int n);
+	public abstract void backward__p0(int n);
+	public abstract void right__p0(int n);
+	public abstract void left__p0(int n);
 	
 	public void textscreen() {}
 	public void fullscreen() {}
@@ -87,7 +87,7 @@ public abstract class AbstractFunctionalLogo extends Interpreter implements IFun
 	public void cleanscreen() {}
 	public void hideturtle() {}
 	public void showturtle() {}
-	public void setpencolor(int n) {}
+	public void setpencolor__p0(int n) {}
 	public void penup() {}
 	public void pendown() {}
 	
@@ -98,10 +98,10 @@ public abstract class AbstractFunctionalLogo extends Interpreter implements IFun
 	public void st() {}
 	public void pu() {}
 	public void pd() {}
-	public void fd(int n) { forward(n); }
-	public void bd(int n) { backward(n); }
-	public void rt(int n) { right(n); }
-	public void lt(int n) { left(n); }
+	public void fd(int n) { forward__p0(n); }
+	public void bd(int n) { backward__p0(n); }
+	public void rt(int n) { right__p0(n); }
+	public void lt(int n) { left__p0(n); }
 	
 	public void turtle(HashMap params, Closure coreography) {}	
 }

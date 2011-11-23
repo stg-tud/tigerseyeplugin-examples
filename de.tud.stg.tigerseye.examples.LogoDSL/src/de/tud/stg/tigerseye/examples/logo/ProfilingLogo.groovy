@@ -67,10 +67,10 @@ public class ProfilingLogo extends AbstractFunctionalLogo implements IFunctional
 	/* Literals */
 
 	/* Operations */
-	public void forward(int n) { programDuration += 2*n; if (DEBUG) println "${this} profiling fd $programDuration"; }
-	public void backward(int n) { programDuration += 2*n; if (DEBUG) println "${this} profiling bd $programDuration"; }
-	public void right(int n) { programDuration += 1*n; if (DEBUG) println "${this} profiling rt $programDuration"; }
-	public void left(int n) { programDuration += 1*n; if (DEBUG) println "${this} profiling lt $programDuration"; }
+	public void forward__p0(int n) { programDuration += 2*n; if (DEBUG) println "${this} profiling fd $programDuration"; }
+	public void backward__p0(int n) { programDuration += 2*n; if (DEBUG) println "${this} profiling bd $programDuration"; }
+	public void right__p0(int n) { programDuration += 1*n; if (DEBUG) println "${this} profiling rt $programDuration"; }
+	public void left__p0(int n) { programDuration += 1*n; if (DEBUG) println "${this} profiling lt $programDuration"; }
 
 	public void go() {
 		if (DEBUG) println "${this} profiling go $programDuration"
@@ -103,11 +103,11 @@ public class ProfilingLogo extends AbstractFunctionalLogo implements IFunctional
 	 * This method approximates the execution time of a repeat command.
 	 * Approximates n time the execution time of the closure.
 	 */
-	public void repeat(int _times, Closure _choreography) {
+	public void repeat__p0__p1(int _times, Closure _choreography) {
 		DSL profiler = createNestedProfiler();
 		Closure choreography = _choreography.clone();		
-    	choreography.delegate = profiler;
-    	choreography.resolveStrategy = Closure.DELEGATE_ONLY;
+//    	choreography.delegate = profiler;
+//    	choreography.resolveStrategy = Closure.DELEGATE_ONLY;
         choreography.call();
 		programDuration += _times * profiler.getProgramDuration();
 
@@ -119,7 +119,7 @@ public class ProfilingLogo extends AbstractFunctionalLogo implements IFunctional
 	 * Approximates the execution time of the closure.
 	 * Looks up the execution time of other turtle (only taking into account the slowest turtle).
 	 */
-	public void turtle(HashMap params, Closure _choreography) {
+	public void turtle(Map params, Closure _choreography) {
 		if (DEBUG) println "  ${this} profiling abstraction turtle of ${params.name} before duration is $programDuration"
 		DSL profiler = createNestedProfiler();
 		if (DEBUG) println "  ${profiler} used to profile abstraction turtle"

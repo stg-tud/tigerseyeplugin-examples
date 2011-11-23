@@ -156,7 +156,7 @@ public class StateMachineDSL {
 	}
 
 
-	@DSLMethod(production = "p0_rarr_p1")
+	@DSLMethod(production = "p0_rarr_p1", isUnicodeEncoding=true)
 	
 	/*
 	 * Example:
@@ -170,7 +170,7 @@ public class StateMachineDSL {
 	}
 	
 	
-	@DSLMethod(production = "rarr_p0")
+	@DSLMethod(production = "rarr_p0", isUnicodeEncoding=true)
 	
 	/*
 	 * Example:

@@ -8,6 +8,7 @@ import java.util.Map;
 import de.tud.stg.tigerseye.dslsupport.annotations.DSLParameter;
 import de.tud.stg.tigerseye.dslsupport.annotations.DSLClass;
 import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod.PreferencePriority;
 import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
 import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
 
@@ -29,7 +30,7 @@ public class MapDSL implements de.tud.stg.tigerseye.dslsupport.DSL {
 
 
 	
-	@DSLMethod(production = "p0  =  p1", topLevel=false)
+	@DSLMethod(production = "p0  =  p1", topLevel=false, preferencePriority=PreferencePriority.Prefer)
 	public <K, V> Entry<K, V> buildEntry(K o, V b) {
 		return new Entry<K, V>(o, b);
 	}

@@ -9,8 +9,7 @@ import java.awt.Color;
 /**
  * This class implements a simplified version of the toy language Logo.
  */
-public class SimpleLogo extends Interpreter
-                        implements ISimpleLogo {
+public class SimpleLogo implements ISimpleLogo {
 	 
 	def DEBUG = false; 
 	
@@ -21,11 +20,8 @@ public class SimpleLogo extends Interpreter
 		myTurtleGraphicsWindow = new TurtleGraphicsWindow();
         myTurtleGraphicsWindow.setTitle("TurtleDSL (based on JavaLogo) "); //Set the windows title
         myTurtleGraphicsWindow.show(); //Display the window
-	}
-	 
-	public Object eval(HashMap map, Closure cl) {
-		assert this.myTurtleGraphicsWindow != null; 
-		turtle(map,cl);
+		assert this.myTurtleGraphicsWindow != null;
+		turtle();
 	}
 	
 	public Turtle getTurtle() {
@@ -45,25 +41,29 @@ public class SimpleLogo extends Interpreter
 	public int getWhite() { return Color.WHITE.value; }
 
 	/* Operations */
-	public void forward(int n) { turtle.forward(n);	}
-	public void backward(int n) { turtle.backward(n); }
-	public void right(int n) {
+	public void forward__p0(int n) { turtle.forward(n);	}
+	public void backward__p0(int n) { turtle.backward(n); }
+	public void right__p0(int n) {
 		if (DEBUG) println("Turtle.right($n) before turning, headings is $turtle.heading");
 		turtle.right(n);	
 		if (DEBUG) println("Turtle.right($n) after turning,headings is $turtle.heading");
 	}
-	public void left(int n) { turtle.left(n); }
+	public void left__p0(int n) { turtle.left(n); }
 
 	/* Abstraction Operators */
-	public void turtle(HashMap params, Closure choreography) {
+	public void turtle(Map map, Closure cl) {
+		turtle()
+	}
+	
+	public void turtle() {
 	  if (DEBUG) println("Abstraction operator: turtle");
 		
-	  String name = params["name"];
+	  String name = null//params["name"];
 	  if (name == null) {
 		  name = "Noname";
 	  }
 		
-	  Integer color = params["color"];
+	  Integer color = null //params["color"];
 	  if (color == null) {
 		  color = Color.BLACK.value;
 	  }
@@ -71,9 +71,6 @@ public class SimpleLogo extends Interpreter
       turtle = new Turtle(name,new Color(color)); //Create a turtle
 	  println "setting turtle $turtle"
       myTurtleGraphicsWindow.add(turtle); //Put turtle in our window so bob has a place to draw
-      
-      choreography.delegate = super.bodyDelegate;
-      choreography.call();
 	}
 	
 	public setDebug(boolean debug){

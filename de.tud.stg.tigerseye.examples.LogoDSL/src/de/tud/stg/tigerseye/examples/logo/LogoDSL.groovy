@@ -20,9 +20,6 @@ public class LogoDSL extends Interpreter implements ILogoDSL {
 	private Turtle turtle;
 
 	public LogoDSL() {
-	}
-
-	public Object eval(HashMap map, Closure cl) {
 		if (myTurtleGraphicsWindow == null) {
 			myTurtleGraphicsWindow = new TurtleGraphicsWindow();
 			myTurtleGraphicsWindow.setTitle("TurtleDSL (based on JavaLogo) "); //Set the windows title
@@ -31,10 +28,7 @@ public class LogoDSL extends Interpreter implements ILogoDSL {
 			myTurtleGraphicsWindow.add(turtle); //Put bob in our window so bob has a place to draw
 		}
 
-		turtle.setName(map.name);
-		cl.delegate = this;
-		cl.resolveStrategy = Closure.DELEGATE_FIRST;
-		cl.call();
+		turtle.setName("LittleLogo");
 	}
 
 	/* Literals */
@@ -114,12 +108,10 @@ public class LogoDSL extends Interpreter implements ILogoDSL {
 		showturtle();
 	}
 
-	@DSLMethod()
-	public void setpencolor(int n) {
+	@DSLMethod(production="setpencolor_p0") public void setpencolor(int n) {
 		turtle.setPenColor(new java.awt.Color(n));
 	}
-	@DSLMethod()
-	public void setpc(int n) {
+	@DSLMethod(production="setpc_p0") public void setpc(int n) {
 		setpencolor(n);
 	}
 	@DSLMethod()
@@ -138,33 +130,25 @@ public class LogoDSL extends Interpreter implements ILogoDSL {
 	public void pd() {
 		pendown();
 	}
-	@DSLMethod()
-	public void forward(int n) {
+	@DSLMethod(production="forward__p0") public void forward(int n) {
 		turtle.forward(n);
 	}
-	@DSLMethod()
-	public void fd(int n) {
+	@DSLMethod(production="fd__p0") public void fd(int n) {
 		forward(n);
-	}	@DSLMethod()
-	public void backward(int n) {
+	}	@DSLMethod(production="backward__p0") public void backward(int n) {
 		turtle.backward(n);
 	}
-	@DSLMethod()
-	public void bd(int n) {
+	@DSLMethod(production="bd__p0") public void bd(int n) {
 		backward(n);
-	}	@DSLMethod()
-	public void right(int n) {
+	}	@DSLMethod(production="right__p0") public void right(int n) {
 		turtle.right(n);
 	}
-	@DSLMethod()
-	public void rt(int n) {
+	@DSLMethod(production="rt__p0") public void rt(int n) {
 		right(n);
-	}	@DSLMethod()
-	public void left(int n) {
+	}	@DSLMethod(production="left__p0") public void left(int n) {
 		turtle.left(n);
 	}
-	@DSLMethod()
-	public void lt(int n) {
+	@DSLMethod(production="lt__p0") public void lt(int n) {
 		left(n);
 	}
 }

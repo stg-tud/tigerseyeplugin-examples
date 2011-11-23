@@ -19,11 +19,11 @@ interface ISimpleLogo extends DSL {
 	int getWhite();
 		
 	/* Operations */
-	void forward(int n);
-	void backward(int n);
-	void right(int n);
-	void left(int n);
+	void forward__p0(int n);
+	void backward__p0(int n);
+	void right__p0(int n);
+	void left__p0(int n);
 	
 	/* Abstraction Operators */
-	void turtle(HashMap params, Closure coreography);	
+	void turtle(Map params, Closure coreography);
 }
