@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import sdf.SdfDSL;
 import sdf.util.GrammarDebugPrinter;
 import de.tud.stg.parlex.core.IGrammar;
-import de.tud.stg.popart.dslsupport.DSL;
+import de.tud.stg.tigerseye.dslsupport.DSL;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.GrammarBuilder;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.UnicodeLookupTable;
 import de.tud.stg.tigerseye.test.PrettyGroovyCodePrinterFactory;

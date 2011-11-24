@@ -27,8 +27,8 @@ import de.tud.stg.parlex.lexer.KeywordSensitiveLexer;
 import de.tud.stg.parlex.lexer.KeywordSeperator;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
-import de.tud.stg.popart.dslsupport.DSL;
-import de.tud.stg.tigerseye.eclipse.core.builder.transformers.ast.InvokationDispatcherTransformation;
+import de.tud.stg.tigerseye.dslsupport.DSL;
+import de.tud.stg.tigerseye.eclipse.core.builder.transformers.Context;
 import de.tud.stg.tigerseye.eclipse.core.builder.transformers.ast.KeywordChainingTransformation;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.GrammarBuilder;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.UnicodeLookupTable;
@@ -78,10 +78,12 @@ public class ConsTest2TreeViewer {
 			tv.addTree("ATerms (original)", new ATermTreeBuilder(originalTerm));
 			
 			try {
-				ATerm transformedTerm = new KeywordChainingTransformation().transform(gb.getMethodOptions(), originalTerm);
-				if (classList.size() > 1) {
-					transformedTerm = new InvokationDispatcherTransformation().transform(gb.getMethodOptions(), transformedTerm);
-				}
+				Context context = new Context("dummy");
+				context.setDSLMethodDescriptions(gb.getMethodOptions());
+				ATerm transformedTerm = new KeywordChainingTransformation().transform(context, originalTerm);
+//				if (classList.size() > 1) {
+//					transformedTerm = new InvokationDispatcherTransformation().transform(gb.getMethodOptions(), transformedTerm);
+//				}
 				
 				tv.addTree("ATerms (transformed)", new ATermTreeBuilder(transformedTerm));
 			} catch (Exception e) {
