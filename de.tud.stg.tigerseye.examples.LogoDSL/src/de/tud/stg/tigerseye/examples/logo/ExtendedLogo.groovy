@@ -28,7 +28,7 @@ public class ExtendedLogo extends SimpleLogo
 	public void hideturtle() { turtle.hide(); }
 	public void showturtle() { turtle.show(); }
 	
-	public void setpencolor(int n) { turtle.setPenColor(new java.awt.Color(n)); }
+	public void setpencolor__p0(int n) { turtle.setPenColor(new java.awt.Color(n)); }
 	public void penup() { turtle.penUp(); }
 	public void pendown() { turtle.penDown(); } 
 	

@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import de.tud.stg.tigerseye.examples.simplesql.SimpleSqlDSL;
 import de.tud.stg.tigerseye.examples.setdsl.SetDSL;
+import de.tud.stg.tigerseye.dslsupport.InterpreterCombiner;
 import de.tud.stg.tigerseye.examples.setdsl.SetDSL;
 import de.tud.stg.tigerseye.examples.simplesql.SimpleSqlDSL;
-import de.tud.stg.popart.dslsupport.InterpreterCombiner;
 
 public class InterpreterCombinerTest {
 

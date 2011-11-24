@@ -18,7 +18,7 @@ interface IExtendedLogo extends ISimpleLogo {
 	void cleanscreen();
 	void hideturtle();
 	void showturtle();
-	void setpencolor(int n);
+	void setpencolor__p0(int n);
 	void penup();
 	void pendown(); 
 	

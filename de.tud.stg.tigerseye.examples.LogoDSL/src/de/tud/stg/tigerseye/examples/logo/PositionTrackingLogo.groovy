@@ -1,8 +1,8 @@
 package de.tud.stg.tigerseye.examples.logo;
 
-import de.tud.stg.popart.dslsupport.DSL;
-import de.tud.stg.popart.dslsupport.Interpreter
 import de.tud.stg.tigerseye.*;
+import de.tud.stg.tigerseye.dslsupport.DSL;
+import de.tud.stg.tigerseye.dslsupport.Interpreter;
 
 import org.javalogo.*;
 import java.awt.Color;
@@ -66,24 +66,24 @@ public class PositionTrackingLogo extends AbstractFunctionalLogo implements IFun
 	/* Literals */
 
 	/* Operations */
-	public void forward(int n) {  
+	public void forward__p0(int n) {  
 		if (DEBUG) println "postrack.fw($n) before $deltaX / $deltaY"
 		deltaX += Math.sin(deltaAngular * 2.0 * Math.PI/360.0)*n; 
 		deltaY += Math.cos(deltaAngular * 2.0 * Math.PI/360.0)*n; 
 		if (DEBUG) println "postrack.fw after $deltaX / $deltaY"
 	}
-	public void backward(int n) { 
+	public void backward__p0(int n) { 
 		if (DEBUG) println "postrack.bd($n) before $deltaX / $deltaY"
 		deltaX -= Math.sin(deltaAngular * 2.0 * Math.PI/360.0)*n; 
 		deltaY -= Math.cos(deltaAngular * 2.0 * Math.PI/360.0)*n; 
 		if (DEBUG) println "postrack.bd after $deltaX / $deltaY"
 	}
-	public void right(int n) { 
+	public void right__p0(int n) { 
 		if (DEBUG) println "postrack.rt($n) before $deltaAngular"
 		deltaAngular = (deltaAngular + n)%360; 
 		if (DEBUG) println "postrack.rt after $deltaAngular"
 	}
-	public void left(int n) { 
+	public void left__p0(int n) { 
 		if (DEBUG) println "postrack.lt($n) before $deltaAngular"
 		deltaAngular = (deltaAngular + (360 - (n%360)))%360; 
 		if (DEBUG) println "postrack.lt after $deltaAngular"
@@ -127,7 +127,7 @@ public class PositionTrackingLogo extends AbstractFunctionalLogo implements IFun
 		if (DEBUG) println "postrack.fun($name) after"
 	}
 	
-	public void repeat(int _times, Closure _choreography) {
+	public void repeat__p0__p1(int _times, Closure _choreography) {
 		def choreography = _choreography.clone();
 		
 		if (DEBUG) println "postrack.repeat($_times) before $deltaX / $deltaY : $deltaAngular"
@@ -140,7 +140,7 @@ public class PositionTrackingLogo extends AbstractFunctionalLogo implements IFun
 		if (DEBUG) println "postrack.repeat($_times) after $deltaX / $deltaY : $deltaAngular"
    	}
 	
-	public void turtle(HashMap params, Closure _choreography) {
+	public void turtle(Map params, Closure _choreography) {
 		def choreography = _choreography.clone();
 		if (DEBUG) println "postrack.turtle($params) before $deltaX / $deltaY : $deltaAngular"
 		DSL positionTracker = new PositionTrackingLogo(functionNamesToClosure);

@@ -7,17 +7,13 @@ package com.dzone.groovy.dslexample
  * Declared keywords:
  *  void p(Object)
  */
-  
-
- 
-units(name:'UnitsTest'){ 
-
+units(name:'UnitsTest'){
 	println (  18 kg)
-	   
+	
 	println( 18 kg * 2 )
 	println( 1800000 kg / 3 )
 	println( 1 kg * 2 + 30 g )
- 	
+
 	println( 3 cm + 12 m * 3 - 1 km )
 	
 	println( 18 kg * 2 )
@@ -29,7 +25,6 @@ units(name:'UnitsTest'){
 	
 	println ( 12 min - 44 s)
 	
-	println (18.4 h + 34.34 s)
+	println (18 h + 34 s)
 	
-  
 }

@@ -6,8 +6,8 @@ import groovy.lang.Closure;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
-import de.tud.stg.popart.builder.core.annotations.DSLParameter;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLParameter;
 
 /**
  * {@link SimpleSqlDSL} is a small DSL modeling a very simple subset of SQL operations
@@ -16,7 +16,7 @@ import de.tud.stg.popart.builder.core.annotations.DSLParameter;
  *
  */
 
-public class SimpleSqlDSL implements de.tud.stg.popart.dslsupport.DSL {
+public class SimpleSqlDSL implements de.tud.stg.tigerseye.dslsupport.DSL {
 
 	public Object eval(@SuppressWarnings("rawtypes") HashMap map, Closure cl) {
 		cl.setDelegate(this);

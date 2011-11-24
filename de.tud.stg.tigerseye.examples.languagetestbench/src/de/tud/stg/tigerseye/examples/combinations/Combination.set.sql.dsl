@@ -6,5 +6,5 @@ def interp = set,sql(name:'Combination') {
 	
 	println M
 
-	def a = SELECT "id", "name" FROM "students", "teachers"
+	def a = SELECT "id", "name" FROM "students", "teachers" 
 }

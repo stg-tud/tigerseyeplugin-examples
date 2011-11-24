@@ -14,12 +14,12 @@ package de.tud.stg.tigerseye.examples.logo
  * introduces the reapeat keyword. So all functionality from Simple Logo
  * plus the repeat is available.
  */
-ucblogo(name:'UcbLogoTest'){
+ucblogo(name:'UcbLogo'){
 	
 	x = 10
-	repeat(5 , {
+	repeat( 5 ,{
 		x = x + 1
-		repeat( 50, {		
+		repeat(50, {
 			fd x
 			lt 10
 		})

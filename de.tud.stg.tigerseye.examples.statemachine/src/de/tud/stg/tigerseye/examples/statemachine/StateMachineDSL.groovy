@@ -1,6 +1,6 @@
 package de.tud.stg.tigerseye.examples.statemachine;
 
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
 import de.tud.stg.popart.eclipse.core.debug.annotations.PopartType;
 import de.tud.stg.popart.eclipse.core.debug.model.keywords.PopartOperationKeyword;
 import de.tud.stg.tigerseye.examples.statemachine.examples.actions.ClosureAction
@@ -156,7 +156,7 @@ public class StateMachineDSL {
 	}
 
 
-	@DSLMethod(production = "p0_rarr_p1")
+	@DSLMethod(production = "p0_rarr_p1", isUnicodeEncoding=true)
 	
 	/*
 	 * Example:
@@ -170,7 +170,7 @@ public class StateMachineDSL {
 	}
 	
 	
-	@DSLMethod(production = "rarr_p0")
+	@DSLMethod(production = "rarr_p0", isUnicodeEncoding=true)
 	
 	/*
 	 * Example:

@@ -1,8 +1,6 @@
 package de.tud.stg.tigerseye.examples.combinations;
 import java.util.Set;
 
-import de.tud.stg.popart.builder.eclipse.EDSL;
-
 @EDSL({"set", "sql"})
 public class SimpleJavaTest2 {
 	

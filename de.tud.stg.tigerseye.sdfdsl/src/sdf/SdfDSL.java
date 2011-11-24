@@ -12,18 +12,18 @@ import java.util.HashMap;
 
 import aterm.*;
 import aterm.pure.SingletonFactory;
-
 import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
-
-import de.tud.stg.popart.builder.core.annotations.DSLMethod.PreferencePriority;
-import de.tud.stg.popart.builder.core.annotations.DSLParameter;
-import de.tud.stg.popart.builder.core.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.DSL;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLClass;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLMethod.PreferencePriority;
+import de.tud.stg.tigerseye.dslsupport.annotations.DSLParameter;
 import de.tud.stg.tigerseye.eclipse.core.codegeneration.typeHandling.TypeHandler;
 
-import sdf.model.*;
 import sdf.util.GrammarDebugPrinter;
+import sdf.model.*;
 
 /**
  * An implementation of the Syntax Definition Formalism (SDF) as a DSL.
@@ -34,7 +34,6 @@ import sdf.util.GrammarDebugPrinter;
  * @see sdf.model
  *
  */
-import de.tud.stg.popart.builder.core.annotations.DSLClass;
 @DSLClass(	whitespaceEscape = " ", stringQuotation = "(\"([^\"\\\\]|\\\\.)*\")",
 		typeRules = {
 				SdfDSL.SortSymbolType.class,
@@ -47,7 +46,7 @@ import de.tud.stg.popart.builder.core.annotations.DSLClass;
 				ATermTypeHandlers.RealConstantTypeHandler.class,
 				ATermTypeHandlers.FunctionNameTypeHandler.class
 		})
-public class SdfDSL implements de.tud.stg.popart.dslsupport.DSL {
+public class SdfDSL implements DSL {
 
 	/**
 	 * All unmodified modules as they appear in the input specification

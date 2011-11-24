@@ -13,6 +13,7 @@ import utilities.PluginTest;
 import utilities.PluginTestRule;
 import utilities.StringUtils;
 
+import de.tud.stg.tigerseye.eclipse.core.builder.transformers.Context;
 import de.tud.stg.tigerseye.eclipse.core.builder.transformers.textual.KeywordTranslationTransformation;
 import de.tud.stg.tigerseye.examples.logo.LogoDSL;
 import de.tud.stg.tigerseye.test.PrettyGroovyCodePrinterFactory;
@@ -42,8 +43,8 @@ public class LogoDSLTest extends DSLTransformationTestBase {
 		//Execution
 		//Must perform keyword translation before actual transformation
 		KeywordTranslationTransformation ktt = new KeywordTranslationTransformation();
-		StringBuffer sb = ktt.transform(newGrammar.generateContext(null),
-				new StringBuffer(withTranslationPrefix.toString()));
+		String sb = ktt.transform(new Context("dummy"),
+				withTranslationPrefix.toString(), null);
 		//simple transformation
 		String output = new TestDSLTransformation(
 				new PrettyGroovyCodePrinterFactory()).performTransformation(

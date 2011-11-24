@@ -13,5 +13,5 @@ interface ICompleteLogo extends IConciseLogo {
 	/* Operations */
 
 	/* Abstraction Operators */
-    void repeat(int _times, Closure coreography);
+    void repeat__p0__p1(int _times, Closure coreography);
 }

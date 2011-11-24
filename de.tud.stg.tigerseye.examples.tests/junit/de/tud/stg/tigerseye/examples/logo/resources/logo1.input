@@ -6,6 +6,7 @@
 	forward 150	
 	
 	lt 90
+	
 	bd 15
 	rt 30
 	bd 150
