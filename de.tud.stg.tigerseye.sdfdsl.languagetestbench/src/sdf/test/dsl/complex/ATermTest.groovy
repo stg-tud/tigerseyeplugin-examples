@@ -11,8 +11,13 @@ import treeviewer.tree.aterms.*
 ATermLang lang = new ATermLang();
 SdfDSL s = lang.getInstance();
 
+String mainModule = "languages/aterm/syntax/ATerms"
+
+// print generated grammar
+s.printGeneratedGrammarHTML(mainModule, "debug/ATermLang.html")
+
 // test with an example aterm
-result = s.parseString("languages/aterm/syntax/ATerms",
+result = s.parseString(mainModule,
 		"hello(\"world\",42,[one,two(three),four(fix,six,seven(\"eight\\n:)\",9))])")
 
 //	println result.parseTree

@@ -23,6 +23,10 @@ public class GeneratedGrammar {
 	public HashMap<Rule, ProductionMapping> getProductionMappings() {
 		return productionMappings;
 	}
+	
+	public ProductionMapping getProductionMapping(Rule rule) {
+		return productionMappings.get(rule);
+	}
 
 	public void setGrammar(Grammar grammar) {
 		this.grammar = grammar;

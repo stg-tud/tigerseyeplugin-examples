@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 import aterm.*;
 import aterm.pure.SingletonFactory;
-import de.tud.stg.parlex.core.Grammar;
 import de.tud.stg.parlex.parser.earley.Chart;
 import de.tud.stg.parlex.parser.earley.EarleyParser;
 import de.tud.stg.tigerseye.dslsupport.DSL;
@@ -205,7 +204,7 @@ public class SdfDSL implements DSL {
 		parser.detectUsedOracles();
 		Chart chart = (Chart) parser.parse(input);
 		
-		return new ParseResult(chart);
+		return new ParseResult(grammar, chart);
 		
 	}
 	

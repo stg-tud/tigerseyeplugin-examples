@@ -21,8 +21,10 @@ public class ParseResult {
 	private IAbstractNode parseTree;
 	private ATerm consTree;
 	private Chart chart;
+	private GeneratedGrammar generatedGrammar;
 	
-	public ParseResult(Chart chart) {
+	public ParseResult(GeneratedGrammar generatedGrammar, Chart chart) {
+		this.generatedGrammar = generatedGrammar;
 		this.chart = chart;
 		this.valid = chart.isValidParse();
 		if (valid) {
@@ -31,7 +33,7 @@ public class ParseResult {
 	}
 	
 	private void constructTree() {
-		ATermConstructor atermConstructor = new ATermConstructor(parseTree);
+		ATermConstructor atermConstructor = new ATermConstructor(generatedGrammar, parseTree);
 		this.consTree = atermConstructor.constructTree();
 	}
 
@@ -54,4 +56,9 @@ public class ParseResult {
 	public Chart getParseChart() {
 		return chart;
 	}
+
+	public GeneratedGrammar getGeneratedGrammar() {
+		return generatedGrammar;
+	}
+	
 }

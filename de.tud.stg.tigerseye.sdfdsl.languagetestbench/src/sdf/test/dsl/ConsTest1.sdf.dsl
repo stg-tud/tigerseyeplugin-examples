@@ -67,7 +67,7 @@ sdf(name:'ConsTest1'){
 		
 		
 	// <- comment is required here, otherwise result is also parsed as a sort symbol :(
-	result = parse "SimpleLang" "print 4 + 8 * (15 / (16+23)) - 42; print 1+2; exit"
+	result = parse "SimpleLang" "print 4 + 8 * (15 / (16+23)) - 42; print 12345+2; exit"
 	
 //	println result.parseTree
 	println result.consTree

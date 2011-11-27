@@ -40,18 +40,14 @@ import de.tud.stg.parlex.core.Rule;
  */
 public class ATermConstructor {
 	
-	/*
-	 * TODO:
-	 * - add sdf productions as annotations
-	 * - add symbol labels as annotations
-	 */
-	
 	IAbstractNode parseTree;
 	ATermFactory factory;
 	ATerm consPattern;
-	ATerm annNamespace, annLex, annCF, annLHS, annRHS;
+	ATerm annNamespace, annLex, annCF, annLHS, annRHS, annLabel, annProduction;
+	GeneratedGrammar grammar;
 
-	public ATermConstructor(IAbstractNode parseTree) {
+	public ATermConstructor(GeneratedGrammar grammar, IAbstractNode parseTree) {
+		this.grammar = grammar;
 		this.parseTree = parseTree;
 		this.factory = SingletonFactory.getInstance();
 		
@@ -61,6 +57,8 @@ public class ATermConstructor {
 		this.annCF = factory.parse("cf");
 		this.annLHS = factory.parse("LHS");
 		this.annRHS = factory.parse("RHS");
+		this.annLabel = factory.parse("label");
+		this.annProduction = factory.parse("production");
 	}
 	
 	public ATerm constructTree() {
@@ -78,31 +76,39 @@ public class ATermConstructor {
 			return null;
 		}
 		
+		// get mapping to sdf rule
+		// note that this is null for all automatically generated rules
+		ProductionMapping prodMapping = grammar.getProductionMapping(rule);
+		
 		if (terminal) {
+			
+			ATerm result;
 			
 			// terminals are only added to the AST for lexical rules
 			if (isLexRule(rule)) {
 				String matched = ((Terminal)node).getTerm();
-				ATerm terminalTerm = factory.makeAppl(factory.makeAFun(matched, 0, true));
+				ATerm terminalTerm = makeString(matched);
 				terminalTerm = addNamespaceAnnotation(terminalTerm, rule);
 				
 				if (consName != null && rule.getRhs().size() == 1) {
 					// terminal has cons attribute
 					AFun fun = factory.makeAFun(consName, 1, false);
 					ATermAppl appl = factory.makeAppl(fun, terminalTerm);
-					return addNamespaceAnnotation(appl, rule);
+					result = addNamespaceAnnotation(appl, rule);
 				} else {
-					return terminalTerm;
+					result = terminalTerm;
 				}
 			} else {
 				// TODO: check condition
 				if (consName != null && rule.getRhs().size() <= 1) {
 					AFun fun = factory.makeAFun(consName, 0, false);
-					return factory.makeAppl(fun);
+					result = factory.makeAppl(fun);
 				} else {
-					return null;
+					result = null;
 				}
 			}
+			
+			return addProductionAnnotation(result, prodMapping);
 			
 		} else { // non-terminal
 			
@@ -111,9 +117,19 @@ public class ATermConstructor {
 			if (children != null) {
 				
 				// process children
-				for (IAbstractNode child : children) {
+				for (int childIndex = 0; childIndex < children.size(); childIndex++) {
+					IAbstractNode child = children.get(childIndex);
+					String label = null;
+					// get symbol label (if specified)
+					if (prodMapping != null) {
+						label = prodMapping.getLabelForCategoryAtPosition(childIndex);
+					}
 					ATerm childTerm = constructTree(child);
 					if (childTerm != null) {
+						// add label annotation
+						if (label != null) {
+							childTerm = childTerm.setAnnotation(annLabel, makeString(label));
+						}
 						childTerms.add(childTerm);
 					}
 				}
@@ -140,9 +156,9 @@ public class ATermConstructor {
 						}
 					}
 					AFun fun = factory.makeAFun(sb.toString(), 0, true);
-					ATermAppl appl = factory.makeAppl(fun);
-					return appl.setAnnotation(annNamespace, annLex);
-	
+					ATerm appl = factory.makeAppl(fun);
+					appl = appl.setAnnotation(annNamespace, annLex);
+					return addProductionAnnotation(appl, prodMapping);
 					
 				} else {
 					
@@ -163,7 +179,9 @@ public class ATermConstructor {
 			// rule has cons attribute -> create appl node
 			AFun fun = factory.makeAFun(consName, childTerms.size(), false);
 			ATermAppl appl = factory.makeAppl(fun, childTerms.toArray(new ATerm[childTerms.size()]));
-			return addRuleAnnotation(appl, rule);
+			ATerm result = addRuleAnnotation(appl, rule);
+			ProductionMapping prodMapping = grammar.getProductionMapping(rule);
+			return addProductionAnnotation(result, prodMapping);
 		} else {
 			// rule has NO cons attribute
 			if (childTerms.isEmpty()) {
@@ -214,6 +232,18 @@ public class ATermConstructor {
 		}
 	}
 	
+	private ATerm addProductionAnnotation(ATerm term, ProductionMapping mapping) {
+		if (mapping == null || term == null)
+			return term;
+		
+		String productionString = mapping.getProduction().toString();
+		return term.setAnnotation(annProduction, makeString(productionString));
+	}
+
+	private ATermAppl makeString(String productionString) {
+		return factory.makeAppl(factory.makeAFun(productionString, 0, true));
+	}
+	
 	private ATerm addRuleAnnotation(ATerm term, Rule rule) {
 		return addRuleAnnotation(term, getLhsAnnotation(rule), getRhsAnnotation(rule));
 	}
@@ -227,11 +257,11 @@ public class ATermConstructor {
 	}
 
 	private ATermAppl getRhsAnnotation(Rule rule) {
-		return factory.makeAppl(factory.makeAFun(rule.getRhs().toString(), 0, true));
+		return makeString(rule.getRhs().toString());
 	}
 
 	private ATermAppl getLhsAnnotation(Rule rule) {
-		return factory.makeAppl(factory.makeAFun(rule.getLhs().toString(), 0, true));
+		return makeString(rule.getLhs().toString());
 	}
 	
 	private ATermList flattenList(List<ATerm> terms, ATerm lhsAnnotation, ATerm rhsAnnotation) {
