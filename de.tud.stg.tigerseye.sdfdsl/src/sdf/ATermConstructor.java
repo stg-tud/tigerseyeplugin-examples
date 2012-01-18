@@ -1,8 +1,11 @@
 package sdf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import sdf.model.Production;
 import sdf.ruleannotations.CustomATermAnnotation;
 
 import aterm.*;
@@ -35,6 +38,12 @@ import de.tud.stg.parlex.core.Rule;
  * </li>
  * </ul>
  * 
+ * <p>The following ATerm annotations are added:
+ * <ul>
+ * <li>{@code production} (String): a normalized string representation of the SDF production that created the node</li>
+ * <li>{@code productionIndex} (Int): an index into the production list, can be used to retrieve the SDF production object</li>
+ * </ul>
+ * 
  * @author Pablo Hoch
  *
  */
@@ -43,13 +52,15 @@ public class ATermConstructor {
 	IAbstractNode parseTree;
 	ATermFactory factory;
 	ATerm consPattern;
-	ATerm annNamespace, annLex, annCF, annLHS, annRHS, annLabel, annProduction;
+	ATerm annNamespace, annLex, annCF, annLHS, annRHS, annLabel, annProduction, annProductionIndex;
 	GeneratedGrammar grammar;
+	ProductionIndex productionIndex;
 
 	public ATermConstructor(GeneratedGrammar grammar, IAbstractNode parseTree) {
 		this.grammar = grammar;
 		this.parseTree = parseTree;
 		this.factory = SingletonFactory.getInstance();
+		this.productionIndex = new ProductionIndex();
 		
 		this.consPattern = factory.parse("cons(<str>)");
 		this.annNamespace = factory.parse("namespace");
@@ -59,10 +70,15 @@ public class ATermConstructor {
 		this.annRHS = factory.parse("RHS");
 		this.annLabel = factory.parse("label");
 		this.annProduction = factory.parse("production");
+		this.annProductionIndex = factory.parse("productionIndex");
 	}
 	
 	public ATerm constructTree() {
 		return constructTree(parseTree);
+	}
+	
+	public List<Production> getProductionList() {
+		return productionIndex.getList();
 	}
 	
 	private ATerm constructTree(IAbstractNode node) {
@@ -236,8 +252,11 @@ public class ATermConstructor {
 		if (mapping == null || term == null)
 			return term;
 		
-		String productionString = mapping.getProduction().toString();
-		return term.setAnnotation(annProduction, makeString(productionString));
+		Production production = mapping.getProduction();
+		String productionString = production.toString();
+		term = term.setAnnotation(annProduction, makeString(productionString));
+		term = term.setAnnotation(annProductionIndex, factory.makeInt(productionIndex.getIndex(production)));
+		return term;
 	}
 
 	private ATermAppl makeString(String productionString) {
@@ -297,5 +316,29 @@ public class ATermConstructor {
 	private boolean isCFRule(Rule rule) {
 		ICategory<String> lhs = rule.getLhs();
 		return lhs.getName().endsWith("-CF>");
+	}
+	
+	private static class ProductionIndex {
+		private List<Production> productions;
+		private Map<Production,Integer> indices;
+		
+		private ProductionIndex() {
+			this.productions = new ArrayList<Production>();
+			this.indices = new HashMap<Production,Integer>();
+		}
+		
+		public int getIndex(Production pro) {
+			Integer index = indices.get(pro);
+			if (index == null) {
+				index = productions.size();
+				productions.add(pro);
+				indices.put(pro, index);
+			}
+			return index;
+		}
+		
+		public List<Production> getList() {
+			return productions;
+		}
 	}
 }
