@@ -1,9 +1,5 @@
 package sdf;
 
-import java.util.List;
-
-import sdf.model.Production;
-
 import aterm.ATerm;
 import de.tud.stg.parlex.ast.IAbstractNode;
 import de.tud.stg.parlex.parser.earley.Chart;
@@ -24,7 +20,7 @@ public class ParseResult {
 	private boolean valid;
 	private IAbstractNode parseTree;
 	private ATerm consTree;
-	private List<Production> productionList;
+	private ProductionIndex productionIndex;
 	private Chart chart;
 	private GeneratedGrammar generatedGrammar;
 	
@@ -40,7 +36,7 @@ public class ParseResult {
 	private void constructTree() {
 		ATermConstructor atermConstructor = new ATermConstructor(generatedGrammar, parseTree);
 		this.consTree = atermConstructor.constructTree();
-		this.productionList = atermConstructor.getProductionList();
+		this.productionIndex = atermConstructor.getProductionIndex();
 	}
 
 	public boolean isValid() {
@@ -59,12 +55,12 @@ public class ParseResult {
 		return consTree;
 	}
 	
-	public List<Production> getProductionList() {
+	public ProductionIndex getProductionIndex() {
 		if (valid && consTree == null) {
 			// build tree
 			constructTree();
 		}
-		return productionList;
+		return productionIndex;
 	}
 	
 	public Chart getParseChart() {

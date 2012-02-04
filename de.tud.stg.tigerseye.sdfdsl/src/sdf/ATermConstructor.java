@@ -1,9 +1,7 @@
 package sdf;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import sdf.model.Production;
 import sdf.ruleannotations.CustomATermAnnotation;
@@ -77,6 +75,11 @@ public class ATermConstructor {
 		return constructTree(parseTree);
 	}
 	
+	public ProductionIndex getProductionIndex() {
+		return productionIndex;
+	}
+
+	@Deprecated
 	public List<Production> getProductionList() {
 		return productionIndex.getList();
 	}
@@ -316,29 +319,5 @@ public class ATermConstructor {
 	private boolean isCFRule(Rule rule) {
 		ICategory<String> lhs = rule.getLhs();
 		return lhs.getName().endsWith("-CF>");
-	}
-	
-	private static class ProductionIndex {
-		private List<Production> productions;
-		private Map<Production,Integer> indices;
-		
-		private ProductionIndex() {
-			this.productions = new ArrayList<Production>();
-			this.indices = new HashMap<Production,Integer>();
-		}
-		
-		public int getIndex(Production pro) {
-			Integer index = indices.get(pro);
-			if (index == null) {
-				index = productions.size();
-				productions.add(pro);
-				indices.put(pro, index);
-			}
-			return index;
-		}
-		
-		public List<Production> getList() {
-			return productions;
-		}
 	}
 }
