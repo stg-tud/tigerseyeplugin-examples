@@ -21,7 +21,7 @@ sdf(name:'ConsTest2'){
 	  context-free syntax
 	    Id          -> Exp {cons("Var")}
 	    IntConst    -> Exp {cons("Int")}
-	    "(" Exp ")" -> Exp {bracket}
+	    "(" Exp ")" -> Exp {bracket, skip}
 
 		
 	module Lexical
