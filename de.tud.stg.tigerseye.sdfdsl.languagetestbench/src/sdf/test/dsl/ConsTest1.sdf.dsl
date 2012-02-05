@@ -36,14 +36,14 @@ sdf(name:'ConsTest1'){
 		context-free syntax
 			Expr "+" Term		-> Expr		{cons("Plus")}
 			Expr "-" Term		-> Expr		{cons("Minus")}
-			Term				-> Expr
+			Term				-> Expr		{skip}
 
 			Term "*" Factor		-> Term		{cons("Mult")}
 			Term "/" Factor		-> Term		{cons("Div")}
-			Factor				-> Term
+			Factor				-> Term		{skip}
 	
 			Number				-> Factor	{cons("Int")}
-			"(" Expr ")"		-> Factor
+			"(" Expr ")"		-> Factor	{skip}
 	
 	hiddens
 		context-free start-symbols Expr
@@ -58,7 +58,7 @@ sdf(name:'ConsTest1'){
 		context-free syntax
 		"print" Expr		-> Stmt			{cons("Print")}
 		"exit"				-> Stmt			{cons("Exit")}
-							-> Stmt
+							-> Stmt			{skip}
 	
 		{Stmt ";"}*			-> Program		{cons("Program")}
 	

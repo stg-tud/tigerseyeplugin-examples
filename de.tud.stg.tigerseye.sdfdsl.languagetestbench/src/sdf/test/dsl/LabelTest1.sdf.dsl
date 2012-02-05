@@ -17,10 +17,10 @@ sdf(name:'LabelTest1'){
 			[ \t\n]						-> LAYOUT
 			
 		context-free syntax
-			obj:Id "." method:Id "(" args:{Param ","}* ")"	-> Call		{cons("call")}
-			Id							-> Param
-			Int							-> Param
-			{Call ";"}+					-> Program
+			obj:Id "." method:Id "(" args:{Param ","}* ")"	-> Call		{cons("Call")}
+			Id							-> Param		{cons("Id")}
+			Int							-> Param		{cons("Int")}
+			{Call ";"}+					-> Program		{cons("Program")}
 			
 		context-free start-symbols Program
 
