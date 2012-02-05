@@ -16,6 +16,13 @@ import de.tud.stg.parlex.parser.earley.Chart;
  *
  */
 public class ParseResult {
+	
+	public enum ASTAlgorithm {
+		CONS,
+		CONS_WITH_SKIP
+	};
+	
+	public static ASTAlgorithm DEFAULT_AST_ALGORITHM = ASTAlgorithm.CONS_WITH_SKIP;
 
 	private boolean valid;
 	private IAbstractNode parseTree;
@@ -23,18 +30,32 @@ public class ParseResult {
 	private ProductionIndex productionIndex;
 	private Chart chart;
 	private GeneratedGrammar generatedGrammar;
+	private ASTAlgorithm astAlgorithm;
 	
 	public ParseResult(GeneratedGrammar generatedGrammar, Chart chart) {
 		this.generatedGrammar = generatedGrammar;
 		this.chart = chart;
 		this.valid = chart.isValidParse();
+		this.astAlgorithm = DEFAULT_AST_ALGORITHM;
 		if (valid) {
 			this.parseTree = chart.getAST();
 		}
 	}
 	
 	private void constructTree() {
-		ATermConstructor atermConstructor = new ATermConstructor(generatedGrammar, parseTree);
+		ATermConstructor atermConstructor;
+		
+		switch (astAlgorithm) {
+		case CONS:
+			atermConstructor = new ATermConstructor(generatedGrammar, parseTree);
+			break;
+		case CONS_WITH_SKIP:
+			atermConstructor = new ATermConstructorWithSkip(generatedGrammar, parseTree);
+			break;
+		default:
+			throw new RuntimeException("Invalid AST Algorithm!");
+		}
+		
 		this.consTree = atermConstructor.constructTree();
 		this.productionIndex = atermConstructor.getProductionIndex();
 	}
@@ -69,6 +90,14 @@ public class ParseResult {
 
 	public GeneratedGrammar getGeneratedGrammar() {
 		return generatedGrammar;
+	}
+
+	public ASTAlgorithm getAstAlgorithm() {
+		return astAlgorithm;
+	}
+
+	public void setAstAlgorithm(ASTAlgorithm astAlgorithm) {
+		this.astAlgorithm = astAlgorithm;
 	}
 	
 }

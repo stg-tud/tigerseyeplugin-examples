@@ -26,7 +26,7 @@ sdf(name:'LabelTest1'){
 
 	//
 	printGeneratedGrammarHTML "LabelTest1" "debug/LabelTest1.html"
-	input = "foo.bar(1,23,test);a.b();c.d(e,f);g.h(i)"
+	input = "foo.bar(1, 23, test); a.b(); c.d(e, f); g.h(i)"
 	
 	println "Parsing: " + input
 	result = parse "LabelTest1" input

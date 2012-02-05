@@ -84,7 +84,7 @@ public class ATermConstructor {
 		return productionIndex.getList();
 	}
 	
-	private ATerm constructTree(IAbstractNode node) {
+	protected ATerm constructTree(IAbstractNode node) {
 		Rule rule = node.getItem().getRule();
 		List<IAbstractNode> children = node.getChildren();
 		boolean terminal = node instanceof Terminal;
@@ -193,30 +193,40 @@ public class ATermConstructor {
 				
 	}
 	
-	private ATerm createNode(String consName, List<ATerm> childTerms, Rule rule) {
+	protected ATerm createNode(String consName, List<ATerm> childTerms, Rule rule) {
 		if (consName != null) {
 			// rule has cons attribute -> create appl node
-			AFun fun = factory.makeAFun(consName, childTerms.size(), false);
-			ATermAppl appl = factory.makeAppl(fun, childTerms.toArray(new ATerm[childTerms.size()]));
-			ATerm result = addRuleAnnotation(appl, rule);
-			ProductionMapping prodMapping = grammar.getProductionMapping(rule);
-			return addProductionAnnotation(result, prodMapping);
+			return createApplNode(consName, childTerms, rule);
 		} else {
 			// rule has NO cons attribute
-			if (childTerms.isEmpty()) {
-				// no children? -> remove node
-				return null;
-			} else if (childTerms.size() == 1) {
-				// exactly 1 child -> remove intermediate node
-				return childTerms.get(0);
-			} else {
-				// more than 1 child -> create unnamed list
-				return flattenList(childTerms, getLhsAnnotation(rule), getRhsAnnotation(rule));
-			}
+			return skipNodeIfPossible(childTerms, rule);
 		}
 	}
 
-	private ATermList buildList(List<ATerm> terms) {
+	protected ATerm createApplNode(String consName, List<ATerm> childTerms, Rule rule) {
+		AFun fun = factory.makeAFun(consName, childTerms.size(), false);
+		ATermAppl appl = factory.makeAppl(fun, childTerms.toArray(new ATerm[childTerms.size()]));
+		ATerm result = addRuleAnnotation(appl, rule);
+		ProductionMapping prodMapping = grammar.getProductionMapping(rule);
+		return addProductionAnnotation(result, prodMapping);
+	}
+	
+	protected ATerm skipNodeIfPossible(List<ATerm> childTerms, Rule rule) {
+		if (childTerms.isEmpty()) {
+			// no children? -> remove node
+			return null;
+		} else if (childTerms.size() == 1) {
+			// exactly 1 child -> remove intermediate node
+			return childTerms.get(0);
+		} else {
+			// more than 1 child -> create unnamed list
+			ATermList list = flattenList(childTerms, getLhsAnnotation(rule), getRhsAnnotation(rule));
+			ProductionMapping prodMapping = grammar.getProductionMapping(rule);
+			return addProductionAnnotation(list, prodMapping);
+		}
+	}
+
+	protected ATermList buildList(List<ATerm> terms) {
 		ATermList list = factory.makeList();
 		for (int i = terms.size() - 1; i >= 0; i--) {
 			list = factory.makeList(terms.get(i), list);
@@ -224,7 +234,7 @@ public class ATermConstructor {
 		return list;
 	}
 	
-	private String getConstructorForRule(Rule rule) {
+	protected String getConstructorForRule(Rule rule) {
 		List<IRuleAnnotation> annotations = rule.getAnnotations();
 		for (IRuleAnnotation ann : annotations) {
 			if (ann instanceof CustomATermAnnotation) {
@@ -241,7 +251,7 @@ public class ATermConstructor {
 		return null;
 	}
 	
-	private ATerm addNamespaceAnnotation(ATerm term, Rule rule) {
+	protected ATerm addNamespaceAnnotation(ATerm term, Rule rule) {
 		if (isLexRule(rule)) {
 			return term.setAnnotation(annNamespace, annLex);
 		} else if (isCFRule(rule)) {
@@ -251,7 +261,7 @@ public class ATermConstructor {
 		}
 	}
 	
-	private ATerm addProductionAnnotation(ATerm term, ProductionMapping mapping) {
+	protected ATerm addProductionAnnotation(ATerm term, ProductionMapping mapping) {
 		if (mapping == null || term == null)
 			return term;
 		
@@ -262,15 +272,15 @@ public class ATermConstructor {
 		return term;
 	}
 
-	private ATermAppl makeString(String productionString) {
+	protected ATermAppl makeString(String productionString) {
 		return factory.makeAppl(factory.makeAFun(productionString, 0, true));
 	}
 	
-	private ATerm addRuleAnnotation(ATerm term, Rule rule) {
+	protected ATerm addRuleAnnotation(ATerm term, Rule rule) {
 		return addRuleAnnotation(term, getLhsAnnotation(rule), getRhsAnnotation(rule));
 	}
 	
-	private ATerm addRuleAnnotation(ATerm term, ATerm lhsAnnotation, ATerm rhsAnnotation) {
+	protected ATerm addRuleAnnotation(ATerm term, ATerm lhsAnnotation, ATerm rhsAnnotation) {
 		
 		term = term.setAnnotation(annLHS, lhsAnnotation);
 		term = term.setAnnotation(annRHS, rhsAnnotation);
@@ -278,15 +288,15 @@ public class ATermConstructor {
 		return term;
 	}
 
-	private ATermAppl getRhsAnnotation(Rule rule) {
+	protected ATermAppl getRhsAnnotation(Rule rule) {
 		return makeString(rule.getRhs().toString());
 	}
 
-	private ATermAppl getLhsAnnotation(Rule rule) {
+	protected ATermAppl getLhsAnnotation(Rule rule) {
 		return makeString(rule.getLhs().toString());
 	}
 	
-	private ATermList flattenList(List<ATerm> terms, ATerm lhsAnnotation, ATerm rhsAnnotation) {
+	protected ATermList flattenList(List<ATerm> terms, ATerm lhsAnnotation, ATerm rhsAnnotation) {
 		ArrayList<ATerm> newTerms = new ArrayList<ATerm>(terms.size() * 2);
 		
 		for (ATerm elm : terms) {
@@ -311,12 +321,12 @@ public class ATermConstructor {
 		return newList;
 	}
 	
-	private boolean isLexRule(Rule rule) {
+	protected boolean isLexRule(Rule rule) {
 		ICategory<String> lhs = rule.getLhs();
 		return lhs.getName().endsWith("-LEX>");
 	}
 	
-	private boolean isCFRule(Rule rule) {
+	protected boolean isCFRule(Rule rule) {
 		ICategory<String> lhs = rule.getLhs();
 		return lhs.getName().endsWith("-CF>");
 	}

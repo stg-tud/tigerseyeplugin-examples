@@ -4,8 +4,11 @@ Bundle-Name: grammarware
 Bundle-SymbolicName: de.tud.stg.tigerseye.sdfdsl;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Export-Package: sdf,
- sdf.model
+ sdf.model,
+ sdf.ruleannotations,
+ sdf.util
 Require-Bundle: de.tud.stg.tigerseye.dslsupport;bundle-version="0.0.1",
  de.tud.stg.tigerseye;bundle-version="0.1.0",
  de.tud.stg.tigerseye.core;bundle-version="0.1.0"
 Eclipse-ExtensibleAPI: true
+X-COMMENT-Eclipse-RegisterBuddy: de.tud.stg.tigerseye, de.tud.stg.tigerseye.core
