@@ -3,5 +3,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="libs/aterm-java.jar"/>
+	<classpathentry kind="lib" path="libs/jjtraveler.jar"/>
+	<classpathentry kind="lib" path="libs/jsr305.jar"/>
+	<classpathentry kind="lib" path="libs/shared-objects.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
