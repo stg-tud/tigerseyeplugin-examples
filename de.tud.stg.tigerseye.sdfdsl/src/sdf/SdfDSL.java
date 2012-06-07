@@ -54,6 +54,13 @@ public class SdfDSL implements DSL {
 	
 	private ATermFactory atermFactory;
 	
+	/**
+	 * Whether parlex oracles are used or not
+	 * Normally, this should always be enabled.
+	 * The option is mainly present to allow for benchmark comparisons.
+	 */
+	private boolean oraclesEnabled = true;
+	
 	
 	public SdfDSL() {
 		this.modules = new HashMap<String, Module>();
@@ -201,13 +208,29 @@ public class SdfDSL implements DSL {
 		GeneratedGrammar grammar = getGrammar(topLevelModule);
 		
 		EarleyParser parser = new EarleyParser(grammar.getGrammar());
-		parser.detectUsedOracles();
+		if (oraclesEnabled) {
+			parser.detectUsedOracles();
+		}
 		Chart chart = (Chart) parser.parse(input);
 		
 		return new ParseResult(grammar, chart);
 		
 	}
 	
+	public boolean isOraclesEnabled() {
+		return oraclesEnabled;
+	}
+
+	/**
+	 * Enable or disable oracles in the parser.
+	 * This method can be used to disable oracles for benchmarking purposes.
+	 * Oracles are always enabled by default and should normally not be disabled.
+	 * @param oraclesEnabled
+	 */
+	public void setOraclesEnabled(boolean oraclesEnabled) {
+		this.oraclesEnabled = oraclesEnabled;
+	}
+
 	@DSLMethod(production = "printGeneratedGrammar p0")
 	public void printGeneratedGrammar(String topLevelModule) {
 		GeneratedGrammar grammar = getGrammar(topLevelModule);
